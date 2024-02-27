@@ -18,7 +18,7 @@ namespace MultiHospitalHarmony.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult SuperAdmin()
         {
             return View();
         }
