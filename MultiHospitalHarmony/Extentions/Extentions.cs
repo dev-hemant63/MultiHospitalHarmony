@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using MultiHospitalHarmony.Models;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace MultiHospitalHarmony.Extentions
 {
@@ -19,15 +21,22 @@ namespace MultiHospitalHarmony.Extentions
 			var Userid = claimsPrincipal.FindFirst(ClaimTypes.Role);
 			return Userid.Value;
 		}
-		public static string GetLoginUserProfile(this ClaimsPrincipal claimsPrincipal)
-		{
-			var Userid = claimsPrincipal.FindFirst("Profile");
-			return Userid.Value;
-		}
 		public static T GetLogingID<T>(this ClaimsPrincipal claimsPrincipal)
 		{
-			var Userid = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
+			var Userid = claimsPrincipal.FindFirst("UserId");
 			return (T)Convert.ChangeType(Userid.Value, typeof(T));
 		}
+		public static T GetRoleId<T>(this ClaimsPrincipal claimsPrincipal)
+		{
+			var Userid = claimsPrincipal.FindFirst("RoleId");
+			return (T)Convert.ChangeType(Userid.Value, typeof(T));
+		}
+		public static MinusVM GetMenu(this ClaimsPrincipal claimsPrincipal)
+		{
+			var json = claimsPrincipal.FindFirst("Menus");
+			var data = JsonConvert.DeserializeObject<MinusVM>(json.Value);
+			return data;
+
+        }
 	}
 }

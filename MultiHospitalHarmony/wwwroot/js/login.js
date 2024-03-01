@@ -3,14 +3,15 @@
         return false;
     }
     let obj = {
-        EmailId:$('#txtEmail').val(),
+        UserName: $('#txtUserName').val(),
         Password:$('#txtPassword').val(),
     }
     $.post('/account/login', obj).done((res) => {
-        console.log('res ', res);
-        alert(res.message);
         if (res.success == true) {
             window.location.href = res.data.redirectURL;
+        }
+        else {
+            alert(res.message);
         }
     }).fail((xhr) => {
         console.log(xhr.responseText);

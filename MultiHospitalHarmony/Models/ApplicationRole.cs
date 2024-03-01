@@ -5,6 +5,6 @@ namespace MultiHospitalHarmony.Models
 {
     public class ApplicationRole: CommonModel
     {
-        public AppRole Role { get; set; }
+        public string Role { get; set; }
     }
 }
