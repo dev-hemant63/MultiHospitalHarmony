@@ -87,7 +87,12 @@ namespace MultiHospitalHarmony.Infrastructure.Services
 						res.Success = true;
 						res.Message = "Success";
                     }
+					else
+					{
+						res.Message = "Please provide a valid zipcode!";
+					}
 				}
+				
             }
 			catch (Exception ex)
 			{
