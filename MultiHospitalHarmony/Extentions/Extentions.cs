@@ -38,5 +38,10 @@ namespace MultiHospitalHarmony.Extentions
 			return data;
 
         }
-	}
+        public static string GetBalance(this ClaimsPrincipal claimsPrincipal)
+        {
+            var Userid = claimsPrincipal.FindFirst("Balance");
+            return Userid.Value.ToString();
+        }
+    }
 }

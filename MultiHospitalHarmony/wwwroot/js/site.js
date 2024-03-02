@@ -32,7 +32,12 @@ let getAreaByPincode = () => {
         if (res.success) {
             $('#ddlcity').val(res.data.cityId);
             $('#ddlState').val(res.data.stateId);
-        }        
+            $('#ddlcity').empty().append(`<option value="${res.data.cityId}">${res.data.district}</option>`);
+            $('#ddlState').empty().append(`<option value="${res.data.stateId}">${res.data.state}</option>`);
+        }
+        else {
+            alert(res.message);
+        }
     }).fail((xhr) => {
         console.log(xhr.responseText);
         alert('Server Error!');
