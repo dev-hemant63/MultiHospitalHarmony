@@ -12,6 +12,11 @@ DBConnection.SqlConnection = builder.Configuration.GetConnectionString("SqlConne
 
 builder.Services.AddSingleton<IDapperContext, DapperContext>();
 builder.Services.AddSingleton<IAccountService, AccountService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IApiUtilityService, ApiUtilityService>();
+builder.Services.AddSingleton<ICommonService, CommonService>();
+builder.Services.AddSingleton<IRequestInfo, RequestInfo>();
+builder.Services.AddSingleton<IFileUploadService, FileUploadService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {

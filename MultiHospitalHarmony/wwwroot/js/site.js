@@ -27,3 +27,14 @@
     }
     return isValid;
 }
+let getAreaByPincode = () => {
+    $.post('/GetDetailsByPincode', { pincode: $('#txtZipCode').val() }).done((res) => {
+        if (res.success) {
+            $('#ddlcity').val(res.data.cityId);
+            $('#ddlState').val(res.data.stateId);
+        }        
+    }).fail((xhr) => {
+        console.log(xhr.responseText);
+        alert('Server Error!');
+    });
+}

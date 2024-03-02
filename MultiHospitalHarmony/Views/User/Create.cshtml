@@ -1,0 +1,127 @@
+﻿@model CreateUserVM
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create User</h4>
+            </div>
+            <div class="card-body">
+                <div class="basic-form">
+                    <div class="row">
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Role</label>
+                            <select class="form-control" id="ddlrole" asp-for="@Model.RoleId" required>
+                                <option value="">Please role</option>
+                                @{
+                                    foreach (var item in Model.ApplicationRole)
+                                    {
+                                        <option value="@item.Id">@item.Role.ToString().ToUpper()</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">FullName</label>
+                            <input type="text" class="form-control" id="txtfullname" asp-for="@Model.FullName" required>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">MobileNo</label>
+                            <input type="number" class="form-control" id="txtmobile" asp-for="@Model.MobileNo" required>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Email (optional)</label>
+                            <input type="email" class="form-control" id="txtemail" asp-for="@Model.Email" />
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">ZipCode</label>
+                            <input type="number" class="form-control" id="txtZipCode" asp-for="@Model.ZipCode" onblur="getAreaByPincode()" required>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" id="txtAddress" asp-for="@Model.Address" required>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">State</label>
+                            <select class="form-control" id="ddlState" asp-for="@Model.StateId" required>
+                                <option value="">Please select</option>
+                                @{
+                                    foreach (var item in Model.State)
+                                    {
+                                        <option value="@item.Id">@item.StateName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">City</label>
+                            <select class="form-control" id="ddlcity" asp-for="@Model.CityId" required>
+                                <option value="">Please select</option>
+                                @{
+                                    foreach (var item in Model.City)
+                                    {
+                                        <option value="@item.Id">@item.CityName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-sm-4 m-b30">
+                            
+                            <label class="form-label">Tehsil</label>
+                            <input type="text" class="form-control" id="txtTehsil" asp-for="@Model.Tehsil" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-primary" onclick="create('@Model.Id')">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var create = (id) => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                Id:id,
+                RoleId: parseInt($('#ddlrole').val()),
+                FullName: $('#txtfullname').val(),
+                MobileNo: $('#txtmobile').val(),
+                Email: $('#txtemail').val(),
+                Address: $('#txtAddress').val(),
+                Tehsil: $('#txtTehsil').val(),
+                CityId: parseInt($('#ddlcity').val()),
+                StateId: parseInt($('#ddlState').val()),
+                ZipCode: parseInt($('#txtZipCode').val()),
+                Photo: ''
+            };
+
+            let formData = new FormData();
+            formData.append('jsonData', JSON.stringify(obj));
+
+            $.ajax({
+                url: '/user/create',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        $('input').val('');
+                        $('select').val('');
+                        window.location.href = '/user/userlist';
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        };
+    </script>
+}

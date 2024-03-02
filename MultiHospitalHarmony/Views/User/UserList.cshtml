@@ -1,0 +1,112 @@
+﻿@using MultiHospitalHarmony.Extentions
+<div class="row">
+	<div class="col-xl-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="row task">
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-primary count">58</h2>
+								<span>All Users</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-purple count">7</h2>
+								<span>Super Distributor</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-warning count">13</h2>
+								<span>Distributor</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-danger count">11</h2>
+								<span>Agent</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-success count">21</h2>
+								<span>Hospitals</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-2 col-sm-4 col-6">
+						<div class="task-summary">
+							<div class="d-flex align-items-baseline">
+								<h2 class="text-danger count">16</h2>
+								<span>Doctors</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create User</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Full Name</td>
+									@if (User.GetRoleId<int>() == 1)
+									{
+										<td>Parent</td>
+									}
+                                    <td>Role</td>
+									<td>Balance</td>
+                                    <td>User Name</td>
+                                    <td>Email</td>
+                                    <td>MobileNo</td>
+                                    <td>Address</td>
+                                    <td>CityName</td>
+                                    <td>StateName</td>
+                                    <td>Tehsil</td>
+                                    <td>IsActive</td>
+                                    <td>CreatedAt</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loaddata();
+        });
+        var loaddata = () => {
+            $.post('/user/getUserList').done((res) => {
+                $('#datagrid tbody').html(res);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                alert('Server Error');
+            });
+        }
+    </script>
+}

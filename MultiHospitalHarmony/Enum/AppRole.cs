@@ -4,8 +4,10 @@
     {
         None = 0,
         SuperAdmin = 1,
-        MasterDistributor=2,
+        SuperDistributor=2,
         Distributor=3,
         Agent =4,
+        Hospital =5,
+        Doctor =6,
     }
 }

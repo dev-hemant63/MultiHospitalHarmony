@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MultiHospitalHarmony.Enum;
+using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
+using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace MultiHospitalHarmony.Controllers
@@ -11,9 +15,11 @@ namespace MultiHospitalHarmony.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private ICommonService _commonService;
+        public AccountController(IAccountService accountService, ICommonService commonService)
         {
             _accountService = accountService;
+            _commonService = commonService;
         }
         [HttpGet]
         public async Task<IActionResult> Login()
@@ -26,13 +32,24 @@ namespace MultiHospitalHarmony.Controllers
             var response = await _accountService.Login(loginRequest);
             if (response.Success)
             {
+                var res = new MinusVM
+                {
+                    MasterMinus = new List<MasterMinus>(),
+                    MasterModule = new List<MasterModule>(),
+                };
+                var list = await _commonService.GetModules(response.Data.Id);
+                var subMinus = await _commonService.GetSubMinus(response.Data.Id);
+                res.MasterMinus = subMinus.Data;
+                res.MasterModule = list.Data;
+                res.Role = (AppRole)response.Data.RoleId;
                 var userclaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,response.Data.FirstName??string.Empty),
+                    new Claim(ClaimTypes.Name,response.Data.FullName??string.Empty),
                     new Claim(ClaimTypes.UserData,response.Data.Email),
                     new Claim("UserId",response.Data.Id.ToString()),
                     new Claim(ClaimTypes.Role,response.Data.Role),
-                    new Claim("Profile",response.Data.Photo),
+                    new Claim("RoleId",response.Data.RoleId.ToString()),
+                    new Claim("Menus",JsonConvert.SerializeObject(res)),
                 };
                 var identity = new ClaimsIdentity(userclaims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var properties = new AuthenticationProperties
@@ -41,7 +58,7 @@ namespace MultiHospitalHarmony.Controllers
                     AllowRefresh = true,
                     ExpiresUtc = DateTime.UtcNow.AddYears(1)
                 };
-                response.Data.RedirectURL = string.IsNullOrEmpty(redirectURL)?$"/Dashboard/{response.Data.Role}": redirectURL;
+                response.Data.RedirectURL = string.IsNullOrEmpty(redirectURL)?$"/dashboard/{response.Data.Role.ToLower()}": redirectURL;
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity), properties);
             }
             return Json(response);

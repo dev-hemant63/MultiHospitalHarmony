@@ -35,16 +35,13 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     {
                         Id = result.Id,
                         RoleId = result.RoleId,
-                        FirstName = result.FirstName,
-                        MiddleName = result.MidileName,
-                        LastName = result.LastName,
+                        FullName = result.FullName,
                         MobileNo = result.MobileNo,
                         Email = result.Email,
                         Address = result.Address,
                         CityId = result.CityId,
                         StateId = result.StateId,
                         ZipCode = result.ZipCode,
-                        Photo = result.Photo,
                         Role = result.Role
                     };
                 }
