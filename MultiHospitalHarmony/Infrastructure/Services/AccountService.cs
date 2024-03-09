@@ -42,7 +42,8 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                         CityId = result.CityId,
                         StateId = result.StateId,
                         ZipCode = result.ZipCode,
-                        Role = result.Role
+                        Role = result.Role,
+                        Balance = result.Balance
                     };
                 }
                 else

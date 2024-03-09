@@ -1,0 +1,207 @@
+﻿@model PatientDeatilsVM
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Patient Detail</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <td>@Model.BasicDetails.FullName</td>
+                                        <th>User Name</th>
+                                        <td>@Model.BasicDetails.UserName</td>
+                                        <th>MobileNo</th>
+                                        <td>@Model.BasicDetails.MobileNo</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email Address</th>
+                                        <td>@Model.BasicDetails.Email</td>
+                                        <th>ZipCode</th>
+                                        <td>@Model.BasicDetails.ZipCode</td>
+                                        <th>State</th>
+                                        <td>@Model.BasicDetails.StateName</td>
+                                    </tr>
+                                    <tr>
+                                        <th>City</th>
+                                        <td>@Model.BasicDetails.CityName</td>
+                                        <th>Tehsil</th>
+                                        <td>@Model.BasicDetails.Tehsil</td>
+                                        <th>Address</th>
+                                        <td>@Model.BasicDetails.Address</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <h4 class="card-title">Medical History</h4>
+                            </div>
+                            <div class="col-sm-10 d-flex" style="justify-content: end;">
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add Record</button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <td>#</td>
+                                        <td>Doctor</td>
+                                        <td>Wight</td>
+                                        <td>Diagnosis</td>
+                                        <td>Prescription</td>
+                                        <td>Prescription File</td>
+                                        <td>DateOfVisit</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 0;
+                                        if (Model.MedicalHistory.Any())
+                                        {
+                                            foreach (var item in Model.MedicalHistory)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@item.DoctorInfo</td>
+                                                    <td>@item.Wight</td>
+                                                    <td>@item.Diagnosis</td>
+                                                    <td>@item.Prescription</td>
+                                                    <td>
+                                                        <a href="@item.PrescriptionFile" target="_blank">
+                                                            <i class="fa fa-download text-success" style="height:24px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>@item.DateOfVisit</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="23" class="text-center text-danger">No any medical history</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Medical History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <label>Diagnosis</label>
+                        <textarea id="txtDiagnosis" name="txtDiagnosis" class="form-control texteditor" placeholder="Diagnosis" required></textarea>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Prescription</label>
+                        <textarea id="txtPrescription" name="txtPrescription" class="form-control texteditor2" placeholder="Prescription" required></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Wight</label>
+                        <input type="text" id="txtWight" class="form-control" placeholder="Wight" required />
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Prescription File</label>
+                        <input type="file" id="txtPrescriptionFile" class="form-control" placeholder="Prescription" required />
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveMedicalhis('@Model.BasicDetails.Id')">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        // var DiagnosisEditor;
+        // var PrescriptionEditor;
+        // $(document).ready(function () {
+        //     DiagnosisEditor = ClassicEditor
+        //         .create(document.querySelector('.texteditor'))
+        //         .catch(error => {
+        //             console.error(error);
+        //         });
+        //     PrescriptionEditor = ClassicEditor
+        //         .create(document.querySelector('.texteditor2'))
+        //         .catch(error => {
+        //             console.error(error);
+        //         });
+        // });
+        var saveMedicalhis = (id) => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+
+            let obj = {
+                PatientId: id,
+                Diagnosis: $('#txtDiagnosis').val(),
+                Prescription: $('#txtPrescription').val(),
+                PrescriptionFile: "",
+                Wight: $('#txtWight').val(),
+            }
+            let formData = new FormData();
+            formData.append('jsonData', JSON.stringify(obj));
+            formData.append('file', $('#txtPrescriptionFile').prop('files')[0])
+            $.ajax({
+                url: '/user/SaveMedicalHistory',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: response.success == true ? "Success" : "Failed",
+                        text: response.message,
+                        icon: response.success == true ? "success" : "error"
+                    });
+                    if (response.success) {
+                        $('.btn-close').click();
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    Swal.fire({
+                        title: "Failed!",
+                        text: "Server Error.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+        function CKEditorGetData(editor) {
+            if (editor) {
+                return editor.getData();
+            } else {
+                console.error('CKEditor instance not found.');
+                return '';
+            }
+        }
+    </script>
+}

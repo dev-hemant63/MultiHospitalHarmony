@@ -28,6 +28,12 @@ namespace MultiHospitalHarmony.Static
                 case AppRole.Doctor:
                     prefix = "DR";
                     break;
+                case AppRole.Patient:
+                    prefix = "PA";
+                    break;
+                case AppRole.Reception:
+                    prefix = "RP";
+                    break;
             }
             string charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string digitSet = "0123456789";

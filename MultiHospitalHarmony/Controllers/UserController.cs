@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Context;
+using MultiHospitalHarmony.Enum;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
 using MultiHospitalHarmony.Models;
+using MultiHospitalHarmony.Models.Common;
+using MultiHospitalHarmony.Models.DTOs;
 using Newtonsoft.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -70,9 +73,9 @@ namespace MultiHospitalHarmony.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserList()
+        public async Task<IActionResult> GetUserList(GetUserFilter userFilter)
         {
-            var data = await _userService.GetUserList(User.GetLogingID<int>());
+            var data = await _userService.GetUserList(User.GetLogingID<int>(), userFilter);
             if (data.Success)
             {
                 return PartialView(data.Data);
@@ -99,6 +102,68 @@ namespace MultiHospitalHarmony.Controllers
         public async Task<IActionResult> forgetpassword()
         {
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int Id)
+        {
+            var model = new PatientDeatilsVM
+            {
+                BasicDetails = new Users(),
+                MedicalHistory = new List<MedicalHistory>()
+            };
+            var userRes = await _userService.GetUserById(User.GetLogingID<int>(), Id);
+            if (userRes.Success)
+            {
+                model.BasicDetails = userRes.Data;
+            }
+            var medicalHistory = await _userService.MedicalHistory(Id);
+            if (medicalHistory.Success)
+            {
+                model.MedicalHistory = medicalHistory.Data;
+            }
+
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Patientlist()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveMedicalHistory(string jsonData,IFormFile file)
+        {
+            var response = new AppResponse<object>();
+            var medicalHistory = JsonConvert.DeserializeObject<MedicalHistory>(jsonData);
+            if (file != null)
+            {
+                var fileRes = _fileUploadService.Upload(new FileUploadModel
+                {
+                    file = file,
+                    FileName = DateTime.Now.ToString("ddMMyyyyhhmmssfff"),
+                    FilePath = "wwwroot/upload/patient/PrescriptionFile/"
+                });
+                if (!fileRes.Success)
+                {
+                    response.Message = fileRes.Message;
+                    return Json(response);
+                }
+                medicalHistory.PrescriptionFile = fileRes.Data;
+            }
+            response = await _userService.SaveMedicalHistory(User.GetLogingID<int>(),medicalHistory);
+            return Json(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetPatientList()
+        {
+            var data = await _userService.GetUserList(User.GetLogingID<int>(),new GetUserFilter
+            {
+                RoleId = AppRole.Patient
+            });
+            if (data.Success)
+            {
+                return PartialView(data.Data);
+            }
+            return PartialView("~/home/recordnotfound");
         }
     }
 }

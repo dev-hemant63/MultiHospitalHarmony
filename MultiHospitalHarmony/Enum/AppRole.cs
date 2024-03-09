@@ -9,5 +9,7 @@
         Agent =4,
         Hospital =5,
         Doctor =6,
+        Patient = 7,
+        Reception = 8,
     }
 }

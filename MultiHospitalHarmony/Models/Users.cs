@@ -23,5 +23,6 @@ namespace MultiHospitalHarmony.Models
         public decimal Balance { get; set; }
         public string CreatedAt { get; set; }
         public string Parent { get; set; }
+        public string Qualifications { get; set; }
     }
 }

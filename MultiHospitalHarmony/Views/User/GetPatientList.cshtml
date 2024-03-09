@@ -14,20 +14,11 @@
                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/user/create?Id=@item.Id">Edit</a>
-                            @if(item.RoleId == 7){
-                                <a class="dropdown-item" href="/user/detail?Id=@item.Id">Details</a>
-                            }
+                            <a class="dropdown-item" href="/user/detail?Id=@item.Id">Details</a>
                         </div>
                     </div>
                 </td>
                 <td>@item.FullName</td>
-                @if (User.GetRoleId<int>() == 1)
-                {
-                    <td>@item.Parent</td>
-                }
-                <td>@item.Role</td>
-                <td>@item.Balance</td>
                 <td>@item.UserName</td>
                 <td>@item.Email</td>
                 <td>@item.MobileNo</td>
