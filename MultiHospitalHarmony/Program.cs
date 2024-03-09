@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IFileUploadService, FileUploadService>();
 builder.Services.AddSingleton<ISMSService, SMSService>();
 builder.Services.AddSingleton<IAlertService, AlertService>();
 builder.Services.AddSingleton<ITransactionService, TransactionService>();
+builder.Services.AddSingleton<IBadManagementService, BadManagementService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {

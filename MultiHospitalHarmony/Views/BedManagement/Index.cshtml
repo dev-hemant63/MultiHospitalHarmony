@@ -1,0 +1,98 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Bed Management</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add Record</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Name</td>
+                                    <td>Remark</td>
+                                    <td>Price</td>
+                                    <td>EntryAt</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Bed</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <label>Name</label>
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Name" required/>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Remark</label>
+                        <input id="txtRemark" name="txtRemark" class="form-control" placeholder="Remark" />
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Amount</label>
+                        <input type="number" id="txtAmount" class="form-control" placeholder="Amount" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="save('0')">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var save = (id)=>{
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                Id: id,
+                Name: $('#txtName').val(),
+                Remark: $('#txtRemark').val(),
+                Price: $('#txtAmount').val(),
+            }
+            $.post('/BedManagement/Save', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    $('input').val('');
+                    $('.btn-close').click();
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}
