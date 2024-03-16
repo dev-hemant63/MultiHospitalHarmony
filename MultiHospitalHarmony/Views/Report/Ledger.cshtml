@@ -29,8 +29,11 @@
                                     <td>Action</td>
                                     <td>TID</td>
                                     <td>User Info</td>
+                                    <td>Service</td>
+                                    <td>Opening</td>
                                     <td>Amount</td>
-                                    <td>Status</td>
+                                    <td>Closing</td>
+                                    <td>TrType</td>
                                     <td>EntryAt</td>
                                 </tr>
                             </thead>
@@ -42,22 +45,3 @@
         </div>
     </div>
 </div>
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            loaddata();
-        });
-        var loaddata = () => {
-            $.post('/addmoney/GetHistory').done((res) => {
-                $('#datagrid tbody').html(res);
-            }).fail((xhr) => {
-                console.log(xhr.responseText);
-                Swal.fire({
-                    title: "Failed!!",
-                    text: "Server Error!",
-                    icon: "error"
-                });
-            });
-        }
-    </script>
-}

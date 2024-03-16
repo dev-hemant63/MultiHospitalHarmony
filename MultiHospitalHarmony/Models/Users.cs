@@ -4,6 +4,7 @@ namespace MultiHospitalHarmony.Models
 {
     public class Users:CommonModel
     {
+        public int WId { get; set; }
         public int RoleId { get; set; }
         public string FullName { get; set; }
         public string MobileNo { get; set; }
@@ -24,5 +25,6 @@ namespace MultiHospitalHarmony.Models
         public string CreatedAt { get; set; }
         public string Parent { get; set; }
         public string Qualifications { get; set; }
+        public string HostName { get; set; }
     }
 }

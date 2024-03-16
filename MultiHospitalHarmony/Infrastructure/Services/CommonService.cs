@@ -157,5 +157,24 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<int>> VerifyHost(string hostName)
+        {
+            var res = new AppResponse<int>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res = await _dapperContext.ExecuteProcAsync<AppResponse<int>>("Proc_VerifyHost", new
+                {
+                    hostName
+                }, CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("CommonService", "VerifyHost", ex.Message);
+            }
+            return res;
+        }
     }
 }

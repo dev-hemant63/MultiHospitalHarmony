@@ -153,12 +153,10 @@ namespace MultiHospitalHarmony.Controllers
             return Json(response);
         }
         [HttpPost]
-        public async Task<IActionResult> GetPatientList()
+        public async Task<IActionResult> GetPatientList(GetUserFilter filter)
         {
-            var data = await _userService.GetUserList(User.GetLogingID<int>(),new GetUserFilter
-            {
-                RoleId = AppRole.Patient
-            });
+            filter.RoleId = AppRole.Patient;
+            var data = await _userService.GetUserList(User.GetLogingID<int>(),filter);
             if (data.Success)
             {
                 return PartialView(data.Data);

@@ -1,65 +1,6 @@
 ﻿@using MultiHospitalHarmony.Enum
 @using MultiHospitalHarmony.Extentions
 <div class="row">
-    @if (User.GetRoleId<int>() == 1)
-    {
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row task">
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-primary count">58</h2>
-                                    <span>All Users</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-purple count">7</h2>
-                                    <span>Super Distributor</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-warning count">13</h2>
-                                    <span>Distributor</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-danger count">11</h2>
-                                    <span>Agent</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-success count">21</h2>
-                                    <span>Hospitals</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-sm-4 col-6">
-                            <div class="task-summary">
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="text-danger count">16</h2>
-                                    <span>Doctors</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -67,17 +8,20 @@
                     <h4 class="card-title">User List</h4>
                 </div>
                 <div class="col-sm-6 d-flex">
-                    <select class="form-control form-control-sm">
+                    <select class="form-control form-control-sm" id="ddlRole">
                         <option value="">:: Select Role ::</option>
                         @{
-                            List<AppRole> roleList = Enum.GetValues(typeof(AppRole)).Cast<AppRole>().ToList();
-                            foreach (var item in roleList)
-                            {
-                                <option value="@Convert.ToInt32(item)">@item.ToString()</option>
-                            }
+                            <option value="@AppRole.SuperDistributor">@AppRole.SuperDistributor.ToString()</option>
+                            <option value="@AppRole.Distributor">@AppRole.Distributor.ToString()</option>
+                            <option value="@AppRole.Agent">@AppRole.Agent.ToString()</option>
+                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
+                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
+                            <option value="@AppRole.Doctor">@AppRole.Doctor.ToString()</option>
+                            <option value="@AppRole.Patient">@AppRole.Patient.ToString()</option>
+                            <option value="@AppRole.Reception">@AppRole.Reception.ToString()</option>
                         }
                     </select>
-                    <select class="form-control form-control-sm">
+                    <select class="form-control form-control-sm" id="SearchCriteria">
                         <option value="">:: Search Criteria ::</option>
                         @{
                             List<SearchCriteria> criteriaList = Enum.GetValues(typeof(SearchCriteria)).Cast<SearchCriteria>().ToList();
@@ -87,27 +31,27 @@
                             }
                         }
                     </select>
-                    <input class="form-control form-control-sm" placeholder="Search Text" />
-                    <button class="btn btn-primary btn-sm btn-last"><i class="fa fa-search"></i></button>
+                    <input class="form-control form-control-sm" placeholder="Search Text" id="SearchText" />
+                    <button class="btn btn-primary btn-sm btn-last" onclick="loaddata()"><i class="fa fa-search"></i></button>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm" id="datagrid">
-                            <thead>
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead class="text-white bg-primary">
                                 <tr>
                                     <td>#</td>
                                     <td>Action</td>
                                     <td>Full Name</td>
-                                    
+
                                     @if (User.GetRoleId<int>() == 1)
                                     {
                                         <td>Parent</td>
                                     }
                                     <td>Role</td>
                                     <td>Balance</td>
-                                    
+
                                     <td>User Name</td>
                                     <td>Email</td>
                                     <td>MobileNo</td>
@@ -134,11 +78,11 @@
         });
         var loaddata = () => {
             let filter = {
-                RoleId:$('#ddlRole').val(),
+                RoleId: $('#ddlRole').val(),
                 SearchText: $('#SearchText').val(),
                 SearchCriteria: $('#SearchCriteria').val(),
             }
-            $.post('/user/getUserList',filter).done((res) => {
+            $.post('/user/getUserList', filter).done((res) => {
                 $('#datagrid tbody').html(res);
             }).fail((xhr) => {
                 console.log(xhr.responseText);

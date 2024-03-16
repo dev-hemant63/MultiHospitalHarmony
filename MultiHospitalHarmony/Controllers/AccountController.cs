@@ -24,7 +24,8 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
-            return View();
+            var WId = HttpContext.Request.Headers["WId"].ToString();
+            return View("Login", Convert.ToInt32(WId));
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest loginRequest,string redirectURL)
@@ -47,6 +48,7 @@ namespace MultiHospitalHarmony.Controllers
                     new Claim(ClaimTypes.Name,response.Data.FullName??string.Empty),
                     new Claim(ClaimTypes.UserData,response.Data.Email),
                     new Claim("UserId",response.Data.Id.ToString()),
+                    new Claim("WID",response.Data.WId.ToString()),
                     new Claim(ClaimTypes.Role,response.Data.Role),
                     new Claim("RoleId",response.Data.RoleId.ToString()),
                     new Claim("Menus",JsonConvert.SerializeObject(res)),

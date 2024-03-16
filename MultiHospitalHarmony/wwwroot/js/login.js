@@ -5,6 +5,7 @@
     let obj = {
         UserName: $('#txtUserName').val(),
         Password:$('#txtPassword').val(),
+        WId: $('#txtWID').val(),
     }
     $.post('/account/login', obj).done((res) => {
         if (res.success == true) {
