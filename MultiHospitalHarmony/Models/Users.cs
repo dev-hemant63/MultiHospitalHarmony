@@ -4,6 +4,7 @@ namespace MultiHospitalHarmony.Models
 {
     public class Users:CommonModel
     {
+        public int WId { get; set; }
         public int RoleId { get; set; }
         public string FullName { get; set; }
         public string MobileNo { get; set; }
@@ -20,8 +21,13 @@ namespace MultiHospitalHarmony.Models
         public string CityName { get; set; }
         public string StateName { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDedicated { get; set; }
         public decimal Balance { get; set; }
         public string CreatedAt { get; set; }
         public string Parent { get; set; }
+        public string Qualifications { get; set; }
+        public string HostName { get; set; }
+        public string Logo { get; set; }
+        public string Banner { get; set; }
     }
 }

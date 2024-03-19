@@ -1,0 +1,41 @@
+﻿@model List<AddMoneyHistory>
+@{
+    if (Model != null)
+    {
+        int count = 0;
+        foreach (var item in Model)
+        {
+            count++;
+            <tr>
+                <td>@count</td>
+                <td>
+                    <div class="btn-group mb-1">
+                        <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Status Check</a>
+                        </div>
+                    </div>
+                </td>
+                <td>@item.TID</td>
+                <td>@item.UserInfo</td>
+                <td>@item.Amount</td>
+                <td>
+                    @if (item.Status =="F")
+                    {
+                        <span class="badge badge-danger badge-sm">Failed</span>
+                    }
+                    else if (item.Status == "S")
+                    {
+                        <span class="badge badge-success badge-sm">Success</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning badge-sm">Pending</span>
+                    }
+                </td>
+                <td>@item.EntryAt</td>
+            </tr>
+        }
+    }
+}

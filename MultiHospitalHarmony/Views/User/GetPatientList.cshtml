@@ -1,0 +1,52 @@
+﻿@using MultiHospitalHarmony.Extentions
+@model List<Users>
+@{
+    if (Model != null)
+    {
+        int count = 0;
+        if (Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>
+                        <div class="btn-group mb-1">
+                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/user/detail?Id=@item.Id">Details</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>@item.FullName</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.MobileNo</td>
+                    <td>@item.Address</td>
+                    <td>@item.StateName</td>
+                    <td>@item.CityName</td>
+                    <td>
+                        @item.Tehsil
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="isactive" checked="@item.IsActive">
+                            <label class="form-check-label" for="isactive"></label>
+                        </div>
+                    </td>
+                    <td>@item.CreatedAt</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="text-center">
+                <td colspan="23">
+                    <img src="~/images/nodata.webp" />
+                </td>
+            </tr>
+        }
+    }
+}

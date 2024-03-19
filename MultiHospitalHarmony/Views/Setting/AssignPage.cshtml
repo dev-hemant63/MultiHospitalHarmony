@@ -1,0 +1,54 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<MasterPage>>
+
+<div class="modal fade bs-example-modal-center show" tabindex="-1" id="myModalNew" role="dialog" aria-labelledby="mySmallModalLabel" aria-modal="true" style="display: block; padding-right: 17px;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Module</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @{
+                        if (Model.Success)
+                        {
+                            foreach (var item in Model.Data)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked="@item.IsActive">
+                                        <label class="form-check-label">
+                                            @item.PageName
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-xl-12">
+                                <div class="alert alert-danger left-icon-big alert-dismissible fade show">
+                                    <div class="media">
+                                        <div class="alert-left-icon-big">
+                                            <span><i class="mdi mdi-alert"></i></span>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="mt-1 mb-2">Failed!</h5>
+                                            <p class="mb-0">@Model.Message</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

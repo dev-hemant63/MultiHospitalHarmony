@@ -1,13 +1,19 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpsPolicy;
 using MultiHospitalHarmony.Context;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
+using MultiHospitalHarmony.Middleware;
+using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Static;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+AppSettings appSettings = new AppSettings();
+builder.Configuration.Bind(appSettings);
+builder.Services.AddSingleton(appSettings);
 DBConnection.SqlConnection = builder.Configuration.GetConnectionString("SqlConnection");
 
 builder.Services.AddSingleton<IDapperContext, DapperContext>();
@@ -19,6 +25,9 @@ builder.Services.AddSingleton<IRequestInfo, RequestInfo>();
 builder.Services.AddSingleton<IFileUploadService, FileUploadService>();
 builder.Services.AddSingleton<ISMSService, SMSService>();
 builder.Services.AddSingleton<IAlertService, AlertService>();
+builder.Services.AddSingleton<ITransactionService, TransactionService>();
+builder.Services.AddSingleton<IBadManagementService, BadManagementService>();
+builder.Services.AddSingleton<ISettingService, SettingService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
@@ -44,6 +53,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseMiddleware(typeof(VerifyHost));
 
 app.MapControllerRoute(
     name: "default",

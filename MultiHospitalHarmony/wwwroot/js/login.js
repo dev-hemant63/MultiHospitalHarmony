@@ -5,15 +5,25 @@
     let obj = {
         UserName: $('#txtUserName').val(),
         Password:$('#txtPassword').val(),
+        WId: $('#txtWID').val(),
     }
     $.post('/account/login', obj).done((res) => {
         if (res.success == true) {
             window.location.href = res.data.redirectURL;
         }
         else {
-            alert(res.message);
+            Swal.fire({
+                title: "Failed!!",
+                text: res.message,
+                icon: "error"
+            });
         }
     }).fail((xhr) => {
         console.log(xhr.responseText);
+        Swal.fire({
+            title: "Failed!!",
+            text: "Server Error!",
+            icon: "error"
+        });
     });
 }

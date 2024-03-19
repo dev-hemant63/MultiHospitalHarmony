@@ -1,6 +1,38 @@
 ﻿@model CreateUserVM
 <div class="row">
     <div class="col-xl-12 col-lg-12">
+        <div class="card d-none" id="divQualifications">
+            <div class="card-header">
+                <h4 class="card-title">Qualifications</h4>
+                <button class="btn btn-primary btn-sm" onclick="qualificationsAdd()"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add Record</button>
+            </div>
+            <div class="card-body">
+                <div class="table-response">
+                    <table class="table table-sm table-bordered" id="Qualifications">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Institution</th>
+                                <th>CompletionYear</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control form-control-sm" /> </td>
+                                <td><input type="text" class="form-control form-control-sm" /> </td>
+                                <td><input type="text" class="form-control form-control-sm" /> </td>
+                                <td>
+                                    <i class="fa fa-trash-o text-danger delete" style="font-size: 24px; cursor: pointer;"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-lg-12" id="maindiv">
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">Create User</h4>
@@ -10,7 +42,7 @@
                     <div class="row">
                         <div class="col-sm-4 m-b30">
                             <label class="form-label">Role</label>
-                            <select class="form-control" id="ddlrole" asp-for="@Model.RoleId" required>
+                            <select class="form-control" id="ddlrole" asp-for="@Model.RoleId" onchange="handleRole()" required>
                                 <option value="">Please role</option>
                                 @{
                                     foreach (var item in Model.ApplicationRole)
@@ -64,11 +96,26 @@
                                 }
                             </select>
                         </div>
+                        <div class="col-sm-4 hospital d-none" style="margin-top: 1.7rem !important;">
+                            <div class="form-check form-control">
+                                <input class="form-check-input" style="margin-left: 0rem;" type="checkbox" id="isdedicated">
+                                <label class="form-check-label" for="isdedicated">
+                                    Is Dedicated
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Host Name</label>
+                            <input type="text" class="form-control hospital-field" asp-for="@Model.HostName">
+                        </div>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Logo</label>
+                            <input type="file" class="form-control" asp-for="@Model.Logo">
+                        </div>
 
-                        <div class="col-sm-4 m-b30">
-                            
-                            <label class="form-label">Tehsil</label>
-                            <input type="text" class="form-control" id="txtTehsil" asp-for="@Model.Tehsil" required>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Banner</label>
+                            <input type="file" class="form-control" asp-for="@Model.Banner">
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -80,6 +127,7 @@
             </div>
         </div>
     </div>
+
 </div>
 @section Scripts {
     <script>
@@ -87,22 +135,37 @@
             if (!valiadteInputs()) {
                 return false;
             }
+            var Qualifications = [];
+            $('#Qualifications tbody tr').each(function () {
+                let currentRow = $(this);
+                let quaObj = {
+                    Name: currentRow.find('td:eq(0) input').val(),
+                    Institution: currentRow.find('td:eq(1) input').val(),
+                    CompletionYear: currentRow.find('td:eq(2) input').val(),
+                }
+                Qualifications.push(quaObj);
+            });
             let obj = {
-                Id:id,
+                Id: id,
                 RoleId: parseInt($('#ddlrole').val()),
                 FullName: $('#txtfullname').val(),
                 MobileNo: $('#txtmobile').val(),
                 Email: $('#txtemail').val(),
                 Address: $('#txtAddress').val(),
                 Tehsil: $('#txtTehsil').val(),
+                HostName: $('#HostName').val(),
+                IsDedicated: $('#isdedicated').is(':checked'),
                 CityId: parseInt($('#ddlcity').val()),
                 StateId: parseInt($('#ddlState').val()),
                 ZipCode: parseInt($('#txtZipCode').val()),
-                Photo: ''
+                Photo: '',
+                Qualifications: JSON.stringify(Qualifications)
             };
 
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));
+            formData.append('Logo', $('#Logo').prop('files')[0]);
+            formData.append('Banner', $('#Banner').prop('files')[0]);
 
             $.ajax({
                 url: '/user/create',
@@ -111,7 +174,11 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: "success"
+                    });
                     if (response.success) {
                         $('input').val('');
                         $('select').val('');
@@ -120,8 +187,48 @@
                 },
                 error: function (error) {
                     console.error(error);
+                    Swal.fire({
+                        title: "Failed!",
+                        text: "Server Error.",
+                        icon: "error"
+                    });
                 }
             });
         };
+        var handleRole = () => {
+            let roleId = $('#ddlrole').val();
+            if (roleId == 6) {
+                $('#divQualifications').removeClass('d-none');
+                $('.hospital').addClass('d-none');
+                $('input[type="file"]').prop('required', false);
+                $('.hospital-field').prop('required', false);
+            }
+            else if (roleId == 5) {
+                $('.hospital').removeClass('d-none');
+                $('input[type="file"]').prop('required', true);
+                $('.hospital-field').prop('required', true);
+            }
+            else {
+                $('#divQualifications').addClass('d-none');
+                $('.hospital').addClass('d-none');
+                $('input[type="file"]').prop('required', false);
+                $('.hospital-field').prop('required', false);
+            }
+        }
+        var qualificationsAdd = () => {
+            let _new = `
+                                             <tr>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                                        <td><i class="fa fa-trash-o text-danger delete" style="font-size: 24px;
+                            cursor: pointer;"></i></td>
+                                                            </tr>
+                                    `
+            $('#Qualifications tbody').append(_new);
+        }
+        $(document).on('click', '.delete', function () {
+            $(this).closest('tr').remove();
+        });
     </script>
 }

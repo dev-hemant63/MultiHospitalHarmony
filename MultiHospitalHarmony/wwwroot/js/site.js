@@ -1,8 +1,8 @@
 ﻿let valiadteInputs = () => {
     let isValid = false;
-    $('input:required, select:required').removeClass("is-invalid");
-    $('input:required, select:required').addClass("is-valid");
-    let inputs = $('input:required, select:required');
+    $('input:required, select:required,textarea:required').removeClass("is-invalid");
+    $('input:required, select:required,textarea:required').addClass("is-valid");
+    let inputs = $('input:required, select:required,textarea:required');
     let filteredInputs = inputs.filter(function () {
         let value = $(this).val();
         return value === "";
@@ -36,10 +36,21 @@ let getAreaByPincode = () => {
             $('#ddlState').empty().append(`<option value="${res.data.stateId}">${res.data.state}</option>`);
         }
         else {
-            alert(res.message);
+            Swal.fire({
+                title: "Falied",
+                text: res.message,
+                icon: "error"
+            });
         }
     }).fail((xhr) => {
         console.log(xhr.responseText);
         alert('Server Error!');
     });
+}
+var showModel = function (result) {
+    $('body').append(result);
+    $('#myModalNew').modal('show');
+    $('[data-dismiss="modal"]').unbind().click(function () {
+        $('.modal,.modal-backdrop').remove();
+    })
 }

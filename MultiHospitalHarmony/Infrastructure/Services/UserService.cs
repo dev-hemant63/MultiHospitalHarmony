@@ -3,7 +3,9 @@ using MultiHospitalHarmony.Enum;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.Common;
+using MultiHospitalHarmony.Models.DTOs;
 using MultiHospitalHarmony.Static;
+using Newtonsoft.Json;
 using System.Data;
 
 namespace MultiHospitalHarmony.Infrastructure.Services
@@ -15,7 +17,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
         {
             _dapperContext = dapperContext;
         }
-        public async Task<AppResponse<object>> Create(Users users, int loginId)
+        public async Task<AppResponse<object>> Create(Users users, int loginId,int WId)
         {
             var response = new AppResponse<object>
             {
@@ -39,8 +41,14 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     users.StateId,
                     users.ZipCode,
                     users.Tehsil,
+                    users.HostName,
+                    users.Logo,
+                    users.Banner,
+                    users.IsDedicated,
                     UserName = Utility.GetUserName((AppRole)users.RoleId),
                     EntryBy = loginId,
+                    WId,
+                    Qualifications = JsonConvert.DeserializeObject<DataTable>(users.Qualifications),
                 }, CommandType.StoredProcedure);
                 response.Message = result.Message;
                 if (result.StatusCode == 1)
@@ -55,7 +63,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
 
             return response;
         }
-        public async Task<AppResponse<List<Users>>> GetUserList(int loginId)
+        public async Task<AppResponse<List<Users>>> GetUserList(int loginId, GetUserFilter userFilter)
         {
             var res = new AppResponse<List<Users>>
             {
@@ -63,7 +71,13 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             };
             try
             {
-                res.Data = await _dapperContext.GetAllAsync<Users>("Proc_GetUserList", new { loginId }, CommandType.StoredProcedure);
+                res.Data = await _dapperContext.GetAllAsync<Users>("Proc_GetUserList", new
+                {
+                    loginId,
+                    FilterRoleId = userFilter.RoleId,
+                    userFilter.SearchCriteria,
+                    userFilter.SearchText
+                }, CommandType.StoredProcedure);
                 res.Success = true;
                 res.Message = "Success";
             }
@@ -73,7 +87,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
-        public async Task<AppResponse<CreateUserVM>> GetUserById(int loginId,int Id)
+        public async Task<AppResponse<CreateUserVM>> GetUserById(int loginId, int Id)
         {
             var res = new AppResponse<CreateUserVM>
             {
@@ -81,7 +95,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             };
             try
             {
-                res.Data = await _dapperContext.ExecuteProcAsync<CreateUserVM>("Proc_GetUserList", new { loginId,Id }, CommandType.StoredProcedure);
+                res.Data = await _dapperContext.ExecuteProcAsync<CreateUserVM>("Proc_GetUserList", new { loginId, Id }, CommandType.StoredProcedure);
                 res.Success = true;
                 res.Message = "Success";
             }
@@ -90,6 +104,67 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 _dapperContext.SaveLog("UserService", "GetUserList", ex.Message);
             }
             return res;
+        }
+        public async Task<AppResponse<List<Qualifications>>> GetUserQualifications(int loginId)
+        {
+            var res = new AppResponse<List<Qualifications>>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<Qualifications>("Select * from Qualifications where UserId = @loginId", new { loginId }, CommandType.Text);
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("UserService", "GetUserQualifications", ex.Message);
+            }
+            return res;
+        }
+        public async Task<AppResponse<List<MedicalHistory>>> MedicalHistory(int loginId)
+        {
+            var res = new AppResponse<List<MedicalHistory>>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<MedicalHistory>("Proc_MedicalHistory", new { loginId }, CommandType.StoredProcedure);
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("UserService", "MedicalHistory", ex.Message);
+            }
+            return res;
+        }
+        public async Task<AppResponse<object>> SaveMedicalHistory(int loginId,MedicalHistory medicalHistory)
+        {
+            var response = new AppResponse<object>
+            {
+                Message = "Failed",
+                Data = null
+            };
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_SaveMedicalHistory",new
+                {
+                    loginId,
+                    medicalHistory.PatientId,
+                    medicalHistory.Diagnosis,
+                    medicalHistory.Prescription,
+                    medicalHistory.PrescriptionFile,
+                    medicalHistory.Wight,
+                });
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("UserService", "SaveMedicalHistory", ex.Message);
+            }
+            return response;
         }
     }
 }
