@@ -43,7 +43,8 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                         StateId = result.StateId,
                         ZipCode = result.ZipCode,
                         Role = result.Role,
-                        Balance = result.Balance
+                        Balance = result.Balance,
+                        WId = result.WId,
                     };
                 }
                 else

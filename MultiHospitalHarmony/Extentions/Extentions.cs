@@ -26,7 +26,12 @@ namespace MultiHospitalHarmony.Extentions
 			var Userid = claimsPrincipal.FindFirst("UserId");
 			return (T)Convert.ChangeType(Userid.Value, typeof(T));
 		}
-		public static T GetRoleId<T>(this ClaimsPrincipal claimsPrincipal)
+        public static T GetWID<T>(this ClaimsPrincipal claimsPrincipal)
+        {
+            var Userid = claimsPrincipal.FindFirst("WID");
+            return (T)Convert.ChangeType(Userid.Value, typeof(T));
+        }
+        public static T GetRoleId<T>(this ClaimsPrincipal claimsPrincipal)
 		{
 			var Userid = claimsPrincipal.FindFirst("RoleId");
 			return (T)Convert.ChangeType(Userid.Value, typeof(T));

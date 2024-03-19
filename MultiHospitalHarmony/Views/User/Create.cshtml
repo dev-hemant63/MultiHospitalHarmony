@@ -96,11 +96,26 @@
                                 }
                             </select>
                         </div>
+                        <div class="col-sm-4 hospital d-none" style="margin-top: 1.7rem !important;">
+                            <div class="form-check form-control">
+                                <input class="form-check-input" style="margin-left: 0rem;" type="checkbox" id="isdedicated">
+                                <label class="form-check-label" for="isdedicated">
+                                    Is Dedicated
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Host Name</label>
+                            <input type="text" class="form-control hospital-field" asp-for="@Model.HostName">
+                        </div>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Logo</label>
+                            <input type="file" class="form-control" asp-for="@Model.Logo">
+                        </div>
 
-                        <div class="col-sm-4 m-b30">
-
-                            <label class="form-label">Tehsil</label>
-                            <input type="text" class="form-control" id="txtTehsil" asp-for="@Model.Tehsil" required>
+                        <div class="col-sm-4 m-b30 hospital d-none">
+                            <label class="form-label">Banner</label>
+                            <input type="file" class="form-control" asp-for="@Model.Banner">
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -138,14 +153,19 @@
                 Email: $('#txtemail').val(),
                 Address: $('#txtAddress').val(),
                 Tehsil: $('#txtTehsil').val(),
+                HostName: $('#HostName').val(),
+                IsDedicated: $('#isdedicated').is(':checked'),
                 CityId: parseInt($('#ddlcity').val()),
                 StateId: parseInt($('#ddlState').val()),
                 ZipCode: parseInt($('#txtZipCode').val()),
                 Photo: '',
                 Qualifications: JSON.stringify(Qualifications)
             };
+
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));
+            formData.append('Logo', $('#Logo').prop('files')[0]);
+            formData.append('Banner', $('#Banner').prop('files')[0]);
 
             $.ajax({
                 url: '/user/create',
@@ -179,21 +199,32 @@
             let roleId = $('#ddlrole').val();
             if (roleId == 6) {
                 $('#divQualifications').removeClass('d-none');
+                $('.hospital').addClass('d-none');
+                $('input[type="file"]').prop('required', false);
+                $('.hospital-field').prop('required', false);
+            }
+            else if (roleId == 5) {
+                $('.hospital').removeClass('d-none');
+                $('input[type="file"]').prop('required', true);
+                $('.hospital-field').prop('required', true);
             }
             else {
                 $('#divQualifications').addClass('d-none');
+                $('.hospital').addClass('d-none');
+                $('input[type="file"]').prop('required', false);
+                $('.hospital-field').prop('required', false);
             }
         }
         var qualificationsAdd = () => {
             let _new = `
-                                     <tr>
-                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                                                <td><i class="fa fa-trash-o text-danger delete" style="font-size: 24px;
-                    cursor: pointer;"></i></td>
-                                                    </tr>
-                            `
+                                             <tr>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                                        <td><i class="fa fa-trash-o text-danger delete" style="font-size: 24px;
+                            cursor: pointer;"></i></td>
+                                                            </tr>
+                                    `
             $('#Qualifications tbody').append(_new);
         }
         $(document).on('click', '.delete', function () {

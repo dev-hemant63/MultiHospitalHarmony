@@ -17,7 +17,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
         {
             _dapperContext = dapperContext;
         }
-        public async Task<AppResponse<object>> Create(Users users, int loginId)
+        public async Task<AppResponse<object>> Create(Users users, int loginId,int WId)
         {
             var response = new AppResponse<object>
             {
@@ -41,8 +41,13 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     users.StateId,
                     users.ZipCode,
                     users.Tehsil,
+                    users.HostName,
+                    users.Logo,
+                    users.Banner,
+                    users.IsDedicated,
                     UserName = Utility.GetUserName((AppRole)users.RoleId),
                     EntryBy = loginId,
+                    WId,
                     Qualifications = JsonConvert.DeserializeObject<DataTable>(users.Qualifications),
                 }, CommandType.StoredProcedure);
                 response.Message = result.Message;

@@ -60,10 +60,35 @@ namespace MultiHospitalHarmony.Controllers
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(string jsonData)
+        public async Task<IActionResult> Create(string jsonData,IFormFile Logo, IFormFile Banner)
         {
             var request = JsonConvert.DeserializeObject<Users>(jsonData);
-            var res = await _userService.Create(request, User.GetLogingID<int>());
+            if (Logo != null)
+            {
+                var fileres = _fileUploadService.Upload(new FileUploadModel
+                {
+                    file = Logo,
+                    FileName = DateTime.Now.ToString("ddMMyyyyhhmmssfff"),
+                    FilePath = $"wwwroot/upload/Website/{request.HostName}/"
+                });
+                if (!fileres.Success)
+                {
+                    return Json(fileres);
+                }
+                request.Logo = fileres.Data;
+                fileres = _fileUploadService.Upload(new FileUploadModel
+                {
+                    file = Banner,
+                    FileName = DateTime.Now.ToString("ddMMyyyyhhmmssfff"),
+                    FilePath = $"wwwroot/upload/Website/{request.HostName}/"
+                });
+                if (!fileres.Success)
+                {
+                    return Json(fileres);
+                }
+                request.Banner = fileres.Data;
+            }
+            var res = await _userService.Create(request, User.GetLogingID<int>(), User.GetWID<int>());
             return Json(res);
         }
         [HttpGet]

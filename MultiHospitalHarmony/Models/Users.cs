@@ -21,10 +21,13 @@ namespace MultiHospitalHarmony.Models
         public string CityName { get; set; }
         public string StateName { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDedicated { get; set; }
         public decimal Balance { get; set; }
         public string CreatedAt { get; set; }
         public string Parent { get; set; }
         public string Qualifications { get; set; }
         public string HostName { get; set; }
+        public string Logo { get; set; }
+        public string Banner { get; set; }
     }
 }
