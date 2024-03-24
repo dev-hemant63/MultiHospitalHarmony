@@ -47,7 +47,7 @@
                                 @{
                                     foreach (var item in Model.ApplicationRole)
                                     {
-                                        <option value="@item.Id">@item.Role.ToString().ToUpper()</option>
+                                                <option value="@item.Id">@item.Role.ToString().ToUpper()</option>
                                     }
                                 }
                             </select>
@@ -79,7 +79,7 @@
                                 @{
                                     foreach (var item in Model.State)
                                     {
-                                        <option value="@item.Id">@item.StateName</option>
+                                                <option value="@item.Id">@item.StateName</option>
                                     }
                                 }
                             </select>
@@ -91,14 +91,18 @@
                                 @{
                                     foreach (var item in Model.City)
                                     {
-                                        <option value="@item.Id">@item.CityName</option>
+                                                <option value="@item.Id">@item.CityName</option>
                                     }
                                 }
                             </select>
                         </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Tehsil</label>
+                            <input type="text" class="form-control" id="txtTehsil" asp-for="@Model.Tehsil" required>
+                        </div>
                         <div class="col-sm-4 hospital d-none" style="margin-top: 1.7rem !important;">
                             <div class="form-check form-control">
-                                <input class="form-check-input" style="margin-left: 0rem;" type="checkbox" id="isdedicated">
+                                <input class="form-check-input" style="margin-left: 0rem;" type="checkbox" id="isdedicated" onchange="handleRequired()">
                                 <label class="form-check-label" for="isdedicated">
                                     Is Dedicated
                                 </label>
@@ -200,19 +204,14 @@
             if (roleId == 6) {
                 $('#divQualifications').removeClass('d-none');
                 $('.hospital').addClass('d-none');
-                $('input[type="file"]').prop('required', false);
-                $('.hospital-field').prop('required', false);
             }
             else if (roleId == 5) {
                 $('.hospital').removeClass('d-none');
-                $('input[type="file"]').prop('required', true);
-                $('.hospital-field').prop('required', true);
+               
             }
             else {
                 $('#divQualifications').addClass('d-none');
                 $('.hospital').addClass('d-none');
-                $('input[type="file"]').prop('required', false);
-                $('.hospital-field').prop('required', false);
             }
         }
         var qualificationsAdd = () => {
@@ -230,5 +229,16 @@
         $(document).on('click', '.delete', function () {
             $(this).closest('tr').remove();
         });
+        var handleRequired = ()=>{
+            let _is = $('#isdedicated').is(':checked');
+            if (_is) {
+                $('input[type="file"]').prop('required', true);
+                $('.hospital-field').prop('required', true);
+            }
+            else {
+                $('input[type="file"]').prop('required', false);
+                $('.hospital-field').prop('required', false);
+            }
+        }
     </script>
 }

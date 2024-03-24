@@ -132,9 +132,51 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _dapperContext.SaveLog("UserService", "GetAddMoneyHistory", ex.Message);
+                _dapperContext.SaveLog("TransactionService", "GetAddMoneyHistory", ex.Message);
             }
             return res;
+        }
+        public async Task<AppResponse<List<Ledger>>> GetLedger(int loginId)
+        {
+            var res = new AppResponse<List<Ledger>>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<Ledger>("Proc_GetAccountLedger", new
+                {
+                    loginId,
+                }, CommandType.StoredProcedure);
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("TransactionService", "GetLedger", ex.Message);
+            }
+            return res;
+        }
+        public async Task<AppResponse<object>> UpdateStatus(int TID, string status,string UTR)
+        {
+            var response = new AppResponse<object>
+            {
+                Message = "Sorry there is some issue!"
+            };
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_UpdateTxnStatus", new
+                {
+                    status,
+                    TID,
+                    UTR
+                }, CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("TransactionService", "UpdateStatus", ex.Message);
+            }
+            return response;
         }
     }
 }

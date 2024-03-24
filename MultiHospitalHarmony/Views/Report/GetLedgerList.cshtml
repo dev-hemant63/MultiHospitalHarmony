@@ -1,0 +1,44 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<Ledger>>
+@{
+    if (Model != null)
+    {
+        int count = 0;
+        if (Model.Data.Any())
+        {
+            foreach (var item in Model.Data)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@item.TID</td>
+                    <td>@item.UserInfo</td>
+                    <td>@item.Reference</td>
+                    <td>@item.ServiceName</td>
+                    <td>@item.Opening</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Closing</td>
+                    <td>
+                        @if (item.TrType == MultiHospitalHarmony.Enum.TrType.CR)
+                        {
+                            <span class="badge badge-success badge-sm">Credit</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger badge-sm">Debit</span>
+                        }
+                    </td>
+                    <td>@item.EntryAt</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="text-center">
+                <td colspan="23">
+                    <img src="~/images/nodata.webp" />
+                </td>
+            </tr>
+        }
+    }
+}

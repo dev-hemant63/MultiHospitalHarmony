@@ -7,6 +7,8 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
     {
         Task<AppResponse<InitateTxnRes>> InitateTxn(int loginId, decimal amount);
         Task<AppResponse<StatusCheckRes>> StatusCheck(int TID);
+        Task<AppResponse<object>> UpdateStatus(int TID,string status,string UTR);
         Task<AppResponse<List<AddMoneyHistory>>> GetAddMoneyHistory(int loginId, int TID);
+        Task<AppResponse<List<Ledger>>> GetLedger(int loginId);
     }
 }

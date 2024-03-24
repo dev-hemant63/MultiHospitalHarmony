@@ -1,0 +1,153 @@
+﻿@using MultiHospitalHarmony.Enum
+@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<Commission>>
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Commission</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead class="text-white bg-primary">
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Role</td>
+                                    <td>Amount</td>
+                                    <td>EntryAt</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 0;
+                                    if (Model.Data.Any())
+                                    {
+                                        foreach (var item in Model.Data)
+                                        {
+                                            i++;
+                                            <tr>
+                                                    <td>@i</td>
+                                                <td>
+                                                    <div class="btn-group mb-1">
+                                                        <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('@item.Id')" href="javascript:void(0)" onclick="getById('@item.Id')">Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                    <td>@item.RoleId.ToString()</td>
+                                                    <td>@item.Amount</td>
+                                                    <td>@item.EntryAt</td>
+                                                </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                            <tr class="text-center">
+                                                <td colspan="23">
+                                                    <img src="~/images/nodata.webp" />
+                                                </td>
+                                            </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Define Commission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="hdnId" value="0" />
+                    <div class="col-sm-12">
+                        <label>Role</label>
+                        <select class="form-control" id="ddlRole" required>
+                            <option value="">:: SELECT ROLE ::</option>
+                            <option value="@Convert.ToInt32(AppRole.SuperDistributor)">Super Distributor</option>
+                            <option value="@Convert.ToInt32(AppRole.Distributor)">Distributor</option>
+                            <option value="@Convert.ToInt32(AppRole.Agent)">Agent</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Amount (%)</label>
+                        <input id="txtcommission" name="txtcommission" class="form-control" placeholder="Enter Amount" required />
+                        <input type="hidden" id="hdnId" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var save = () => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                Id: $('#hdnId').val(),
+                RoleId: $('#ddlRole').val(),
+                Amount: $('#txtcommission').val()
+            }
+            $.post('/Commission/Save', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    $('input').val('');
+                    $('.btn-close').click();
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id) => {
+            if (id != 0) {
+                $.post('/Commission/GetById', { Id: id }).done((res) => {
+                    if (res.success) {
+                        $('#hdnId').val(res.data.id);
+                        $('#ddlRole').val(res.data.roleId);
+                        $('#txtcommission').val(res.data.amount);
+                    }
+                }).fail((xhr) => {
+                    console.log(xhr.responseText);
+                    Swal.fire({
+                        title: "Failed!!",
+                        text: "Server Error!",
+                        icon: "error"
+                    });
+                });
+            }
+        }
+    </script>
+}
