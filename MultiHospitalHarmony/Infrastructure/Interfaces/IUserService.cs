@@ -12,5 +12,7 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
         Task<AppResponse<List<Qualifications>>> GetUserQualifications(int loginId);
         Task<AppResponse<List<MedicalHistory>>> MedicalHistory(int loginId);
         Task<AppResponse<object>> SaveMedicalHistory(int loginId, MedicalHistory medicalHistory);
+        Task<AppResponse<List<UserPermisions>>> GetPermisions(int UserId);
+        Task<AppResponse<object>> AssignPermission(int UserId, int ModuleId);
     }
 }

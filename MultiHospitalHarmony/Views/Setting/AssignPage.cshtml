@@ -16,10 +16,10 @@
                         {
                             foreach (var item in Model.Data)
                             {
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <div class="form-check">
                                         <input class="form-check-input_@item.Id" type="checkbox" checked="@item.IsActive">
-                                        <label class="form-check-label_@item.Id">
+                                        <label class="form-check-label_@item.Id text-nowrap">
                                             @item.PageName
                                         </label>
                                     </div>

@@ -188,5 +188,17 @@ namespace MultiHospitalHarmony.Controllers
             }
             return PartialView("~/home/recordnotfound");
         }
+        [HttpPost]
+        public async Task<IActionResult> GetPermisions(int UserId)
+        {
+            var data = await _userService.GetPermisions(UserId);
+            return Json(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignPermission(int UserId,int ModuleId)
+        {
+            var res = await _userService.AssignPermission(UserId, ModuleId);
+            return Json(res);
+        }
     }
 }
