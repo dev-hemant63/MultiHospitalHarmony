@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-sm-3">
-                    <h4 class="card-title">Add Money History</h4>
+                    <h4 class="card-title">Account Ledger</h4>
                 </div>
                 <div class="col-sm-6 d-flex">
                     <select class="form-control form-control-sm">
@@ -26,9 +26,9 @@
                             <thead class="text-white bg-primary">
                                 <tr>
                                     <td>#</td>
-                                    <td>Action</td>
                                     <td>TID</td>
                                     <td>User Info</td>
+                                    <td>Reference</td>
                                     <td>Service</td>
                                     <td>Opening</td>
                                     <td>Amount</td>
@@ -45,3 +45,22 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loaddata();
+        });
+        var loaddata = () => {
+            $.post('/Report/GetLedgerList').done((res) => {
+                $('#datagrid tbody').html(res);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

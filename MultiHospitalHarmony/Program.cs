@@ -28,6 +28,7 @@ builder.Services.AddSingleton<IAlertService, AlertService>();
 builder.Services.AddSingleton<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<IBadManagementService, BadManagementService>();
 builder.Services.AddSingleton<ISettingService, SettingService>();
+builder.Services.AddSingleton<ICommissionService, CommissionService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
