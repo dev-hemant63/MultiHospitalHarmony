@@ -167,10 +167,6 @@
                     text: res.message,
                     icon: res.success == true ? "success" : "error"
                 });
-                if (res.success == true) {
-                    $('input').val('');
-                    $('.btn-close').click();
-                }
             }).fail((xhr) => {
                 console.log(xhr.responseText);
                 Swal.fire({

@@ -19,18 +19,16 @@
     {
         public int statusCode { get; set; }
         public string responseText { get; set; }
-        public string utr { get; set; }
-        public string requestedId { get; set; }
-        public int tid { get; set; }
-        public int amount { get; set; }
-        public string status { get; set; }
-        public string qrid { get; set; }
-        public string displayName { get; set; }
-        public object url { get; set; }
-        public string entryOn { get; set; }
-        public string webhook { get; set; }
-        public string serverhook { get; set; }
+        public statusData result { get; set; }
     }
-
+    public class statusData
+    {
+        public string status { get; set; }
+        public string requestedId { get; set; }
+        public double amount { get; set; }
+        public string utr { get; set; }
+        public int tid { get; set; }
+        public string transactionInitiatedAt { get; set; }
+    }
 
 }

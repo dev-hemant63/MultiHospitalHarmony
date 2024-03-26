@@ -5,6 +5,7 @@ using MultiHospitalHarmony.Infrastructure.Interfaces;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class AddMoneyController : Controller
     {
         private readonly ITransactionService _transactionService;
@@ -12,11 +13,17 @@ namespace MultiHospitalHarmony.Controllers
         {
             _transactionService = transactionService;
         }
-        [Authorize]
+        
         [HttpPost]
         public async Task<IActionResult> InitiateTxn(decimal amount)
         {
             var res = await _transactionService.InitateTxn(User.GetLogingID<int>(), amount);
+            return Ok(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> StatusCheck(int TID)
+        {
+            var res = await _transactionService.StatusCheck(TID);
             return Ok(res);
         }
         [HttpGet]

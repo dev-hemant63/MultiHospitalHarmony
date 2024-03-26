@@ -13,13 +13,17 @@
                         <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Status Check</a>
+                            @if (item.Status == "P")
+                            {
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="statusCheck('@item.TID')">Status Check</a>
+                            }
                         </div>
                     </div>
                 </td>
                 <td>@item.TID</td>
                 <td>@item.UserInfo</td>
                 <td>@item.Amount</td>
+                <td>@item.UTR</td>
                 <td>
                     @if (item.Status =="F")
                     {
