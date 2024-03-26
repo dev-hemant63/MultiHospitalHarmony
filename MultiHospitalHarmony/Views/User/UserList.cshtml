@@ -11,14 +11,14 @@
                     <select class="form-control form-control-sm" id="ddlRole">
                         <option value="">:: Select Role ::</option>
                         @{
-                            <option value="@AppRole.SuperDistributor">@AppRole.SuperDistributor.ToString()</option>
-                            <option value="@AppRole.Distributor">@AppRole.Distributor.ToString()</option>
-                            <option value="@AppRole.Agent">@AppRole.Agent.ToString()</option>
-                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
-                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
-                            <option value="@AppRole.Doctor">@AppRole.Doctor.ToString()</option>
-                            <option value="@AppRole.Patient">@AppRole.Patient.ToString()</option>
-                            <option value="@AppRole.Reception">@AppRole.Reception.ToString()</option>
+                                            <option value="@AppRole.SuperDistributor">@AppRole.SuperDistributor.ToString()</option>
+                                            <option value="@AppRole.Distributor">@AppRole.Distributor.ToString()</option>
+                                            <option value="@AppRole.Agent">@AppRole.Agent.ToString()</option>
+                                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
+                                            <option value="@AppRole.Hospital">@AppRole.Hospital.ToString()</option>
+                                            <option value="@AppRole.Doctor">@AppRole.Doctor.ToString()</option>
+                                            <option value="@AppRole.Patient">@AppRole.Patient.ToString()</option>
+                                            <option value="@AppRole.Reception">@AppRole.Reception.ToString()</option>
                         }
                     </select>
                     <select class="form-control form-control-sm" id="SearchCriteria">
@@ -27,7 +27,7 @@
                             List<SearchCriteria> criteriaList = Enum.GetValues(typeof(SearchCriteria)).Cast<SearchCriteria>().ToList();
                             foreach (var item in criteriaList)
                             {
-                                <option value="@Convert.ToInt32(item)">@item.ToString()</option>
+                                                <option value="@Convert.ToInt32(item)">@item.ToString()</option>
                             }
                         }
                     </select>
@@ -71,6 +71,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Permission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="dataGrid">
+
+                    
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -84,6 +105,68 @@
             }
             $.post('/user/getUserList', filter).done((res) => {
                 $('#datagrid tbody').html(res);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getPermisions = (userId) => {
+            $.post('/user/GetPermisions', { UserId: userId }).done((response) => {
+                if (response.success) {
+                    let _html = response.data.map((v, i) => {
+                        let attribute = "";
+                        if (v.isPermission) {
+                            attribute = "checked";
+                        }
+                        return `<div class="col-sm-4">
+                                <div class="form-check">
+                                   <input class="form-check-input_${v.id}" type="checkbox" ${attribute} id="form-check-label_${v.id}" onchange="assignPermission('${userId}','${v.id}')">
+                                   <label class="form-check-label_${v.id} text-nowrap" for="form-check-label_${v.id}">${v.displayName}</label>
+                                </div>
+                            </div>`;
+                    });
+                    $('#dataGrid').empty().append(_html);
+                }
+                else {
+                    let _alert = `<div class="col-xl-12">
+                                        <div class="alert alert-danger left-icon-big alert-dismissible fade show">
+                                            <div class="media">
+                                                <div class="alert-left-icon-big">
+                                                    <span><i class="mdi mdi-alert"></i></span>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h5 class="mt-1 mb-2">Failed!</h5>
+                                                    <p class="mb-0">${v.message}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    $('#dataGrid').empty().append(_alert);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var assignPermission = (userId,moduleId) => {
+            let obj = {
+                UserId: userId,
+                ModuleId: moduleId,
+            }
+            $.post('/user/AssignPermission', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
             }).fail((xhr) => {
                 console.log(xhr.responseText);
                 Swal.fire({

@@ -11,8 +11,8 @@
                     <select class="form-control form-control-sm">
                         <option value="">:: Search Criteria ::</option>
                         @{
-                            <option value="@SearchCriteria.TID">@SearchCriteria.TID.ToString()</option>
-                            <option value="@SearchCriteria.UTR">@SearchCriteria.UTR.ToString()</option>
+                                    <option value="@SearchCriteria.TID">@SearchCriteria.TID.ToString()</option>
+                                    <option value="@SearchCriteria.UTR">@SearchCriteria.UTR.ToString()</option>
                         }
                     </select>
                     <input class="form-control form-control-sm" placeholder="Search Text" />
@@ -30,6 +30,7 @@
                                     <td>TID</td>
                                     <td>User Info</td>
                                     <td>Amount</td>
+                                    <td>UTR (Unique Transaction Reference)</td>
                                     <td>Status</td>
                                     <td>EntryAt</td>
                                 </tr>
@@ -50,6 +51,27 @@
         var loaddata = () => {
             $.post('/addmoney/GetHistory').done((res) => {
                 $('#datagrid tbody').html(res);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var statusCheck = (tid) => {
+            $.post('/addmoney/StatusCheck', { TID: tid }).done((res) => {
+                if (res.success) {
+                    loaddata();
+                }
+                else {
+                    Swal.fire({
+                        title: "Failed!!",
+                        text: res.message,
+                        icon: "error"
+                    });
+                }
             }).fail((xhr) => {
                 console.log(xhr.responseText);
                 Swal.fire({

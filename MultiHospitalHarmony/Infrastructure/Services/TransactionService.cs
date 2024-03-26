@@ -80,30 +80,36 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 var txnDetails = await _dapperContext.ExecuteProcAsync<PgTransaction>("Select * from PgTransaction Where TID = @TID", new
                 {
                     TID
-                }, CommandType.StoredProcedure);
+                }, CommandType.Text);
                 if (txnDetails.Status == "P")
                 {
                     var statusReq = new
                     {
-                        tid = TID,
+                        requestedId = TID.ToString(),
                         merchantId = PgDetails.MerchantId,
                         secretkey = PgDetails.SecretKey,
                     };
-                    var apiRes = _apiUtilityService.CallApiUsingPostWithHeader(PgDetails.TxnURL, statusReq, null);
+                    var apiRes = _apiUtilityService.CallApiUsingPostWithHeader(PgDetails.StatusURL, statusReq, null);
                     if (!string.IsNullOrEmpty(apiRes))
                     {
                         var txnStsRes = JsonConvert.DeserializeObject<StatusRes>(apiRes);
                         if (txnStsRes.statusCode == 1)
                         {
-                            if (txnStsRes.status[0].ToString().ToUpper() != "P")
+                            if (txnStsRes.result.status[0].ToString().ToUpper() != "P")
                             {
-                                var Dbres = await _dapperContext.ExecuteProcAsync<AppResponse<int>>("Proc_UpdatePGTxn", new StatusCheckRes
+                                var Dbres = await _dapperContext.ExecuteProcAsync<AppResponse<int>>("Proc_UpdateTxnStatus", new StatusCheckRes
                                 {
-                                    Status = txnStsRes.status,
+                                    Status = txnStsRes.result.status,
                                     TID = TID,
-                                    UTR = txnStsRes.utr
+                                    UTR = txnStsRes.result.utr
                                 }, CommandType.StoredProcedure);
+                                res.Success = Dbres.Success;
+                                res.Message = Dbres.Message;
                             }
+                        }
+                        else
+                        {
+                            res.Message = txnStsRes.responseText;
                         }
                     }
                 }                
@@ -111,6 +117,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             catch (Exception ex)
             {
                 _dapperContext.SaveLog("TransactionService", "StatusCheck", ex.Message);
+                res.Message = "Sorry there is some issue!";
             }
             return res;
         }

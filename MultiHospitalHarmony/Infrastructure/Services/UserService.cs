@@ -166,5 +166,42 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
+        public async Task<AppResponse<List<UserPermisions>>> GetPermisions(int UserId)
+        {
+            var response = new AppResponse<List<UserPermisions>>();
+            try
+            {
+                response.Data = await _dapperContext.GetAllAsync<UserPermisions>("Proc_GetPermisions", new
+                {
+                    UserId,
+                });
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Sorry there is some issue.";
+                _dapperContext.SaveLog("UserService", "GetPermisions", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<object>> AssignPermission(int UserId,int ModuleId)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_AssignPermission", new
+                {
+                    UserId,
+                    ModuleId
+                });
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Sorry there is some issue.";
+                _dapperContext.SaveLog("UserService", "GetPermisions", ex.Message);
+            }
+            return response;
+        }
     }
 }
