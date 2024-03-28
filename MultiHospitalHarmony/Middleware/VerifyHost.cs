@@ -14,7 +14,11 @@ namespace MultiHospitalHarmony.Middleware
         }
         public async Task InvokeAsync(HttpContext context)
         {
-            var appsetting = context.RequestServices.GetService<AppSettings>();
+			if (context.Request.Path == "/Home/NotFound")
+			{
+				await _next(context);
+			}
+			var appsetting = context.RequestServices.GetService<AppSettings>();
             var domain = context.Request.Host.Value;
             if (domain.Contains("localhost"))
             {
@@ -28,7 +32,7 @@ namespace MultiHospitalHarmony.Middleware
             else
             {
                 context.Response.Redirect($"/Home/NotFound");
-                return;
+				return;
             }
             await _next(context);
         }
