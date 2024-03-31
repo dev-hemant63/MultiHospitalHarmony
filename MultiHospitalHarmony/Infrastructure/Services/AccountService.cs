@@ -45,6 +45,8 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                         Role = result.Role,
                         Balance = result.Balance,
                         WId = result.WId,
+                        HospitalId = result.HospitalId,
+                        DoctorId = result.DoctorId,
                     };
                 }
                 else

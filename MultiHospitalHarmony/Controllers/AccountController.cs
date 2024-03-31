@@ -53,6 +53,8 @@ namespace MultiHospitalHarmony.Controllers
                     new Claim("RoleId",response.Data.RoleId.ToString()),
                     new Claim("Menus",JsonConvert.SerializeObject(res)),
                     new Claim("Balance",response.Data.Balance.ToString()),
+                    new Claim("HospitalId",response.Data.HospitalId.ToString()),
+                    new Claim("DoctorId",response.Data.DoctorId.ToString()),
                 };
                 var identity = new ClaimsIdentity(userclaims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var properties = new AuthenticationProperties

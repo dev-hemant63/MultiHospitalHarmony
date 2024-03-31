@@ -88,6 +88,7 @@ namespace MultiHospitalHarmony.Controllers
                 }
                 request.Banner = fileres.Data;
             }
+            request.HospitalId = User.GetHospitalId();
             var res = await _userService.Create(request, User.GetLogingID<int>(), User.GetWID<int>());
             return Json(res);
         }
