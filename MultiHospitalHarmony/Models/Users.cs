@@ -29,5 +29,7 @@ namespace MultiHospitalHarmony.Models
         public string HostName { get; set; }
         public string Logo { get; set; }
         public string Banner { get; set; }
+        public int HospitalId { get; set; }
+        public int DoctorId { get; set; }
     }
 }
