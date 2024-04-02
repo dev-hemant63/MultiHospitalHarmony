@@ -29,6 +29,7 @@ builder.Services.AddSingleton<ITransactionService, TransactionService>();
 builder.Services.AddSingleton<IBadManagementService, BadManagementService>();
 builder.Services.AddSingleton<ISettingService, SettingService>();
 builder.Services.AddSingleton<ICommissionService, CommissionService>();
+builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {

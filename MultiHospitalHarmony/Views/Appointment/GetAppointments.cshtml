@@ -1,0 +1,77 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<Appointments>>
+@{
+    if (Model != null)
+    {
+        int count = 0;
+        if (Model.Data.Any())
+        {
+            foreach (var item in Model.Data)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>
+                        <div class="btn-group mb-1">
+                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu">
+                                @if (item.Status == MultiHospitalHarmony.Enum.MasterStatus.Pending)
+                                {
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="changeStatus('2','@item.Id')">Approved</a>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="changeStatus('3','@item.Id')">Reject</a>
+                                }                                
+                            </div>
+                        </div>
+                    </td>
+                    <td>@item.Doctor</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.PatientMobileNo</td>
+                    <td>
+                        @if (item.Gender == "M")
+                        {
+                            <span>Male</span>
+                        }
+                        else if (item.Gender == "F")
+                        {
+                            <span>Female</span>
+                        }
+                        else
+                        {
+                            <span>Other</span>
+                        }
+                    </td>
+                    <td>@item.DOB</td>
+                    <td>@item.City</td>
+                    <td>@item.State</td>
+                    <td>@item.Time</td>
+                    <td>
+                        @if (item.Status == MultiHospitalHarmony.Enum.MasterStatus.Scheduled)
+                        {
+                            <span class="badge badge-success badge-sm">Scheduled</span>
+                        }
+                        else if (item.Status == MultiHospitalHarmony.Enum.MasterStatus.Reject)
+                        {
+                            <span class="badge badge-danger badge-sm">Reject</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-info badge-sm">Pending</span>
+                        }
+                    </td>
+                    <td>@item.Remark</td>
+                    <td>@item.AppointmentDate</td>
+                    <td>@item.EntryAt</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="text-center">
+                <td colspan="23">
+                    <img src="~/images/nodata.webp" />
+                </td>
+            </tr>
+        }
+    }
+}
