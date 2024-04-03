@@ -33,6 +33,19 @@ namespace MultiHospitalHarmony.Controllers
             var response = await _appointmentService.GetAppointments(User.GetLogingID<int>(),filter);
             return PartialView(response);
         }
+        [HttpGet]
+        public async Task<IActionResult> ScheduledAppointments()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetScheduledAppointments(AppointmentsFilter filter)
+        {
+            filter.HospitalId = User.GetHospitalId();
+            filter.DoctorId = User.GetDoctorId();
+            var response = await _appointmentService.GetScheduledAppointments(User.GetLogingID<int>(),filter);
+            return PartialView(response);
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateAppointment(UpdateAppointmentReq appointmentReq)
         {

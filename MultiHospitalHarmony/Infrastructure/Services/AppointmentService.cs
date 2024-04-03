@@ -53,6 +53,29 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
+        public async Task<AppResponse<List<Appointments>>> GetScheduledAppointments(int loginId,AppointmentsFilter request)
+        {
+            var response = new AppResponse<List<Appointments>>();
+            try
+            {
+                response.Data = await _dapperContext.GetAllAsync<Appointments>("Proc_GetScheduledAppointments", new
+                {
+                    request.FromDate,
+                    request.ToDate,
+                    request.SearchCriteria,
+                    request.SearchText,
+                    request.HospitalId,
+                    request.DoctorId,
+                }, CommandType.StoredProcedure);
+                response.Success = true;
+                response.Message = "Success.";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("AppointmentService", "Proc_GetScheduledAppointments", ex.Message);
+            }
+            return response;
+        }
         public async Task<AppResponse<object>> UpdateAppointmentStatus(int loginId,UpdateAppointmentReq request)
         {
             var response = new AppResponse<object>();

@@ -5,6 +5,7 @@ namespace MultiHospitalHarmony.Models
 {
     public class Appointments:CommonModel
     {
+        public long AppointmentSrNo { get; set; }
         public string Doctor { get; set; }
         public string PatientName { get; set; }
         public string PatientMobileNo { get; set; }

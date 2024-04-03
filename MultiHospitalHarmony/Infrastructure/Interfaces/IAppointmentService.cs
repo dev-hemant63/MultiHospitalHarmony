@@ -8,6 +8,7 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
     {
         Task<AppResponse<object>> Save(AppointmentReq request);
         Task<AppResponse<List<Appointments>>> GetAppointments(int loginId, AppointmentsFilter request);
+        Task<AppResponse<List<Appointments>>> GetScheduledAppointments(int loginId, AppointmentsFilter request);
         Task<AppResponse<object>> UpdateAppointmentStatus(int loginId,UpdateAppointmentReq request);
     }
 }
