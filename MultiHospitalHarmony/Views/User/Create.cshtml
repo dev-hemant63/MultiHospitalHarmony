@@ -1,4 +1,5 @@
-﻿@model CreateUserVM
+﻿@using MultiHospitalHarmony.Enum
+@model CreateUserVM
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card d-none" id="divQualifications">
@@ -108,6 +109,22 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="col-sm-4 m-b30 doctor d-none">
+                            <label class="form-label">Shift</label>
+                            <select class="form-control doctor-field" id="ddlshift" asp-for="@Model.ShiftId">
+                                <option value="0">Please select</option>
+                                <option value="@MasterShift.Day">@MasterShift.Day</option>
+                                <option value="@MasterShift.Night">@MasterShift.Night</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30 doctor d-none">
+                            <label class="form-label">Time From</label>
+                            <input type="time" class="form-control doctor-field" asp-for="@Model.TimeFrom">
+                        </div>
+                        <div class="col-sm-4 m-b30 doctor d-none">
+                            <label class="form-label">Time To</label>
+                            <input type="time" class="form-control doctor-field" asp-for="@Model.TimeTo">
+                        </div>
                         <div class="col-sm-4 m-b30 hospital d-none">
                             <label class="form-label">Host Name</label>
                             <input type="text" class="form-control hospital-field" asp-for="@Model.HostName">
@@ -158,6 +175,9 @@
                 Address: $('#txtAddress').val(),
                 Tehsil: $('#txtTehsil').val(),
                 HostName: $('#HostName').val(),
+                ShiftId: $('#ddlshift').val(),
+                TimeFrom: $('#TimeFrom').val(),
+                TimeTo: $('#TimeTo').val(),
                 IsDedicated: $('#isdedicated').is(':checked'),
                 CityId: parseInt($('#ddlcity').val()),
                 StateId: parseInt($('#ddlState').val()),
@@ -190,7 +210,7 @@
                     }
                 },
                 error: function (error) {
-                    console.error(error);
+                    console.error(error.responseText);
                     Swal.fire({
                         title: "Failed!",
                         text: "Server Error.",
@@ -203,6 +223,7 @@
             let roleId = $('#ddlrole').val();
             if (roleId == 6) {
                 $('#divQualifications').removeClass('d-none');
+                $('.doctor').removeClass('d-none');
                 $('.hospital').addClass('d-none');
             }
             else if (roleId == 5) {
@@ -211,6 +232,7 @@
             }
             else {
                 $('#divQualifications').addClass('d-none');
+                $('.doctor').addClass('d-none');
                 $('.hospital').addClass('d-none');
             }
         }

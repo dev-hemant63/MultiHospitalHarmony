@@ -1,0 +1,119 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Appointments</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead class="text-white bg-primary text-nowrap">
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Doctor</td>
+                                    <td>Patient Name</td>
+                                    <td>Patient MobileNo</td>
+                                    <td>Gender</td>
+                                    <td>DOB</td>
+                                    <td>City</td>
+                                    <td>State</td>
+                                    <td>Time</td>
+                                    <td>Status</td>
+                                    <td>Remark</td>
+                                    <td>Appointment Date</td>
+                                    <td>EntryAt</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <label>Status</label>
+                        <select class="form-control" id="ddlStatus">
+                            <option value="0">:: SELECT STATUS ::</option>
+                            <option value="2">Approved</option>
+                            <option value="3">Reject</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Remark</label>
+                        <input type="text" placeholder="Remark" id="remark" class="form-control" />
+                        <input type="hidden" id="hdnId" value="0"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UpdateStatus()">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loaddata();
+        });
+        var loaddata = () => {
+            $.post('/Appointment/GetAppointments').done((res) => {
+                $('#datagrid tbody').html(res);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var changeStatus = (status,id) => {
+            $('#ddlStatus').val(status);
+            $('#hdnId').val(id)
+        }
+        var UpdateStatus = () => {
+            let obj = {
+                AppointmentId: $('#hdnId').val(),
+                Status: $('#ddlStatus').val(),
+                Remark: $('#remark').val(),
+            }
+            $.post('/Appointment/UpdateAppointment', obj).done((response) => {
+                Swal.fire({
+                    title: response.success == true ? "Success" : "Failed",
+                    text: response.message,
+                    icon: response.success == true ? "success" : "error"
+                });
+                if (response.success) {
+                    loaddata();
+                    $('.btn-close').click();
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

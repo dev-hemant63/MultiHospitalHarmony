@@ -53,5 +53,10 @@ namespace MultiHospitalHarmony.Extentions
             var HospitalId = claimsPrincipal.FindFirst("HospitalId");
 			return Convert.ToInt32(HospitalId.Value);
         }
+        public static int GetDoctorId(this ClaimsPrincipal claimsPrincipal)
+        {
+            var HospitalId = claimsPrincipal.FindFirst("DoctorId");
+            return Convert.ToInt32(HospitalId.Value);
+        }
     }
 }

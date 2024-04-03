@@ -1,0 +1,50 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<Appointments>>
+@{
+    if (Model != null)
+    {
+        int count = 0;
+        if (Model.Data.Any())
+        {
+            foreach (var item in Model.Data)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@item.AppointmentSrNo</td>
+                    <td>@item.Doctor</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.PatientMobileNo</td>
+                    <td>
+                        @if (item.Gender == "M")
+                        {
+                            <span>Male</span>
+                        }
+                        else if (item.Gender == "F")
+                        {
+                            <span>Female</span>
+                        }
+                        else
+                        {
+                            <span>Other</span>
+                        }
+                    </td>
+                    <td>@item.DOB</td>
+                    <td>@item.City</td>
+                    <td>@item.State</td>
+                    <td>@item.Time</td>
+                    <td>@item.AppointmentDate</td>
+                    <td>@item.EntryAt</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="text-center">
+                <td colspan="23">
+                    <img src="~/images/nodata.webp" />
+                </td>
+            </tr>
+        }
+    }
+}

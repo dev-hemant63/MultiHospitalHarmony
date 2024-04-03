@@ -1,4 +1,5 @@
-﻿using MultiHospitalHarmony.Models.Common;
+﻿using MultiHospitalHarmony.Enum;
+using MultiHospitalHarmony.Models.Common;
 
 namespace MultiHospitalHarmony.Models
 {
@@ -31,5 +32,8 @@ namespace MultiHospitalHarmony.Models
         public string Banner { get; set; }
         public int HospitalId { get; set; }
         public int DoctorId { get; set; }
+        public MasterShift ShiftId { get; set; }
+        public string TimeFrom { get; set; }
+        public string TimeTo { get; set; }
     }
 }
