@@ -30,6 +30,7 @@ builder.Services.AddSingleton<IBadManagementService, BadManagementService>();
 builder.Services.AddSingleton<ISettingService, SettingService>();
 builder.Services.AddSingleton<ICommissionService, CommissionService>();
 builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
+builder.Services.AddSingleton<IWardService, WardService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {

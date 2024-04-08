@@ -1,0 +1,47 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<Wards>
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Ward Beds</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead class="text-white bg-primary">
+                                <tr>
+                                    <td style="width: 12px;">#</td>
+                                    <td style="width: 14rem;">Name</td>
+                                    <td>Beds</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>@Model.Data.Name</td>
+                                    <td>
+                                        <div class="row">
+                                           @{
+                                                for (var i = 0; i < @Model.Data.Capacity_of_bed; i++)
+                                                {
+                                                    <div class="col-sm-3 mb-3">
+                                                        <span>Name: <input type="text" id="" /></span><br>
+                                                        <span>Code: <input type="text" id="" /></span>
+                                                    </div>
+                                               }
+                                           }
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

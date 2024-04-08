@@ -1,0 +1,146 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Ward Type</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead class="text-white bg-primary">
+                                <tr>
+                                    <td>#</td>
+                                    <td>Name</td>
+                                    <td>Remark</td>
+                                    <td>EntryAt</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Bed</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="hdnId" value="0" />
+                    <div class="col-sm-12">
+                        <label>Name</label>
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Name" required />
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Remark</label>
+                        <input id="txtRemark" name="txtRemark" class="form-control" placeholder="Remark" />
+                        <input type="hidden" id="hdnid" value="0" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loaddata();
+        });
+        var loaddata = () => {
+            $.post('/Ward/GetWardType').done((res) => {
+                if (res.success) {
+                    let _html = res.data.map((v, i) => {
+                        i = i + 1;
+                        return `<tr>
+                                                    <td>${i}</td>
+                                                    <td>${v.name}</td>
+                                                    <td>${v.remark}</td>
+                                                    <td>${v.entryAt}</td>
+                                                            <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('${v.id}')"><i class="fa fa-edit"></i><a></td>
+                                                </tr>`;
+                    });
+                    $('#datagrid tbody').empty().append(_html);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var save = () => {
+            let obj = {
+                Id: $('#hdnid').val(),
+                Name: $('#txtName').val(),
+                Remark: $('#txtRemark').val()
+            }
+            $.post('/Ward/SaveType', obj).done((response) => {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: "success"
+                    });
+                    $('input').val('');
+                    $('.btn-close').click();
+                    loaddata();
+                }
+                else {
+                    Swal.fire({
+                        title: "Failed",
+                        text: response.message,
+                        icon: "error"
+                    });
+                }
+                
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id) => {
+            let obj = {
+                Id: id
+            }
+            $.post('/Ward/GetWardTypeById', obj).done((response) => {
+                if (response.success) {
+                    $('#txtName').val(response.data.name);
+                    $('#txtRemark').val(response.data.remark);
+                    $('#hdnid').val(response.data.id);
+                    loaddata();
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

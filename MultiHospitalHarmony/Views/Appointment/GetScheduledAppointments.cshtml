@@ -30,6 +30,16 @@
                         }
                     </td>
                     <td>@item.DOB</td>
+                    <td>
+                        @if (item.IsCompleted)
+                        {
+                            <span class="badge badge-sm badge-success">Complete</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-sm badge-info">Pending</span>
+                        }
+                    </td>
                     <td>@item.City</td>
                     <td>@item.State</td>
                     <td>@item.Time</td>

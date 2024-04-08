@@ -17,5 +17,6 @@ namespace MultiHospitalHarmony.Models
         public MasterStatus Status { get; set; }
         public string AppointmentDate { get; set; }
         public string Remark { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }
