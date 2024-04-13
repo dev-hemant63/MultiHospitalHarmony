@@ -1,0 +1,39 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<DoctorVisit>>
+<div class="col-sm-12">
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm" id="datagrid">
+            <thead class="text-white bg-primary">
+                <tr>
+                    <td>#</td>
+                    <td>Full Name</td>
+                    <td>MobileNo</td>
+                    <td>VisitTime</td>
+                    <td>VisitDate</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model != null && Model.Success && Model.Data != null){
+                    int i = 0;
+                    foreach (var item in Model.Data)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.FullName</td>
+                            <td>@item.MobileNo</td>
+                            <td>@item.VisitTime</td>
+                            <td>@item.VisitDate</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="34" class="text-center text-danger">No record found...</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

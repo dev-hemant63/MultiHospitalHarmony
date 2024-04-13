@@ -108,6 +108,24 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<CreateUserVM>> GetUserByMobile(string mobileNo)
+        {
+            var res = new AppResponse<CreateUserVM>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res.Data = await _dapperContext.ExecuteProcAsync<CreateUserVM>("Proc_GetUserInfoByMobileNo", new { mobileNo }, CommandType.StoredProcedure);
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("UserService", "GetUserByMobile", ex.Message);
+            }
+            return res;
+        }
         public async Task<AppResponse<List<Qualifications>>> GetUserQualifications(int loginId)
         {
             var res = new AppResponse<List<Qualifications>>
@@ -205,6 +223,28 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 _dapperContext.SaveLog("UserService", "GetPermisions", ex.Message);
             }
             return response;
+        }
+        public async Task<AppResponse<List<Users>>> GetDoctorList(int loginId, GetDoctorReq userFilter)
+        {
+            var res = new AppResponse<List<Users>>
+            {
+                Message = "Failed."
+            };
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<Users>("Proc_GetDoctors", new
+                {
+                    userFilter.WID,
+                    userFilter.HospitalId
+                }, CommandType.StoredProcedure);
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("UserService", "GetDoctorList", ex.Message);
+            }
+            return res;
         }
     }
 }

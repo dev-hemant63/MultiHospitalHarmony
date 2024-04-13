@@ -1,0 +1,198 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12" id="maindiv">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Admit Patient</h4>
+            </div>
+            <div class="card-body">
+                <div class="basic-form">
+                    <div class="row" id="div-main">
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">PatientId/MobileNo</label>
+                            <input type="text" class="form-control" id="txtPatientInfo" onblur="getDetails()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            
+        });
+        var getDetails = () => {
+            $.post('/patient/GetPatientDetails', { patientInfo: $('#txtPatientInfo').val() }).done((result) => {
+                $('#div-main').empty().append(result);
+                setTimeout(() => {
+                    bindWardType();
+                    
+                }, 1000);
+                setTimeout(() => {
+                    bindDoctor();
+                },1000);
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var PreferredForAdmit = () =>{
+            let _is = $('#ddlforAdmit').val();
+            if (_is == 1) {
+                $('.PreferredForAdmit').removeClass('d-none');
+                //$('.PreferredForAdmit select,input').attr('required', true);
+            }
+            else {
+                $('.PreferredForAdmit').addClass('d-none');
+                //$('.PreferredForAdmit select,input').attr('required', false);
+            }
+        }
+        var bindWardType = () =>{
+            $.post('/ward/GetWardType').done((res) => {
+                if (res.data != null && res.success == true) {
+                    let _option = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let v = res.data[i];
+                        _option.push(`<option value="${v.id}">${v.name}</option>`);
+                    }
+                    $('#ddlwardtpe').empty().append('<option value="0">:: SELECT WARD ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindWardRoom = () => {
+            let obj ={
+                WardTypeId: $('#ddlwardtpe').val()
+            }
+            $.post('/ward/GetWardList', obj).done((res) => {
+                if (res.data != null && res.success == true) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.name}</option>`;
+                    });
+                    $('#ddlroom').empty().append('<option value="">:: SELECT ROOM ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindWardBed = () => {
+            let obj = {
+                WardId: $('#ddlroom').val()
+            }
+            $.post('/ward/GetHospitalBedById', obj).done((res) => {
+                if (res.data != null && res.success == true) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.name} (${v.code})</option>`;
+                    });
+                    $('#ddlbed').empty().append('<option value="">:: SELECT BED ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindDoctor = () => {
+            $.post('/patient/GetDoctors').done((res) => {
+                if (res.data != null && res.success == true) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.fullName}</option>`;
+                    });
+                    $('#ddldoctor').empty().append('<option value="">:: SELECT DOCTOR ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var savePatient = () => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                PatientUserName: $('#txtUserName').val(),
+                MobileNo: $('#txtPatientInfo').val(),
+                DOB: $('#txtdob').val(),
+                FullName: $('#txtfullname').val(),
+                Age: $('#txtAge').val(),
+                BloodGroup: $('#txtBloodGroup').val(),
+                MaritalStatus: $('#ddlMarital').val(),
+                Gender: $('#ddlgender').val(),
+                Email: $('#txtemail').val(),
+                ZipCode: $('#txtZipCode').val(),
+                Address: $('#txtAddress').val(),
+                State: $('#ddlState').val(),
+                City: $('#ddlcity').val(),
+                Tehsil: $('#txtTehsil').val(),
+                GuardianName: $('#txtGuardianName').val(),
+                GuardianMobile: $('#txtGuardianMobile').val(),
+                RelationWithPatient: $('#txtRelationWithPatient').val(),
+                BloodPressure: $('#txtbloodpressure').val(),
+                PulseRate: $('#txtpluserate').val(),
+                Wight: $('#txtWight').val(),
+                WardType: $('#ddlwardtpe').val(),
+                RoomId: $('#ddlroom').val(),
+                BedId: $('#ddlbed').val(),
+                DoctorId: $('#ddldoctor').val(),
+                PrescriptionFile: "",
+                Diagnosis: $('#txtDiagnosis').val(),
+                Prescription: $('#txtPrescription').val(),
+                ReferedType: "",
+                PreferredForAdmit: $('#ddlforAdmit').val() == '1'?true:false,
+            }
+            let formdata = new FormData();
+            formdata.append("JsonData", JSON.stringify(obj));
+            formdata.append("File", $('#txtPrescriptionFile').prop('files')[0]);
+
+            $.ajax({
+                url: '/patient/admitpatient',
+                type: 'POST',
+                data: formdata,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: "success"
+                    });
+                    if (response.success) {
+                        $('input').val('');
+                        $('select').val('');
+                    }
+                },
+                error: function (error) {
+                    console.error(error.responseText);
+                    Swal.fire({
+                        title: "Failed!",
+                        text: "Server Error.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    </script>
+}

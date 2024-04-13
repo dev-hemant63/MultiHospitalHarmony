@@ -54,3 +54,13 @@ var showModel = function (result) {
         $('.modal,.modal-backdrop').remove();
     })
 }
+var btnLoader = () => {
+    return {
+        load: (btnId) => {
+            $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
+        },
+        stop: (btnId, btnText) => {
+            $('#' + btnId).html(btnText).prop('disabled', false);
+        }
+    };
+};

@@ -35,5 +35,13 @@ namespace MultiHospitalHarmony.Models
         public MasterShift ShiftId { get; set; }
         public string TimeFrom { get; set; }
         public string TimeTo { get; set; }
+        public int Age { get; set; }
+        public string BloodGroup { get; set; }
+        public string GuardianName { get; set; }
+        public string GuardianMobile { get; set; }
+        public string Relation_with_Patient { get; set; }
+        public string Marital { get; set; }
+        public string Gender { get; set; }
+        public string DOB { get; set; }
     }
 }
