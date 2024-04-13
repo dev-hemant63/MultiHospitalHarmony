@@ -11,5 +11,6 @@ namespace MultiHospitalHarmony.Models
         public string TypeName { get; set; }
         public int Capacity_of_bed { get; set; }
         public int CurrentOccupancy { get; set; }
+        public decimal Charge { get; set; }
     }
 }

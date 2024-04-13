@@ -12,6 +12,8 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
         Task<AppResponse<WardType>> GetWardTypeById(int loginId, GetWardTypeReq request);
         Task<AppResponse<List<Wards>>> GetWardList(int loginId, GetWardTypeReq request);
         Task<AppResponse<Wards>> GetWardById(int loginId, GetWardTypeReq request);
-
+        Task<AppResponse<List<HospitalBeds>>> GetHospitalBeds(int loginId, GetBedsReq request);
+        Task<AppResponse<object>> AddHospitalBeds(int loginId, AddHospitalBedsReq request);
+        Task<AppResponse<HospitalBeds>> GetHospitalBedById(int loginId, GetBedsReq request);
     }
 }

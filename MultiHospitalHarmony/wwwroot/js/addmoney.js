@@ -25,6 +25,7 @@ $('#btnAdd').click(function () {
     initiatePayment();
 });
 var initiatePayment = () => {
+    btnLoader().load('btnAdd');
     $.post('/addmoney/InitiateTxn', {
         amount: $('#txtAmount').val()
     }).done((res) => {
@@ -49,5 +50,5 @@ var initiatePayment = () => {
             text: "Server Error",
             icon: "error"
         });
-    });
+    }).always(() => { btnLoader().stop('btnAdd','Next'); });
 }

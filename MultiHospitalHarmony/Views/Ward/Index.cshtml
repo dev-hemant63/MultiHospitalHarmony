@@ -17,6 +17,7 @@
                                 <tr>
                                     <td>#</td>
                                     <td>Name</td>
+                                    <td>Charge</td>
                                     <td>Type</td>
                                     <td>Capacity Of Bed</td>
                                     <td>Current Occupancy</td>
@@ -52,6 +53,10 @@
                     <div class="col-sm-12">
                         <label>Name</label>
                         <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Name" required />
+                    </div> 
+                    <div class="col-sm-12">
+                        <label>Charge</label>
+                        <input type="number" id="txtCharge" name="txtCharge" class="form-control" placeholder="Charge" required />
                     </div>
                     
                     <div class="col-sm-12">
@@ -82,6 +87,7 @@
                         return `<tr>
                                                             <td>${i}</td>
                                                             <td>${v.name}</td>
+                                                                    <td>${v.charge}</td>
                                                                     <td>${v.typeName}</td>
                                                                     <td>${v.capacity_of_bed}</td>
                                                                             <td>${v.currentOccupancy}</td>
@@ -107,6 +113,7 @@
                 Id: $('#hdnid').val(),
                 Name: $('#txtName').val(),
                 Type: $('#ddltype').val(),
+                Charge: $('#txtCharge').val(),
                 Capacity_of_bed: $('#txtcapofbed').val()
             }
             $.post('/Ward/Save', obj).done((response) => {
@@ -158,12 +165,13 @@
             bindType();
 
             setTimeout(() => {
-                $.post('/Ward/GetWardById').done((res) => {
+                $.post('/Ward/GetWardById', { Id: id }).done((res) => {
                     if (res.success) {
                         $('#hdnid').val(res.data.id);
                         $('#txtName').val(res.data.name);
                         $('#ddltype').val(res.data.type);
                         $('#txtcapofbed').val(res.data.capacity_of_bed);
+                        $('#txtCharge').val(res.data.charge);
                     }
                 }).fail((xhr) => {
                     console.log(xhr.responseText);
@@ -175,5 +183,6 @@
                 });
             },200)
         }
+        
     </script>
 }

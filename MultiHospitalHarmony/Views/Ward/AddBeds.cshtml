@@ -1,11 +1,13 @@
-﻿@using MultiHospitalHarmony.Models.Common
-@model AppResponse<Wards>
+﻿@model AddBedsVM
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div class="col-sm-3">
                     <h4 class="card-title">Ward Beds</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0','0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
                 </div>
             </div>
             <div class="card-body">
@@ -22,18 +24,30 @@
                             <tbody>
                                 <tr>
                                     <td>1</td>
-                                    <td>@Model.Data.Name</td>
+                                    <td>@Model.WardDetails.Data.Name</td>
                                     <td>
                                         <div class="row">
-                                           @{
-                                                for (var i = 0; i < @Model.Data.Capacity_of_bed; i++)
+                                            @{
+                                                foreach (var item in Model.HospitalBeds.Data)
                                                 {
-                                                    <div class="col-sm-3 mb-3">
-                                                        <span>Name: <input type="text" id="" /></span><br>
-                                                        <span>Code: <input type="text" id="" /></span>
+                                                    <div class="col-sm-2">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="new-arrival-product">
+                                                                    <div class="new-arrivals-img-contnent">
+                                                                        <img class="img-fluid" src="/images/bed.webp" alt="">
+                                                                    </div>
+                                                                    <div class="new-arrival-content text-center mt-3">
+                                                                        <h4><a href="javascript:void(0)" class="text-wrap">@item.Name</h4>
+                                                                        <span class="price">@item.Code</span>
+                                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('@item.Id','@Model.WardDetails.Data.Id')" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                               }
-                                           }
+                                                }
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -45,3 +59,88 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Bed</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Name</label>
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Name" required />
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Code</label>
+                        <input id="txtCode" name="txtCode" class="form-control" placeholder="Code" />
+                        <input type="hidden" id="hdnId" value="0" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveBed('@Model.WardDetails.Data.Id')">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var saveBed = (wardId) => {
+
+            let obj = {
+                Id: $('#hdnId').val(),
+                Name: $('#txtName').val(),
+                Code: $('#txtCode').val(),
+                WardId: wardId
+            }
+
+            $.post('/Ward/AddHospitalBeds', obj).done((response) => {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: "success"
+                    });
+                    $('input').val('');
+                    $('.btn-close').click();
+                    window.location.reload();
+                }
+                else {
+                    Swal.fire({
+                        title: "Failed",
+                        text: response.message,
+                        icon: "error"
+                    });
+                }
+
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id,wardId) =>{
+            $.post('/Ward/GetHospitalBedById', { Id: id, WardId: wardId }).done((res) => {
+                if (res.success) {
+                    $('#hdnId').val(res.data.id);
+                    $('#txtName').val(res.data.name);
+                    $('#txtCode').val(res.data.code);
+                }
+            }).fail((xhr) => {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

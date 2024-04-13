@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
+using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
 
 namespace MultiHospitalHarmony.Controllers
@@ -64,7 +65,8 @@ namespace MultiHospitalHarmony.Controllers
             var res = await _wardService.GetWardList(User.GetLogingID<int>(), new GetWardTypeReq
             {
                 WID = User.GetWID<int>(),
-                HospitalId = User.GetHospitalId()
+                HospitalId = User.GetHospitalId(),
+                WardTypeId = addWardTypeReq.WardTypeId
             });
             return Json(res);
         }
@@ -78,7 +80,22 @@ namespace MultiHospitalHarmony.Controllers
                 Id = addWardReq.Id,
                 Name = addWardReq.Name,
                 Type = addWardReq.Type,
-                Capacity_of_bed = addWardReq.Capacity_of_bed
+                Capacity_of_bed = addWardReq.Capacity_of_bed,
+                Charge = addWardReq.Charge,
+            });
+            return Json(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddHospitalBeds(AddHospitalBedsReq bedsReq)
+        {
+            var res = await _wardService.AddHospitalBeds(User.GetLogingID<int>(), new AddHospitalBedsReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId(),
+                Id = bedsReq.Id,
+                Name = bedsReq.Name,
+                Code = bedsReq.Code,
+                WardId = bedsReq.WardId
             });
             return Json(res);
         }
@@ -97,13 +114,31 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> AddBeds(int wardId)
         {
-            var res = await _wardService.GetWardById(User.GetLogingID<int>(), new GetWardTypeReq
+            var res = new AddBedsVM();
+            res.WardDetails = await _wardService.GetWardById(User.GetLogingID<int>(), new GetWardTypeReq
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId(),
                 Id = wardId
             });
+            res.HospitalBeds = await _wardService.GetHospitalBeds(User.GetLogingID<int>(), new GetBedsReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId(),
+                WardId = wardId
+            });
             return View(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetHospitalBedById(GetBedsReq getBedsReq)
+        {
+            var res = await _wardService.GetHospitalBeds(User.GetLogingID<int>(), new GetBedsReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId(),
+                WardId = getBedsReq.WardId
+            });
+            return Json(res);
         }
     }
 }

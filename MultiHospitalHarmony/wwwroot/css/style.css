@@ -15332,11 +15332,11 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_2"][data-theme-version="dark"],
 [data-nav-headerbg="color_2"] {
-  --nav-headbg: #222B40;
-  /* .nav-control{
+    --nav-headbg: #ffffff;
+    /* .nav-control{
 				background-color:transparent;
 			} */
-  /* &[data-nav-headerbg="color_8"]{
+    /* &[data-nav-headerbg="color_8"]{
 				.nav-header{
 					.brand-logo{
 						.brand-title{
@@ -15352,7 +15352,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 						background:$black;
 					}
 				}
-			} */ }
+			} */
+}
   [data-nav-headerbg="color_2"][data-theme-version="dark"] .nav-header .brand-logo .logo-abbr path,
   [data-nav-headerbg="color_2"] .nav-header .brand-logo .logo-abbr path {
     fill: #fff; }

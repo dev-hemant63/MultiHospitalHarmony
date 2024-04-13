@@ -8,5 +8,6 @@
 		public string Name { get; set; }
 		public int Type { get; set; }
 		public int Capacity_of_bed { get; set; }
+		public decimal Charge { get; set; }
 	}
 }

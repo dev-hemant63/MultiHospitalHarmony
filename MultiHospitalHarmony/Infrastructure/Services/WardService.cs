@@ -27,6 +27,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
 					addWardReq.Name,
 					addWardReq.Type,
 					addWardReq.Capacity_of_bed,
+					addWardReq.Charge,
 					LoginId = loginId
 				});
 			}
@@ -106,7 +107,8 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 {
                     request.HospitalId,
                     request.WID,
-                    request.Id
+                    request.Id,
+                    request.WardTypeId,
                 });
                 response.Success = true;
                 response.Message = "Success";
@@ -134,6 +136,71 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             catch (Exception ex)
             {
                 _dapperContext.SaveLog("WardService", "GetWardList", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<List<HospitalBeds>>> GetHospitalBeds(int loginId, GetBedsReq request)
+        {
+            var response = new AppResponse<List<HospitalBeds>>();
+            try
+            {
+                response.Data = await _dapperContext.GetAllAsync<HospitalBeds>("Proc_GetHospitalBeds", new
+                {
+                    request.HospitalId,
+                    request.WID,
+                    request.WardId,
+                });
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("WardService", "GetHospitalBeds", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<object>> AddHospitalBeds(int loginId, AddHospitalBedsReq request)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_AddHospitalBeds", new
+                {
+                    request.Id,
+                    request.HospitalId,
+                    request.WID,
+                    request.WardId,
+                    Name = request.Name == null?"": request.Name,
+                    Code = request.Code == null?"": request.Code,
+                    loginId
+                });
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("WardService", "AddHospitalBeds", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<HospitalBeds>> GetHospitalBedById(int loginId, GetBedsReq request)
+        {
+            var response = new AppResponse<HospitalBeds>();
+            try
+            {
+                response.Data = await _dapperContext.ExecuteProcAsync<HospitalBeds>("Proc_GetHospitalBeds", new
+                {
+                    request.HospitalId,
+                    request.WID,
+                    request.WardId,
+                    request.Id,
+                });
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("WardService", "GetHospitalBedById", ex.Message);
             }
             return response;
         }
