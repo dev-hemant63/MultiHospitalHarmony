@@ -80,7 +80,7 @@
                     $('#datagrid tbody').empty().append(_html);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -114,7 +114,7 @@
                 }
                 
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -134,7 +134,7 @@
                     loaddata();
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",

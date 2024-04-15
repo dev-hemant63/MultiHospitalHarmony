@@ -123,7 +123,7 @@
                     $('.btn-close').click();
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -140,7 +140,7 @@
                         $('#txtcommission').val(res.data.amount);
                     }
                 }).fail((xhr) => {
-                    console.log(xhr.responseText);
+                    console.log(xhr);
                     Swal.fire({
                         title: "Failed!!",
                         text: "Server Error!",

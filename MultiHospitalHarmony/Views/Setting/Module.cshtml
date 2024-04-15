@@ -108,7 +108,7 @@
                     $('.modal,.modal-backdrop').remove();
                 });
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
             });
         }
         var save = () => {
@@ -131,7 +131,7 @@
                     $('.btn-close').click();
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -148,7 +148,7 @@
                         $('#txtdisplayname').val(res.data.displayName);
                     }
                 }).fail((xhr) => {
-                    console.log(xhr.responseText);
+                    console.log(xhr);
                     Swal.fire({
                         title: "Failed!!",
                         text: "Server Error!",

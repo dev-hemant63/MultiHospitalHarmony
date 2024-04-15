@@ -25,10 +25,11 @@ $('#btnAdd').click(function () {
     initiatePayment();
 });
 var initiatePayment = () => {
-    btnLoader().load('btnAdd');
+    $('#btnAdd').html('<i class="fa fa-spinner fa-spin"></i> Requesting...').prop('disabled', true);
     $.post('/addmoney/InitiateTxn', {
         amount: $('#txtAmount').val()
     }).done((res) => {
+        
         if (res.success) {
             window.open(
                 res.data.url,
@@ -44,11 +45,11 @@ var initiatePayment = () => {
             });
         }
     }).fail((xhr) => {
-        console.log(xhr.responseText);
+        console.log(xhr);
         Swal.fire({
             title: "Failed!",
             text: "Server Error",
             icon: "error"
         });
-    }).always(() => { btnLoader().stop('btnAdd','Next'); });
+    }).always(() => { $('#btnAdd').html('Next').prop('disabled', false); });
 }

@@ -118,7 +118,7 @@
                 }
 
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -134,7 +134,7 @@
                     $('#txtCode').val(res.data.code);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",

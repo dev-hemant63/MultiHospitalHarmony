@@ -78,7 +78,7 @@
             $.post('/Appointment/GetAppointments').done((res) => {
                 $('#datagrid tbody').html(res);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -107,7 +107,7 @@
                     $('.btn-close').click();
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",

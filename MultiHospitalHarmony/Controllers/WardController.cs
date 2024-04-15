@@ -136,7 +136,8 @@ namespace MultiHospitalHarmony.Controllers
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId(),
-                WardId = getBedsReq.WardId
+                WardId = getBedsReq.WardId,
+                Id = getBedsReq.Id
             });
             return Json(res);
         }

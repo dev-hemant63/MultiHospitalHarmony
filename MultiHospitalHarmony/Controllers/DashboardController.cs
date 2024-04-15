@@ -57,5 +57,11 @@ namespace MultiHospitalHarmony.Controllers
         {
             return View();
         }
+        [Authorize (Roles = "PharmacyAdmin")]
+        [HttpGet]
+        public async Task<IActionResult> PharmacyAdmin()
+        {
+            return View();
+        }
     }
 }

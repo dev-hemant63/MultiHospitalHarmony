@@ -81,7 +81,7 @@ namespace MultiHospitalHarmony.Controllers
                 {
                     file = File,
                     FileName =$"{req.FullName}_{DateTime.Now.ToString("ddMMyyyyhhmmssfff")}",
-                    FilePath = "wwwroot/Patients/document/"
+                    FilePath = "wwwroot/upload/patient/PrescriptionFile/"
                 });
                 if(!fileRes.Success)
                 {
@@ -125,6 +125,12 @@ namespace MultiHospitalHarmony.Controllers
         {
             var res = await _iPDService.PatientWardDetails(User.GetLogingID<int>(), patientId);
             return PartialView(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetHistory(int patientId)
+        {
+            var medicalHistory = await _userService.MedicalHistory(patientId);
+            return PartialView(medicalHistory);
         }
     }
 }

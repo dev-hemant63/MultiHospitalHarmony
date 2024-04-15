@@ -87,7 +87,7 @@
             $.post('/patient/GetAdmitedPatientList', filter).done((res) => {
                 $('#datagrid tbody').html(res);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -100,7 +100,7 @@
             $.post('/patient/GetDoctorVisit', { patientId: patientId }).done((res) => {
                 $('#data').empty().append(res);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -113,7 +113,20 @@
             $.post('/patient/GetPatientWards', { patientId: patientId }).done((res) => {
                 $('#data').empty().append(res);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var GetHistory = (patientId) => {
+            $('#title').text('Medical History');
+            $.post('/patient/GetHistory', { patientId: patientId }).done((res) => {
+                $('#data').empty().append(res);
+            }).fail((xhr) => {
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",

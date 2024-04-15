@@ -106,7 +106,7 @@
             $.post('/user/getUserList', filter).done((res) => {
                 $('#datagrid tbody').html(res);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -148,7 +148,7 @@
                     $('#dataGrid').empty().append(_alert);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -168,7 +168,7 @@
                     icon: res.success == true ? "success" : "error"
                 });
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
