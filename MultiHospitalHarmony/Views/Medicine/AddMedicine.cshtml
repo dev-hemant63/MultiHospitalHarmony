@@ -1,0 +1,240 @@
+﻿@model Medicine
+<div class="row">
+    <div class="col-xl-12 col-lg-12" id="maindiv">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Add Medicine</h4>
+            </div>
+            <div class="card-body">
+                <div class="basic-form">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Bar Code/QR Code</label>
+                            <input type="text" class="form-control" asp-for="@Model.BarCode" placeholder="Bar Code/QR Code" id="txtBarCode" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Category</label>
+                            <select class="form-control" id="ddlCategory" asp-for="@Model.CategoryId" required>
+                                <option value="0">:: SELECT Category ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Medicine Type</label>
+                            <select class="form-control" id="ddlMedicineType" asp-for="@Model.MedicineType" required>
+                                <option value="0">:: Medicine Type ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Medicine Name</label>
+                            <input type="text" class="form-control" placeholder="Medicine Name" asp-for="@Model.Name" id="txtMedicineName" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Strength</label>
+                            <input type="text" class="form-control" placeholder="Strength" asp-for="@Model.Strength" id="txtStrength" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Generic Name</label>
+                            <input type="text" class="form-control" placeholder="Generic Name " asp-for="@Model.GenericName" id="txtGenericName" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Box Size</label>
+                            <select class="form-control" id="ddlboxsize" asp-for="@Model.BoxSize" required>
+                                <option value="0">:: SELECT SIZE ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Unit</label>
+                            <select class="form-control" id="ddlUnit" asp-for="@Model.UnitId" required>
+                                <option value="0">:: SELECT SIZE ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Shelf</label>
+                            <input type="text" class="form-control" asp-for="@Model.Shelf" placeholder="Shelf" id="txtShelf" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Medicine Details</label>
+                            <input type="text" class="form-control" asp-for="@Model.Details" placeholder="Medicine Details" id="txtMedicineDetails" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Price</label>
+                            <input type="number" class="form-control" asp-for="@Model.Price" placeholder="Price" id="txtPrice" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Image</label>
+                            <input type="file" class="form-control" placeholder="Image" id="txtImage" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Supplier</label>
+                            <select class="form-control" id="ddlSupplier" asp-for="@Model.SupplierId" required>
+                                <option value="0">:: SELECT Supplier ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Supplier Price</label>
+                            <input type="number" class="form-control" asp-for="@Model.SupplierPrice" placeholder="Supplier Price" id="txtSupplierPrice" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Tax (%)</label>
+                            <input type="number" class="form-control" asp-for="@Model.Tax" placeholder="Tax" id="txtPricetax" required />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-primary" onclick="saveData('@Model.Id')">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            bindCategory();
+        });
+        var bindCategory = () => {
+            $.post('/Medicine/GetMedicineCategory').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlCategory').empty().append(_option);
+                    bindType();
+                }
+
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindType = () => {
+            $.post('/Medicine/GetType').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlMedicineType').empty().append(_option);
+                    bindLeafSetting();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindLeafSetting = () => {
+            $.post('/Medicine/GetLeafSetting').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.leafType} (${v.totalNumber})</option>`;
+                    });
+                    $('#ddlboxsize').empty().append(_option);
+                    bindUnit();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindUnit = () => {
+            $.post('/Medicine/GetUnit').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlUnit').empty().append(_option);
+                    bindSupliers();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindSupliers = () => {
+            $.post('/Medicine/GetSupliers').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlSupplier').empty().append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var saveData = (id) => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj ={
+                Id:id,
+                BarCode: $('#txtBarCode').val(),
+                SupplierId: $('#ddlSupplier').val(),
+                CategoryId: $('#ddlCategory').val(),
+                MedicineType: $('#ddlMedicineType').val(),
+                Name: $('#txtMedicineName').val(),
+                Strength: $('#txtStrength').val(),
+                GenericName: $('#txtGenericName').val(),
+                BoxSize: $('#ddlboxsize').val(),
+                UnitId: $('#ddlUnit').val(),
+                Shelf: $('#txtShelf').val(),
+                Details: $('#txtMedicineDetails').val(),
+                Price: $('#txtPrice').val(),
+                SupplierPrice: $('#txtSupplierPrice').val(),
+                TaxInPercentage: $('#txtPricetax').val(),
+            }
+            let formData = new FormData();
+            formData.append('jsonData', JSON.stringify(obj));
+            formData.append('file', $('#txtImage').prop('files')[0])
+            $.ajax({
+                url: '/Medicine/AddMedicine',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: response.success == true ? "Success" : "Failed",
+                        text: response.message,
+                        icon: response.success == true ? "success" : "error"
+                    });
+                    if (response.success) {
+                        $('input').val('');
+                        $('select').val('0');
+                        window.location.href = '/medicine/medicinelist';
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    Swal.fire({
+                        title: "Failed!",
+                        text: "Server Error.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    </script>
+}

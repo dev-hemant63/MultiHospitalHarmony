@@ -33,7 +33,7 @@
                     bindDoctor();
                 },1000);
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -63,7 +63,7 @@
                     $('#ddlwardtpe').empty().append('<option value="0">:: SELECT WARD ::</option>').append(_option);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -83,7 +83,7 @@
                     $('#ddlroom').empty().append('<option value="">:: SELECT ROOM ::</option>').append(_option);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -103,7 +103,7 @@
                     $('#ddlbed').empty().append('<option value="">:: SELECT BED ::</option>').append(_option);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -120,7 +120,7 @@
                     $('#ddldoctor').empty().append('<option value="">:: SELECT DOCTOR ::</option>').append(_option);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -174,14 +174,21 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    Swal.fire({
-                        title: "Success",
-                        text: response.message,
-                        icon: "success"
-                    });
                     if (response.success) {
+                        Swal.fire({
+                            title: "Success",
+                            text: response.message,
+                            icon: "success"
+                        });
                         $('input').val('');
                         $('select').val('');
+                    }
+                    else{
+                        Swal.fire({
+                            title: "Failed!",
+                            text: response.message,
+                            icon: "error"
+                        });
                     }
                 },
                 error: function (error) {

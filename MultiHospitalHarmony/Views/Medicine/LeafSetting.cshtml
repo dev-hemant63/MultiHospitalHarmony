@@ -1,0 +1,140 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Leaf Setting</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Leaf Type</td>
+                                    <td>Total Number</td>
+                                    <td>EntryAt</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Leaf Setting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Leaf Type</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="Leaf Type" id="txtName">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Total Number</label>
+                    <div class="col-sm-9">
+                        <input type="hidden" id="hdnId" value="0"/>
+                        <input type="number" class="form-control" placeholder="Total Number" id="txtnumber">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveData()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+        var saveData = () => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                LeafType: $('#txtName').val(),
+                TotalNumber: $('#txtnumber').val(),
+                Id: $('#hdnId').val()
+            }
+            $.post('/Medicine/SaveLeafSetting', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    $('input').val('');
+                    $('.btn-close').click();
+                    loadData();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var loadData = () => {
+            $.post('/Medicine/GetLeafSetting').done((result) => {
+                if (result.success) {
+                    let _html = result.data.map((v, i) => {
+                        return `<tr>
+                                <td>${i + 1}</td>
+                                <td>${v.leafType}</td>
+                                <td>${v.totalNumber}</td>
+                                        <td>${v.entryAt}</td>
+                                                                <td><a href="javacript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" data-toggle="tooltip" data-placement="left" title="Update" onclick="getById('${v.id}')"><i class="fas fa-edit" aria-hidden="true"></i></a></td>
+                                </tr>`;
+                    });
+                    $('#datagrid tbody').empty().append(_html);
+                }
+            }).fail(() => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id) => {
+            if (id != 0) {
+                $.post('/Medicine/GetLeafSettingById', { Id: id }).done((res) => {
+                    if (res.success) {
+                        $('#hdnId').val(res.data.id);
+                        $('#txtName').val(res.data.name);
+                        $('#txtnumber').val(res.data.totalNumber);
+                    }
+                }).fail((xhr) => {
+                    console.log(xhr);
+                    Swal.fire({
+                        title: "Failed!!",
+                        text: "Server Error!",
+                        icon: "error"
+                    });
+                });
+            }
+        }
+    </script>
+}

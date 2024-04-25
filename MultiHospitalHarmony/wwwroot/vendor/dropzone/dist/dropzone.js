@@ -2929,7 +2929,7 @@ function (_Emitter) {
       }
 
       if (xhr.responseType !== 'arraybuffer' && xhr.responseType !== 'blob') {
-        response = xhr.responseText;
+        response = xhr;
 
         if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
           try {

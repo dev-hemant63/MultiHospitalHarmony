@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="table-responsive">
                         <table class="table table-bordered table-sm" id="datagrid">
-                            <thead class="text-white bg-primary">
+                            <thead>
                                 <tr>
                                     <td>#</td>
                                     <td>Name</td>
@@ -100,7 +100,7 @@
                     $('#datagrid tbody').empty().append(_html);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -136,7 +136,7 @@
                 }
 
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -153,7 +153,7 @@
                     $('#ddltype').empty().append('<option value="0">:: SELECT TYPE ::</option>').append(option);
                 }
             }).fail((xhr) => {
-                console.log(xhr.responseText);
+                console.log(xhr);
                 Swal.fire({
                     title: "Failed!!",
                     text: "Server Error!",
@@ -174,7 +174,7 @@
                         $('#txtCharge').val(res.data.charge);
                     }
                 }).fail((xhr) => {
-                    console.log(xhr.responseText);
+                    console.log(xhr);
                     Swal.fire({
                         title: "Failed!!",
                         text: "Server Error!",

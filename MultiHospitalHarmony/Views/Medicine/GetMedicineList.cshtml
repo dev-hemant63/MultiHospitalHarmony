@@ -1,0 +1,45 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<Medicine>>
+@{
+    if (Model.Success)
+    {
+        @if (Model.Data != null)
+        {
+            int i = 0;
+            foreach (var item in Model.Data)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td>
+                        <div class="btn-group mb-1">
+                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/Medicine/AddMedicine?Id=@item.Id">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>@item.Name</td>
+                    <td>@item.BarCode</td>
+                    <td>@item.Category</td>
+                    <td>@item.Type</td>
+                    <td>@item.Supplier</td>
+                    <td>@item.Strength</td>
+                    <td>@item.GenericName</td>
+                    <td>@item.Unit</td>
+                    <td>@item.BoxSiz</td>
+                    <td>@item.Shelf</td>
+                    <td>@item.Details</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <img src="@item.Image" style="height: 36px;" />
+                    </td>
+                    <td>@item.SupplierPrice</td>
+                    <td>@item.Tax</td>
+                    <td>@item.EntryAt</td>
+                </tr>
+            }
+        }
+    }
+}

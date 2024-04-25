@@ -43,24 +43,27 @@ let getAreaByPincode = () => {
             });
         }
     }).fail((xhr) => {
-        console.log(xhr.responseText);
+        console.log(xhr);
         alert('Server Error!');
     });
 }
-var showModel = function (result) {
-    $('body').append(result);
-    $('#myModalNew').modal('show');
-    $('[data-dismiss="modal"]').unbind().click(function () {
-        $('.modal,.modal-backdrop').remove();
-    })
-}
-var btnLoader = () => {
-    return {
-        load: (btnId) => {
-            $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
-        },
-        stop: (btnId, btnText) => {
-            $('#' + btnId).html(btnText).prop('disabled', false);
-        }
-    };
-};
+//var showModel = function (result) {
+//    $('body').append(result);
+//    $('#myModalNew').modal('show');
+//    $('[data-dismiss="modal"]').unbind().click(function () {
+//        $('.modal,.modal-backdrop').remove();
+//    })
+//}
+    (function () {
+        var btnLoader = () => {
+            return {
+                load: (btnId) => {
+                    $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
+                },
+                stop: (btnId, btnText) => {
+                    $('#' + btnId).html(btnText).prop('disabled', false);
+                }
+            };
+        };
+    })();
+

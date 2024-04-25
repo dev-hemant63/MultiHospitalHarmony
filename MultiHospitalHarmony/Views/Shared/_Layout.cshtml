@@ -605,13 +605,14 @@
 
                                                         <span class="ms-2">Profile </span>
                                                     </a>
-                                                    <a href="javascript:void(0)" class="dropdown-item ai-icon ">
-                                                        <img src="/images/add-payment.png" style="height: 21px;" />
-
-                                                        <span class="ms-2">Balance : @User.GetBalance() </span>
-                                                    </a>
+                                                    
                                                     @if (User.GetRoleId<int>() == 5)
                                                     {
+                                                        <a href="javascript:void(0)" class="dropdown-item ai-icon ">
+                                                            <img src="/images/add-payment.png" style="height: 21px;" />
+
+                                                            <span class="ms-2">Balance : @User.GetBalance() </span>
+                                                        </a>
                                                         <a href="javascript:void(0)" onclick="initiatePaymentConfirm()" class="dropdown-item ai-icon ">
                                                             <img src="/images/add-payment.png" style="height: 21px;" />
 

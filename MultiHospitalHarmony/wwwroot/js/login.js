@@ -19,7 +19,7 @@
             });
         }
     }).fail((xhr) => {
-        console.log(xhr.responseText);
+        console.log(xhr);
         Swal.fire({
             title: "Failed!!",
             text: "Server Error!",

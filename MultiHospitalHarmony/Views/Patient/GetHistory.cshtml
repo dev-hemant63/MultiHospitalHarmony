@@ -1,0 +1,48 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<MedicalHistory>>
+<div class="col-sm-12">
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm" id="datagrid">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Diagnosis</td>
+                    <td>Prescription</td>
+                    <td>DoctorInfo</td>
+                    <td>PrescriptionFile</td>
+                    <td>Wight</td>
+                    <td>DateOfVisit</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Success && Model.Data != null)
+                {
+                    int i = 0;
+                    foreach (var item in Model.Data)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Diagnosis</td>
+                            <td>@item.Prescription</td>
+                            <td>@item.DoctorInfo</td>
+                            <td>
+                                <a href="@item.PrescriptionFile" target="_blank">
+                                    <i class="fa fa-download text-success" style="height:24px;"></i>
+                                </a>
+                            </td>
+                            <td>@item.Wight</td>
+                            <td>@item.DateOfVisit</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="34" class="text-center text-danger">No record found...</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
