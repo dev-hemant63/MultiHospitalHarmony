@@ -1,0 +1,165 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Unit List</h4>
+                </div>
+                <div class="col-sm-9" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Name</td>
+                                    <td>IsActive</td>
+                                    <td>EntryAt</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Unit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="Enter Name" id="txtName" required>
+                    </div>
+                </div>
+                <fieldset class="mb-3">
+                    <div class="row">
+                        <label class="col-form-label col-sm-3 pt-0">Status</label>
+                        <div class="col-sm-9">
+                            <input type="hidden" id="hdnId" value="0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="statustrue" name="status" value="true" checked="checked">
+                                <label class="form-check-label">
+                                    Isactive
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="statusfalse" name="status" value="false" checked="">
+                                <label class="form-check-label">
+                                    Inactive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveData()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+        var saveData = () => {
+            if (!valiadteInputs()) {
+                return false;
+            }
+            let obj = {
+                Name: $('#txtName').val(),
+                IsActive: $('input[name="status"]').val(),
+                Id: $('#hdnId').val()
+            }
+            $.post('/Medicine/SaveUnit', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    $('input').val('');
+                    $('.btn-close').click();
+                    loadData();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var loadData = () => {
+            $.post('/Medicine/GetUnit').done((result) => {
+                if (result.success) {
+                    let _html = result.data.map((v,i) => {
+                        let status = '';
+                        if (v.isActive) {
+                            status = 'Active';
+                        }
+                        else {
+                            status = 'InActive';
+                        }
+                        return `<tr>
+                        <td>${i+1}</td>
+                        <td>${v.name}</td>
+                        <td>${status}</td>
+                                <td>${v.entryAt}</td>
+                                                        <td><a href="javacript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" data-toggle="tooltip" data-placement="left" title="Update" onclick="getById('${v.id}')"><i class="fas fa-edit" aria-hidden="true"></i></a></td>
+                        </tr>`;
+                    });
+                    $('#datagrid tbody').empty().append(_html);
+                }
+            }).fail(() => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id) => {
+            if (id != 0) {
+                $.post('/Medicine/GetUnitById', { Id: id }).done((res) => {
+                    if (res.success) {
+                        $('#hdnId').val(res.data.id);
+                        $('#txtName').val(res.data.name);
+                        if (res.data.isActive) {
+                            $('#statustrue').prop('checked', true);
+                        }
+                        else {
+                            $('#statusfalse').prop('checked', true);
+                        }
+                    }
+                }).fail((xhr) => {
+                    console.log(xhr);
+                    Swal.fire({
+                        title: "Failed!!",
+                        text: "Server Error!",
+                        icon: "error"
+                    });
+                });
+            }
+        }
+    </script>
+}

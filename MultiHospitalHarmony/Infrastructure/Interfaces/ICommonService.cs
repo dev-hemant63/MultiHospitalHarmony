@@ -12,5 +12,6 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
 		Task<AppResponse<List<State>>> GetState();
 		Task<AppResponse<List<ApplicationRole>>> GetUserRole(int loginId);
 		Task<AppResponse<int>> VerifyHost(string hostName);
+		Task<AppResponse<List<PaymentModes>>> GetPaymentModes();
     }
 }

@@ -176,5 +176,28 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<List<PaymentModes>>> GetPaymentModes()
+        {
+            var response = new AppResponse<List<PaymentModes>>
+            {
+                Success = false,
+                Message = "An error has occurred; try again later.",
+                Data = null
+            };
+
+            try
+            {
+                var result = await _dapperContext.GetAllAsync<PaymentModes>("Proc_GetPaymentModes", null, CommandType.StoredProcedure);
+                response.Success = true;
+                response.Message = "Success";
+                response.Data = result;
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("CommonService", "GetModules", ex.Message);
+            }
+
+            return response;
+        }
     }
 }

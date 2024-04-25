@@ -2,7 +2,7 @@
 
 namespace MultiHospitalHarmony.Models.Common
 {
-    public class CommonFilter
+    public class CommonFilter:CommonRequest
     {
         public AppRole RoleId { get; set; }
         public string SearchText { get; set; }
