@@ -62,7 +62,7 @@ namespace MultiHospitalHarmony.Controllers
             return Json(res);
         }
         [HttpGet]
-        public async Task<IActionResult> ViewPurchaseDetails()
+        public async Task<IActionResult> ViewPurchaseDetails(int Id)
         {
             return View();
         }

@@ -1,1 +1,121 @@
-﻿
+﻿<style>
+    .fieldset {
+        border: 1px solid #ccc;
+        margin-top: 15px;
+        padding: 10px;
+        min-height: 100px;
+    }
+</style>
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Purchase Details</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <h3><b>Basic Details</b></h3>
+                    <fieldset class="fieldset">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Voucher No. </label>:
+                                <span class="text-blue-600 text-bold" id="txt_VoucherNo">1</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Supplier Bill No. </label>:
+                                <span class="text-blue-600 text-bold" id="txt_BillNo">GRFU90</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Purchase Date </label>:
+                                <span class="text-blue-600 text-bold" id="txt_PurchaseDate">2024-04-16</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Inter State Function </label>:
+                                <span class="text-blue-600 text-bold" id="txt_InterStateFunction"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Total Amount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_TotalAmount">7600/-</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> GST Amount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_GstAmt">60/-</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span>Gst Cess</label>:
+                                <span class="text-blue-600 text-bold" id="txt_GstCess">0/-</span>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span>Paid Amount</label>:
+                                <span class="text-blue-600 text-bold" id="txt_PaidAmount">7600/-</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <h3><b>Supplier Details</b></h3>
+                    <fieldset class="fieldset">
+                        <div class="row" id="divSupplierDetails">
+                        </div>
+                    </fieldset>
+                    <h3><b>Medicine Details</b></h3>
+                    <fieldset class="fieldset">
+                        <div class="row col-md-12 table-responsive" id="divVoucherItemDetails">
+                            <table class="table table-bordered table-sm" width="100%">
+                                <thead>
+                                    <tr class="seen">
+                                        <th>#</th>
+                                        <th>Medicine</th>
+                                        <th>Batch Code</th>
+                                        <th>Expiry Date</th>
+                                        <th>Box Size</th>
+                                        <th>Stock Qty</th>                                        
+                                        <th>Total Quantity</th>
+                                        <th>Supplier Price</th>
+                                        <th>MRP</th>
+                                        <th>Total Purchase Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblItemDetails"></tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <h3><b>Payment Details</b></h3>
+                        <div class="col-md-12 row">
+                            <table class="table table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mode</th>
+                                        <th>Amount</th>
+                                        <th>Paid Amount</th>
+                                        <th>Balance Amount</th>
+                                        <th>Status</th>
+                                        <th>UTR</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblPaymentDetails">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 row" id="actiondiv">
+                            <div class="col-md-3 row">
+                                <label class="form-control text-center" id="partiallypaid" style="display:none;border-color: #ff0202;background-color: #ffb6b6;color: red;font-size: 17px;height: 35px;">UNPAID AMOUNT : <span id="spn_unpaid"></span>/-</label>
+                                <label class="form-control text-center" id="fullypaid" style="display:none;border-color: #54a000;background-color: #bcff72;color: #284c00;font-size: 17px;height: 35px;">FULLY PAID</label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 row" style="padding-right:0px;" id="divReturn"><label class="form-control text-center" style="border-color: #ffffff;background-color:#76ab3c; color: white;font-size: 17px; height: 35px;">FULL PAID</label></div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

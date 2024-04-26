@@ -233,7 +233,7 @@ var loadData = () => {
                             <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="">View</a>
+                                <a class="dropdown-item" href="/Purchase/ViewPurchaseDetails?Id=${v.id}">View</a>
                             </div>
                         </div>
                 </td>
