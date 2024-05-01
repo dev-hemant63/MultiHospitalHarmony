@@ -1,0 +1,141 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<InvoiceDetails>
+@{
+    var status = "";
+    if (Model.Data.Status == 1)
+    {
+        status = "Order Completed";
+    }
+    if (Model.Data.Status == 4)
+    {
+        status = "Partially Paid";
+    }
+    if (Model.Data.Status == 5)
+    {
+        status = "UnPaid";
+    }
+}
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="card mt-3" id="invoice">
+            <div class="card-header">
+                Invoice <strong>@Model.Data.InvoiceDate</strong>
+                <span class="float-end">
+                    <strong>Status:</strong> @status
+                </span>
+                <button class="btn btn-info light btn-sm d-none" id="btn-print"><i class="fa fa-print"></i></button>
+            </div>
+            <div class="card-body">
+                <div class="row mb-5">
+                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <h6>From:</h6>
+                        <div> <strong>@Model.Data.PharmacyDetails.FullName</strong> </div>
+                        <div>@Model.Data.PharmacyDetails.Address</div>
+                        <div>@Model.Data.PharmacyDetails.ZipCode</div>
+                        <div>Email: @Model.Data.PharmacyDetails.Email</div>
+                        <div>Phone: @Model.Data.PharmacyDetails.MobileNo</div>
+                    </div>
+                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 text-end">
+                        <h6>To:</h6>
+                        <div> <strong>@Model.Data.CustomerDetail.Name</strong> </div>
+                        <div>@Model.Data.CustomerDetail.Address</div>
+                        <div>@Model.Data.CustomerDetail.Pincode</div>
+                        <div>Email: @Model.Data.CustomerDetail.EmailId</div>
+                        <div>Phone: @Model.Data.CustomerDetail.MobileNo</div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-border">
+                        <thead>
+                            <tr>
+                                <th class="center">#</th>
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th class="right">Unit Cost</th>
+                                <th class="center">Qty</th>
+                                <th class="right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                                foreach (var item in Model.Data.InvoiceDetail)
+                                {
+                                    i++;
+                                    var totalAmount = @item.PricePerUnit * @item.Quantity;
+                                        <tr>
+                                            <td class="center">@i</td>
+                                            <td class="left strong">@item.Medicine</td>
+                                            <td class="left">@item.UnitName</td>
+                                            <td class="right">₹@item.PricePerUnit</td>
+                                            <td class="center">@item.Quantity</td>
+                                            <td class="right">₹@totalAmount</td>
+                                        </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-5"> </div>
+                    <div class="col-lg-4 col-sm-5 ms-auto">
+                        <table class="table table-clear">
+                            <tbody>
+                                <tr>
+                                    <td class="left"><strong>Subtotal</strong></td>
+                                    <td class="right">₹@Model.Data.SubTotalAmount</td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>Discount (₹)</strong></td>
+                                    <td class="right">₹@Model.Data.Discount</td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>GST (₹)</strong></td>
+                                    <td class="right">₹@Model.Data.GST</td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>Total</strong></td>
+                                    <td class="right">
+                                        <strong>₹@Model.Data.TotalPrice</strong><br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>Paid Amount</strong></td>
+                                    <td class="right">
+                                        <strong>₹@Model.Data.PaidAmount</strong><br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="left"><strong>Balance Amount</strong></td>
+                                    <td class="right">
+                                        <strong>₹@Model.Data.BalanceAmount</strong><br>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            var isprint = urlParams.get('isprint');
+            if (isprint == 'true') {
+                $('#btn-print').removeClass('d-none');
+            }
+        });
+        $('#btn-print').click(function () {
+            var content = $("#invoice").html();
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><link href="~/css/style.css" rel="stylesheet"><title>Print</title></head><body>' + content + '</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+    </script>
+}

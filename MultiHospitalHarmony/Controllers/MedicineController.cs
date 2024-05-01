@@ -223,7 +223,8 @@ namespace MultiHospitalHarmony.Controllers
                 Price = addMedicineReq.Price,
                 ImageUrl = addMedicineReq.ImageUrl,
                 SupplierPrice = addMedicineReq.SupplierPrice,
-                TaxInPercentage = addMedicineReq.TaxInPercentage
+                TaxInPercentage = addMedicineReq.TaxInPercentage,
+                PricePerUnit = addMedicineReq.PricePerUnit,
             });
             return Json(res);
         }

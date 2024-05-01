@@ -241,6 +241,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     addMedicineReq.ImageUrl,
                     addMedicineReq.SupplierPrice,
                     addMedicineReq.TaxInPercentage,
+                    addMedicineReq.PricePerUnit,
                 });
             }
             catch (Exception ex)

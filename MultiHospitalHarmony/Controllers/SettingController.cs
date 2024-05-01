@@ -38,5 +38,10 @@ namespace MultiHospitalHarmony.Controllers
             var response = await _settingService.GetPageList(id);
             return PartialView(response);
         }
+        [HttpGet]
+        public IActionResult General()
+        {
+            return View();
+        }
     }
 }

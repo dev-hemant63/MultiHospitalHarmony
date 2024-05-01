@@ -11,6 +11,7 @@ namespace MultiHospitalHarmony.Models
         public int BoxSize { get; set; }
         public int UnitId { get; set; }
         public string BarCode { get; set; }
+        public string ExpiryDate { get; set; }
         public string Category { get; set; }
         public string Type { get; set; }
         public string Supplier { get; set; }
@@ -22,6 +23,7 @@ namespace MultiHospitalHarmony.Models
         public string Details { get; set; }
         public decimal Price { get; set; }
         public decimal SupplierPrice { get; set; }
+        public decimal PricePerUnit { get; set; }
         public decimal Tax { get; set; }
         public string Image { get; set; }
     }

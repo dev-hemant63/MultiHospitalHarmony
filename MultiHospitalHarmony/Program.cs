@@ -35,6 +35,9 @@ builder.Services.AddSingleton<IIPDService, IPDService>();
 builder.Services.AddSingleton<ISupplierService, SupplierService>();
 builder.Services.AddSingleton<IMedicineService, MedicineService>();
 builder.Services.AddSingleton<IPurchaseService, PurchaseService>();
+builder.Services.AddSingleton<ICustomerService, CustomerService>();
+builder.Services.AddSingleton<IReportService, ReportService>();
+builder.Services.AddSingleton<IInvoiceService, InvoiceService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {

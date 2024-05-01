@@ -1,0 +1,341 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Add Invoice</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Customer</label>
+                        <select class="form-control" id="ddlCustomer">
+                            <option value="">:: SELECT CUSTOMER ::</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Date </label>
+                        <input type="date" class="form-control" id="txtdate" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Details </label>
+                        <input type="text" class="form-control" id="txtDetails" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Payment Mode </label>
+                        <select class="form-control" id="ddlPaymentMode">
+                            <option value="">:: SELECT PAYMENTMODE ::</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Remark / UTR </label>
+                        <input type="text" class="form-control" id="txtRemark" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine</th>
+                                        <th>Batch</th>
+                                        <th>Avail Qty</th>
+                                        <th>Expiry Date</th>
+                                        <th>Unit</th>
+                                        <th>Quantity</th>
+                                        <th>Box Qty</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-invoice">
+                                    <tr data-rowid="1" class="item">
+                                        <td>
+                                            <select class="form-control" id="ddlMedicine_1" onchange="handleMedicine('1')">
+                                                <option value="0">:: SELECT Medicine ::</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="txtBatch_1" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="txtAvailQty_1" />
+                                        </td>
+                                        <td>
+                                            <input type="date" class="form-control form-control-sm" id="txtExpiry_1" />
+                                        </td>
+                                        <td>
+                                            <select class="form-control form-control-sm" id="ddlUnit_1">
+                                                <option value="0">:: SELECT UNIT ::</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm" id="txtTotalQty_1" />
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm" id="txtBoxQty_1" />
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm" id="txtPrice_1" />
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm" id="txtTotalPrice_1" />
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger light btn-sm delete"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-end">Discount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="discount" onchange="handlePrice()" /></td>
+                                        <td>
+                                            <button class="btn btn-success light btn-sm" onclick="addRow()"><i class="fa fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-end">GST (CGST + SGST + IGST) : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="gst" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-end">Net Total : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="nettotal" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" class="text-end">Paid Amount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="paidamount" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <input type="button" id="full_paid_invoice_tab" class="btn btn-warning" value="Full Paid" tabindex="14" onclick="full_paid_invoice()">
+                                            <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="Save" onclick="addInvoice()" tabindex="15">
+                                        </td>
+                                        <td colspan="6" class="text-end">Balance Amount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="balanceamount" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            bindCustomer();
+        });
+        var addRow = () => {
+            let rowCount = $('#table-invoice tr.item').length;
+            rowCount = rowCount + 1;
+            let _html = `
+                                            <tr data-rowid="${rowCount}" class="item">
+                                                                <td>
+                                                                                            <select class="form-control" id="ddlMedicine_${rowCount}" onchange="handleMedicine('${rowCount}')">
+                                                                        <option value="0">:: SELECT Medicine ::</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                            <input type="text" class="form-control form-control-sm" id="txtBatch_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <input type="text" class="form-control form-control-sm" id="txtAvailQty_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <input type="date" class="form-control form-control-sm" id="txtExpiry_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <select class="form-control form-control-sm" id="ddlUnit_${rowCount}">
+                                                                        <option value="0">:: SELECT UNIT ::</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                                            <input type="number" class="form-control form-control-sm" onchange="handlePrice('${rowCount}')" id="txtTotalQty_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <input type="number" class="form-control form-control-sm" id="txtBoxQty_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <input type="number" class="form-control form-control-sm" id="txtPrice_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                            <input type="number" class="form-control form-control-sm" id="txtTotalPrice_${rowCount}" />
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-danger light btn-sm delete"><i class="fa fa-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                        `;
+
+            $('#table-invoice tr.item').after(_html);
+            setTimeout(() => {
+                bindMedicine(rowCount);
+            }, 1000);
+        }
+        $(document).on('click', '.delete', function () {
+            let rowCount = $('#table-invoice tr.item').length;
+            if (rowCount > 1) {
+                $(this).closest('tr').remove();
+            } else {
+                $('input').val('');
+                $('select').val('0');
+            }
+        });
+        var bindCustomer = () => {
+            $.post('/Customer/GetCustomerList').done((res) => {
+                if (res.success) {
+                    var _html = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.name}</option>`;
+                    });
+                    $('#ddlCustomer').empty().append('<option value="0">:: SELECT ::<option>').append(_html);
+                }
+                bindPaymentModes();
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindPaymentModes = () => {
+            $.post('/Purchase/GetPaymentModes').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlPaymentMode').empty().append('<option value="0">:: Select ::</option>').append(_option);
+                }
+                bindMedicine(1);
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindMedicine = (id) => {
+            $.post('/Invoice/GetInvoiceItem').done((result) => {
+                if (result.success) {
+                    let _option = result.data.map((v, i) => {
+                        return `<option value="${v.id}" data-BarCode="${v.barCode}" data-ExpiryDate="${v.expiryDate}" data-UnitId="${v.unitId}" data-availqty="${v.totalQty}" data-boxqty="${v.boxQty}" data-price="${v.price}">${v.name}</option>`;
+                    });
+                    $('#ddlMedicine_' + id).empty().append('<option value="0">:: Select ::</option>').append(_option);
+                }
+                bindUnit(id);
+            }).fail(() => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindUnit = (id) => {
+            $.post('/Medicine/GetUnit').done((result) => {
+                if (result.success) {
+                    let _html = result.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.name}</option>`;
+                    });
+                    $('#ddlUnit_' + id).empty().append('<option value="0">:: SELECT ::</option>').append(_html);
+                }
+            }).fail(() => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var handleMedicine = (id) => {
+            $('#txtBatch_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('barcode'));
+            $('#txtAvailQty_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('availqty'));
+            $('#txtExpiry_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('expirydate'));
+            $('#ddlUnit_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('unitid'));
+            $('#txtBoxQty_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('boxqty'));
+            $('#txtPrice_' + id).val($('#ddlMedicine_' + id + ' option:selected').data('price'));
+        }
+        const handlePrice = () => {
+            let totalAmount = 0;
+
+            $('#table-invoice tr.item').each((i, item) => {
+                let id = $(item).data('rowid');
+                let price = parseFloat($(item).find('td:eq(7) input').val()) || 0;
+                let qty = parseInt($(item).find('td:eq(5) input').val()) || 0;
+                totalAmount += price * qty;
+                $('#txtTotalPrice_' + id).val((price * qty));
+            });
+
+            $('#nettotal').val(totalAmount.toFixed(2));
+
+            let nettotal = parseFloat($('#nettotal').val()) || 0;
+            let discount = parseFloat($('#discount').val()) || 0;
+            let gst = parseFloat($('#gst').val()) || 0;
+
+            let netValue = (nettotal - discount) + gst;
+            $('#nettotal').val(netValue.toFixed(2));
+
+            let paidamount = parseFloat($('#paidamount').val()) || 0;
+            nettotal = parseFloat($('#nettotal').val()) || 0;
+
+            $('#balanceamount').val((nettotal - paidamount).toFixed(2));
+        };
+        const addInvoice = () =>{
+            var InvoicesItems = [];
+            let obj = {
+                CustomerId: $('#ddlCustomer').val(),
+                InvoiceDate: $('#txtdate').val(),
+                Details: $('#txtDetails').val(),
+                PaymentModeId: $('#ddlPaymentMode').val(),
+                Remark: $('#txtRemark').val(),
+                Discount: $('#discount').val(),
+                GST: $('#gst').val(),
+                TotalAmount: $('#nettotal').val(),
+                PaidAmount: $('#paidamount').val(),
+                BalanceAmount: $('#balanceamount').val(),
+                SubTotalAmount: 0,
+                InvoicesItems: [],
+            }
+            $('#table-invoice tr.item').each((i, item) => {
+
+                let data = {
+                    MedicineId: $(item).find('td:eq(0) select').val(),
+                    BatchCode: $(item).find('td:eq(1) input').val(),
+                    ExpiryDate: $(item).find('td:eq(3) input').val(),
+                    UnitId: $(item).find('td:eq(4) select').val(),
+                    Quantity: $(item).find('td:eq(5) input').val(),
+                    PricePerUnit: $(item).find('td:eq(7) input').val(),
+                }
+                obj.SubTotalAmount = parseFloat(obj.SubTotalAmount) + parseFloat($(item).find('td:eq(8) input').val());
+                InvoicesItems.push(data);
+            });
+            obj.InvoicesItems = InvoicesItems;
+            $.post('/Invoice/SaveInvoice', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    window.location.reload();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

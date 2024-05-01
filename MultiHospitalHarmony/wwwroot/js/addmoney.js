@@ -19,9 +19,9 @@ var openAddMoney = () => {
     $('#btnaddmoney').click();
 }
 $('#btnAdd').click(function () {
-    if (!valiadteInputs()) {
-        return false;
-    }
+    //if (!valiadteInputs()) {
+    //    return false;
+    //}
     initiatePayment();
 });
 var initiatePayment = () => {

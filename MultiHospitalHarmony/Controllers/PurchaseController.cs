@@ -2,7 +2,9 @@
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
+using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
+using Newtonsoft.Json;
 
 namespace MultiHospitalHarmony.Controllers
 {
@@ -37,7 +39,10 @@ namespace MultiHospitalHarmony.Controllers
                 WID = User.GetWID<int>(),
                 Id = 0
             });
-            res.Data = res.Data.Where(x=>x.SupplierId == SupplierId).ToList();
+            if (SupplierId != 0)
+            {
+                res.Data = res.Data.Where(x => x.SupplierId == SupplierId).ToList();
+            }            
             return Json(res);
         }
         [HttpPost]
@@ -64,7 +69,26 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewPurchaseDetails(int Id)
         {
-            return View();
+            var response = await _purchaseService.GetMedicinePurchaseDetails(User.GetLogingID<int>(),new GetMedicinePurchasReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId(),
+                PurchaseId = Id
+            });
+            if (response.Success)
+            {
+                response.Data.PaymentDetails = JsonConvert.DeserializeObject<List<PaymentDetails>>(response.Data.PaymentDetailsJson);
+                response.Data.PurchaseMedicineDetails = JsonConvert.DeserializeObject<List<PurchaseMedicineDetails>>(response.Data.PurchaseMedicineDetailsJson);
+            }
+            return View(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> PayPurchaseDueAmount(PayPurchaseDueAmountReq amountReq)
+        {
+            amountReq.WID = User.GetWID<int>();
+            amountReq.HospitalId = User.GetHospitalId();
+            var res = await _purchaseService.PayPurchaseDueAmount(User.GetLogingID<int>(), amountReq);
+            return Json(res);
         }
     }
 }

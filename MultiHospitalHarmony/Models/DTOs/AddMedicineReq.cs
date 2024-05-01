@@ -18,6 +18,7 @@ namespace MultiHospitalHarmony.Models.DTOs
         public decimal Price { get; set; }
         public decimal SupplierPrice { get; set; }
         public decimal TaxInPercentage { get; set; }
+        public decimal PricePerUnit { get; set; }
         public string ImageUrl { get; set; }
         public IFormFile Image { get; set; }
     }

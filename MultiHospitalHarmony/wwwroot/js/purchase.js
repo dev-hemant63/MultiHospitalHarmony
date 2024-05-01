@@ -82,6 +82,7 @@ var bindPaymentModes = () => {
                 return `<option value='${v.id}'>${v.name}</option>`;
             });
             $('#ddlPaymentType').empty().append('<option value="0">:: Select ::</option>').append(_option);
+            $('#ddlPaymnetMethod').empty().append('<option value="0">:: Select ::</option>').append(_option);
         }
     }).fail((xhr) => {
         console.log(xhr);
@@ -213,6 +214,7 @@ var loadData = () => {
             let _html = result.data.map((v, i) => {
 
                 let status = '';
+                let option = '';
                 if (v.status == 1) {
                     status = '<span class="badge badge-sm badge-success">Order Completed</span>';
                 }
@@ -223,8 +225,10 @@ var loadData = () => {
                     status = '<span class="badge badge-sm badge-danger">Order Returned</span>';
                 }
                 if (v.status == 4) {
+                    option = `<a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="paymentModel('${v.balanceAmount}','${v.id}')">Pay</a>`;
                     status = '<span class="badge badge-sm badge-info">Partially Paid</span>';
                 }
+
                 return `
                 <tr>
                 <td>${i + 1}</td>
@@ -234,6 +238,7 @@ var loadData = () => {
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/Purchase/ViewPurchaseDetails?Id=${v.id}">View</a>
+                                ${option}
                             </div>
                         </div>
                 </td>
@@ -253,6 +258,40 @@ var loadData = () => {
                 `;
             });
             $('#datagrid tbody').empty().append(_html);
+        }
+    }).fail((xhr) => {
+        console.log(xhr);
+        Swal.fire({
+            title: "Failed!!",
+            text: "Server Error!",
+            icon: "error"
+        });
+    });
+}
+var paymentModel = (amount,id) => {
+    $('#dueamount').val(amount);
+    $('#hdnId').val(id);
+    bindPaymentModes();
+}
+var payDueAmount = () => {
+    let obj = {
+        Id: $('#hdnId').val(),
+        DueAmount: $('#dueamount').val(),
+        PaidAmount: $('#paidamount').val(),
+        Remark: $('#remark').val(),
+        PaymentMode: $('#ddlPaymnetMethod').val(),
+    }
+    $.post('/Purchase/PayPurchaseDueAmount',obj).done((res) => {
+        Swal.fire({
+            title: res.success == true ? "Success" : "Failed",
+            text: res.message,
+            icon: res.success == true ? "success" : "error"
+        });
+        if (res.success == true) {
+            $('input').val('');
+            $('select').val('0');
+            $('.btn-close').click();
+            loadData();
         }
     }).fail((xhr) => {
         console.log(xhr);

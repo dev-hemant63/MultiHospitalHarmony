@@ -75,6 +75,10 @@
                             <input type="number" class="form-control" asp-for="@Model.SupplierPrice" placeholder="Supplier Price" id="txtSupplierPrice" required />
                         </div>
                         <div class="col-sm-3">
+                            <label>Price (Per Unit)</label>
+                            <input type="number" class="form-control" asp-for="@Model.PricePerUnit" placeholder="Supplier Price" id="txtPricePerUnit" required />
+                        </div>
+                        <div class="col-sm-3">
                             <label>Tax (%)</label>
                             <input type="number" class="form-control" asp-for="@Model.Tax" placeholder="Tax" id="txtPricetax" required />
                         </div>
@@ -185,9 +189,9 @@
             });
         }
         var saveData = (id) => {
-            if (!valiadteInputs()) {
-                return false;
-            }
+            // if (!valiadteInputs()) {
+            //     return false;
+            // }
             let obj ={
                 Id:id,
                 BarCode: $('#txtBarCode').val(),
@@ -204,6 +208,7 @@
                 Price: $('#txtPrice').val(),
                 SupplierPrice: $('#txtSupplierPrice').val(),
                 TaxInPercentage: $('#txtPricetax').val(),
+                PricePerUnit: $('#txtPricePerUnit').val(),
             }
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));
