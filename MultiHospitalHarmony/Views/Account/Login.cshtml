@@ -2,76 +2,34 @@
     Layout = "_LoginLayout";
 }
 @model int
-<div class="page-wrapper">
-
-    <!-- Content -->
-    <div class="browse-job login-style3">
-        <!-- Coming Soon -->
-        <div class="bg-img-fix overflow-hidden" style="background:#fff url('@Url.Content("~/images/background/bg6.jpg")'); height: 100vh;">
-            <div class="row gx-0">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 vh-100 bg-white ">
-                    <div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: 653px;display: flex;
-    justify-content: center;" tabindex="0">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4">
-                        <div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
-                            <div class="login-form style-2 pd-3">
-
-                                <div class="card-body">
-                                    <div class="logo-header">
-                                            <a href="/" class="logo"><img src="@Url.Content("~/images/logo/logo-full.png")" alt="" class="light-logo" style="width: 56%;"></a>
-                                        <a href="/" class="logo"><img src="@Url.Content("~/images/logo/logofull-white.png")" alt="" class="width-230 dark-logo"></a>
-                                    </div>
-
-                                    <nav>
-                                        <div class="nav nav-tabs border-bottom-0" id="nav-tab" role="tablist">
-
-                                            <div class="tab-content w-100" id="nav-tabContent">
-                                                <div class="tab-pane fade show active" id="nav-personal" role="tabpanel" aria-labelledby="nav-personal-tab">
-                                                    <form action="@Url.Action("ActionName", "ControllerName")" class="dz-form pb-3">
-                                                        <h3 class="form-title m-t0">Personal Information</h3>
-                                                        <div class="dz-separator-outer m-b5">
-                                                            <div class="dz-separator bg-primary style-liner"></div>
-                                                            <input type="hidden" id="txtWID" value="@Model" />
-                                                        </div>
-                                                        <p>Enter your e-mail address and your password. </p>
-                                                        <div class="form-group mb-3">
-                                                            <input type="text" id="txtUserName" class="form-control" required placeholder="UserName">
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <input type="password" id="txtPassword" class="form-control" required placeholder="*******">
-                                                        </div>
-                                                        <div class="form-group text-left mb-5 forget-main">
-                                                            <span class="form-check d-inline-block">
-                                                                <input type="checkbox" class="form-check-input" id="check1" name="example1" checked>
-                                                                <label class="form-check-label" for="check1">Remember me</label>
-                                                            </span>
-                                                            <a class="form-check-label" href="#">Forget Password ?</a>
-                                                            <button class="m-auto btn btn-primary " id="nav-forget-tab" type="button" onclick="login()">SignIn</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </nav>
-                                </div>
-                            </div>
+<div class="row justify-content-center h-100 align-items-center">
+    <div class="col-md-6">
+        <div class="authincation-content">
+            <div class="row no-gutters">
+                <div class="col-xl-12">
+                    <div class="auth-form">
+                        <div class="text-center mb-3">
+                            <a href="/"><img src="images/logo/logo-full.png" alt=""></a>
                         </div>
+                        <h4 class="text-center mb-4">Sign In your account</h4>
+                        <input type="hidden" id="txtWID" value="@Model" />
+                        <div class="mb-3">
+                            <label class="mb-1"><strong>Username</strong></label>
+                            <input type="text" id="txtUserName" class="form-control" required placeholder="UserName">
                         </div>
-                        <div class="col-sm-4"></div>
-                        <div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical" style="display: block;">
-                            <div class="mCSB_draggerContainer">
-                                <div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 0px; display: block; height: 652px; max-height: 643px; top: 0px;">
-                                    <div class="mCSB_dragger_bar" style="line-height: 0px;"></div><div class="mCSB_draggerRail"></div>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label class="mb-1"><strong>Password</strong></label>
+                            <input type="password" id="txtPassword" class="form-control" required placeholder="*******">
                         </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-block" onclick="login()">Sign In</button>
+                        </div>
+                       @*  <div class="new-account mt-3">
+                            <p>Already have an account? <a class="text-primary" href="page-login.html">Sign in</a></p>
+                        </div> *@
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Full Blog Page Content -->
     </div>
-    <!-- Content END-->
 </div>
