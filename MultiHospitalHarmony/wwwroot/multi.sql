@@ -1,127 +1,28 @@
-USE [db_New]
-GO
-/****** Object:  StoredProcedure [dbo].[Proc_GetInvoiceList]    Script Date: 03-05-2024 11:34:48 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER Proc [dbo].[Proc_GetInvoiceList]
+-- Proc_GetPharmacyDashboardData 1,3,48
+Alter proc Proc_GetPharmacyDashboardData
 @WID int,
 @HospitalId int,
-@loginId int,
-@StatusId int =0
+@loginId int
 AS
 BEGIN
-	select t2.Name + ' [ '+t2.MobileNo + ' ]' CustomerInfo,t1.* from Invoices t1 
-	inner join Customer t2 on t1.CustomerId = t2.Id
-	where t1.WID = @WID and t1.HospitalId = @HospitalId and t1.PharmacyId = @loginId AND (t1.[Status] = @StatusId OR @StatusId = 0)
-	order by t1.Id desc
-END
+	DECLARE @TotalCustomer int,@TotalMedicine int,@OutOfStock int,@ExpiredMedicine int,@SaleInfo nvarchar(max),@TotalSales numeric(18,2),
+			@TotalPurchase numeric(18,2),@CashReceived numeric(18,2),@BankReceive numeric(18,2)
 
+	SELECT @TotalCustomer = COUNT(*) FROM Customer WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId
+	SELECT @TotalMedicine = COUNT(*) FROM Medicines WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId
+	SELECT @OutOfStock = COUNT(*) FROM MedicineInventory WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId AND TotalQty = 0
+	SELECT @ExpiredMedicine = COUNT(*) FROM MedicineInventory WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId AND CONVERT(date,ExpiryDate,103) < CONVERT(date,GETDATE(),103)
 
+	SELECT @TotalSales = SUM(PaidAmount) FROM Invoices WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId
+	SELECT @TotalPurchase = SUM(PaidAmount) FROM MedicinePurchase WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId
+	SELECT @CashReceived = SUM(PaidAmount) FROM MedicinePurchasePaymentDetails WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId And PaymentModeId = 1 AND PurchaseId = 0
+	SELECT @BankReceive = SUM(PaidAmount) FROM MedicinePurchasePaymentDetails WHERE WID = @WID AND HospitalId = @HospitalId AND PharmacyId = @loginId And PaymentModeId <> 1 AND PurchaseId = 0
 
+	SELECT c.Name + ' ['+c.MobileNo + ' ]' CustomerInfo,i.InvoiceNo,i.TotalPrice,i.PaidAmount,i.BalanceAmount,i.EntryAt Into #tempSaleInfo FROM Invoices i 
+	inner join Customer c on i.CustomerId = c.Id
 
+	SET @SaleInfo = (select * from #tempSaleInfo for json auto)
 
--- Proc_GetPurchaseReportMonthWise 1,3,48,0
-CREATE PROC Proc_GetPurchaseReportMonthWise
-@WID int,
-@HospitalId int,
-@loginId int,
-@Year int = 0
-AS
-BEGIN
-	CREATE table #temp
-	(
-		MonthId int,
-		Discount numeric(18,2),
-		TotalAmount numeric(18,2),
-		PaidAmount numeric(18,2),
-		BalanceAmount numeric(18,2)
-	)
-
-	INSERT INTO #temp(MonthId,Discount,TotalAmount,PaidAmount,BalanceAmount)
-	SELECT ID,0.00,0.00,0.00,0.00 FROM MonthlyData
-
-	select MONTH(t1.PurchaseDate) MonthId,SUM(t1.Discount) Discount,SUM(t1.TotalAmount) TotalAmount,SUM(t1.PaidAmount) PaidAmount,SUM(t1.BalanceAmount) BalanceAmount INTO #tempData from MedicinePurchase t1
-	inner join Supplier t2 ON t1.SupplierId = t2.Id
-	where t1.WID = @WID AND t1.HospitalId = @HospitalId And t1.PharmacyId = @loginId
-	group by MONTH(t1.PurchaseDate)
-
-
-	UPDATE t
-	SET t.Discount = td.Discount,t.TotalAmount = td.TotalAmount,t.PaidAmount = td.PaidAmount,t.BalanceAmount = td.BalanceAmount
-	FROM #temp t
-	INNER JOIN #tempData td ON t.MonthId = td.MonthId
-
-	SELECT t1.*,t2.[MonthName] FROM #temp t1 
-	inner join MonthlyData t2 ON t1.MonthId = t2.ID
-END
-
-
-
--- Create the table
-CREATE TABLE MonthlyData (
-    ID INT PRIMARY KEY,
-    MonthName NVARCHAR(50)
-);
-
--- Insert data for 12 months
-INSERT INTO MonthlyData (ID, MonthName) VALUES 
-(1, 'January'),
-(2, 'February'),
-(3, 'March'),
-(4, 'April'),
-(5, 'May'),
-(6, 'June'),
-(7, 'July'),
-(8, 'August'),
-(9, 'September'),
-(10, 'October'),
-(11, 'November'),
-(12, 'December');
-
-
-
-
-
-
-
-
-
-
-
--- Proc_GetSaleReportMonthWise 1,3,48,0
-CREATE PROC Proc_GetSaleReportMonthWise
-@WID int,
-@HospitalId int,
-@loginId int,
-@Year int = 0
-AS
-BEGIN
-	CREATE table #temp
-	(
-		MonthId int,
-		SubTotalAmount numeric(18,2),
-		GST numeric(18,2),
-		Discount numeric(18,2),
-		TotalAmount numeric(18,2),
-		PaidAmount numeric(18,2),
-		BalanceAmount numeric(18,2)
-	)
-
-	INSERT INTO #temp(MonthId,SubTotalAmount,GST,Discount,TotalAmount,PaidAmount,BalanceAmount)
-	SELECT ID,0.00,0.00,0.00,0.00,0.00,0.00 FROM MonthlyData
-
-	select MONTH(t1.InvoiceDate) MonthId,SUM(t1.SubTotalAmount) SubTotalAmount,SUM(t1.GST) GST,SUM(t1.Discount) Discount,SUM(t1.TotalPrice) TotalAmount,SUM(t1.PaidAmount) PaidAmount,SUM(t1.BalanceAmount) BalanceAmount INTO #tempData from Invoices t1
-	where t1.WID = @WID AND t1.HospitalId = @HospitalId And t1.PharmacyId = @loginId
-	group by MONTH(t1.InvoiceDate)
-
-
-	UPDATE t
-	SET t.Discount = td.Discount,t.TotalAmount = td.TotalAmount,t.PaidAmount = td.PaidAmount,t.BalanceAmount = td.BalanceAmount,t.SubTotalAmount = td.SubTotalAmount,t.GST = td.GST
-	FROM #temp t
-	INNER JOIN #tempData td ON t.MonthId = td.MonthId
-
-	SELECT t1.*,t2.[MonthName] FROM #temp t1 
-	inner join MonthlyData t2 ON t1.MonthId = t2.ID
+	SELECT ISNULL(@TotalCustomer,0) TotalCustomer,ISNULL(@TotalMedicine,0) TotalMedicine,ISNULL(@OutOfStock,0) OutOfStock,ISNULL(@ExpiredMedicine,0) ExpiredMedicine,ISNULL(@TotalSales,0) TotalSales,ISNULL(@TotalPurchase,0)
+	 TotalPurchase,ISNULL(@CashReceived,0) CashReceived,ISNULL(@BankReceive,0) BankReceive,@SaleInfo SaleInfo
 END

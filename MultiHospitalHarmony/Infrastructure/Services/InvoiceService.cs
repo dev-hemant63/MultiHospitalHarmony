@@ -126,5 +126,47 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
+        public async Task<AppResponse<List<SaleReportMonthWise>>> GetSaleReportMonthWise(int loginId, GetSaleReportMonthWiseReq reportMonthWiseReq)
+        {
+            var res = new AppResponse<List<SaleReportMonthWise>>();
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<SaleReportMonthWise>("Proc_GetSaleReportMonthWise", new
+                {
+                    reportMonthWiseReq.WID,
+                    reportMonthWiseReq.HospitalId,
+                    reportMonthWiseReq.Year,
+                    loginId
+                });
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "GetSaleReportMonthWise", ex.Message);
+            }
+            return res;
+        }
+        public async Task<AppResponse<List<SaleReportMonthWise>>> GetPurchaseReportMonthWise(int loginId, GetSaleReportMonthWiseReq reportMonthWiseReq)
+        {
+            var res = new AppResponse<List<SaleReportMonthWise>>();
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<SaleReportMonthWise>("Proc_GetPurchaseReportMonthWise", new
+                {
+                    reportMonthWiseReq.WID,
+                    reportMonthWiseReq.HospitalId,
+                    reportMonthWiseReq.Year,
+                    loginId
+                });
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "GetPurchaseReportMonthWise", ex.Message);
+            }
+            return res;
+        }
     }
 }

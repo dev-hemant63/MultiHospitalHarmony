@@ -1,0 +1,36 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<List<SaleReportMonthWise>>
+@{
+    if (Model.Data.Any())
+    {
+        int i = 0;
+        var totalAmount = Model.Data.Sum(x => x.TotalAmount);
+        var totalPaidAmount = Model.Data.Sum(x => x.PaidAmount);
+        var totalbalanceAmount = Model.Data.Sum(x => x.BalanceAmount);
+        foreach (var item in Model.Data)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@item.MonthName</td>
+                <td>@item.SubTotalAmount</td>
+                <td>@item.GST</td>
+                <td>@item.Discount</td>
+                <td>@item.TotalAmount</td>
+                <td>@item.PaidAmount</td>
+                <td>@item.BalanceAmount</td>
+            </tr>
+        }
+        <tr style="background: #222b40; color: white;">
+            <td colspan="6" class="text-end"> Total Amount : @totalAmount</td>
+            <td class="text-end"> Paid Amount : @totalPaidAmount</td>
+            <td class="text-end"> Balance Amount : @totalbalanceAmount</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td colspan="34" class="text-center text-danger">Record not found!</td>
+        </tr>
+    }
+}

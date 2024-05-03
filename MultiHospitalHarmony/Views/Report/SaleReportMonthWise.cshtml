@@ -1,0 +1,53 @@
+﻿@using MultiHospitalHarmony.Enum
+@using MultiHospitalHarmony.Extentions
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Sale Report (Month Wise)</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Month</td>
+                                    <td>Sab Total Amount</td>
+                                    <td>GST</td>
+                                    <td>Discount</td>
+                                    <td>Total Amount</td>
+                                    <td>Paid Amount</td>
+                                    <td>Balance Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+        var loadData = () => {
+            $.post('/Report/GetSaleReportMonthWise').done((result) => {
+                $('#datagrid tbody').empty().append(result);
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}
