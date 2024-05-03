@@ -90,5 +90,39 @@ namespace MultiHospitalHarmony.Controllers
             var res = await _purchaseService.PayPurchaseDueAmount(User.GetLogingID<int>(), amountReq);
             return Json(res);
         }
+        [HttpGet]
+        public async Task<IActionResult> ReturnPurchase(int Id)
+        {
+            var response = await _purchaseService.GetMedicinePurchaseDetails(User.GetLogingID<int>(), new GetMedicinePurchasReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId(),
+                PurchaseId = Id
+            });
+            if (response.Success)
+            {
+                response.Data.PaymentDetails = JsonConvert.DeserializeObject<List<PaymentDetails>>(response.Data.PaymentDetailsJson);
+                response.Data.PurchaseMedicineDetails = JsonConvert.DeserializeObject<List<PurchaseMedicineDetails>>(response.Data.PurchaseMedicineDetailsJson);
+            }
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelReturnPurchase(int PurchaseId,int StatusId)
+        {
+            var res = await _purchaseService.CancelReturnPurchase(User.GetLogingID<int>(), new CancelReturnPurchaseReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>(),
+                Id = PurchaseId,
+                StatusId = StatusId
+            });
+            return Json(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> PurchaseReturn()
+        {
+            return View();
+        }
     }
 }

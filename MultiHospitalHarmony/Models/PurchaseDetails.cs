@@ -26,6 +26,7 @@
         public string ExpiryDate { get; set; }
         public string BoxSize { get; set; }
         public decimal BoxQty { get; set; }
+        public decimal AvilQty { get; set; }
         public decimal TotalQuantity { get; set; }
         public decimal SupplierPrice { get; set; }
         public decimal MRP { get; set; }

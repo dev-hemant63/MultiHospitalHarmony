@@ -57,7 +57,8 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 {
                     loginId,
                     request.WID,
-                    request.HospitalId
+                    request.HospitalId,
+                    request.StatusId,
                 }, CommandType.StoredProcedure);
                 response.Success = true;
                 response.Message = "Success.";
@@ -109,6 +110,26 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             catch (Exception ex)
             {
                 _dapperContext.SaveLog("PurchaseService", "PayPurchaseDueAmount", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<object>> CancelReturnPurchase(int loginId, CancelReturnPurchaseReq request)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_CancelReturnPurchase", new
+                {
+                    loginId,
+                    request.WID,
+                    request.HospitalId,
+                    PurchaseId = request.Id,
+                    request.StatusId,
+                }, CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("PurchaseService", "CancelReturnPurchase", ex.Message);
             }
             return response;
         }

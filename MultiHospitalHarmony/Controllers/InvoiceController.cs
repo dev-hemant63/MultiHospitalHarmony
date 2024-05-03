@@ -51,7 +51,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewInvoice(int invoiceId)
         {
-            var res = await _invoiceService.GetInvoiceDetail(User.GetLogingID<int>(),new GetInvoiceDetailsReq
+            var res = await _invoiceService.GetInvoiceDetail(User.GetLogingID<int>(), new GetInvoiceDetailsReq
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId(),
@@ -64,6 +64,16 @@ namespace MultiHospitalHarmony.Controllers
             res.Data.InvoiceDetail = JsonConvert.DeserializeObject<List<InvoiceItems>>(res.Data.InvoiceDetailsJson);
             return View(res);
         }
-
+        [HttpPost]
+        public async Task<IActionResult> CancelReturnSale(int InvoiceId)
+        {
+            var res = await _invoiceService.CancelReturnSale(User.GetLogingID<int>(), new ReturnSaleReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>(),
+                Id = InvoiceId
+            });
+            return Json(res);
+        }
     }
 }

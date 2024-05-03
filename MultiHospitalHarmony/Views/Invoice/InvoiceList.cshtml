@@ -69,6 +69,7 @@
                                                                 <div class="dropdown-menu">
                                                                                                     <a class="dropdown-item" href="/Invoice/ViewInvoice?invoiceId=${v.id}&isprint=false" >View</a>
                                                                                             <a class="dropdown-item" href="/Invoice/ViewInvoice?invoiceId=${v.id}&isprint=true" >Print</a>
+                                                                                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="cancelReturnSale('${v.id}')">Return</a>
                                                                 </div>
                                                             </div>
                                                             </td>
@@ -86,6 +87,28 @@
                                                             `;
                     });
                     $('#datagrid tbody').empty().append(_html);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var cancelReturnSale = (id) => {
+            let obj = {
+                InvoiceId: id,
+            }
+            $.post('/Invoice/CancelReturnSale', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    loadData();
                 }
             }).fail((xhr) => {
                 console.log(xhr);

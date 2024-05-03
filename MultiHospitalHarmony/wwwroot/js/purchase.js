@@ -217,6 +217,8 @@ var loadData = () => {
                 let option = '';
                 if (v.status == 1) {
                     status = '<span class="badge badge-sm badge-success">Order Completed</span>';
+                    option = `<a class="dropdown-item" href="javascript:void(0)" onclick="cancelReturnPurchase('${v.id}','2')">Cancel</a>`;
+                    option += `<a class="dropdown-item" href="javascript:void(0)" onclick="cancelReturnPurchase('${v.id}','3')">Return</a>`;
                 }
                 if (v.status == 2) {
                     status = '<span class="badge badge-sm badge-danger">Order Canceled</span>';
@@ -292,6 +294,72 @@ var payDueAmount = () => {
             $('select').val('0');
             $('.btn-close').click();
             loadData();
+        }
+    }).fail((xhr) => {
+        console.log(xhr);
+        Swal.fire({
+            title: "Failed!!",
+            text: "Server Error!",
+            icon: "error"
+        });
+    });
+}
+var cancelReturnPurchase = (id,statusId) => {
+    let obj = {
+        PurchaseId: id,
+        StatusId: statusId
+    }
+    $.post('/Purchase/CancelReturnPurchase', obj).done((res) => {
+        Swal.fire({
+            title: res.success == true ? "Success" : "Failed",
+            text: res.message,
+            icon: res.success == true ? "success" : "error"
+        });
+        if (res.success == true) {
+            loadData();
+        }
+    }).fail((xhr) => {
+        console.log(xhr);
+        Swal.fire({
+            title: "Failed!!",
+            text: "Server Error!",
+            icon: "error"
+        });
+    });
+}
+var getReturnList = () => {
+    $.post('/Purchase/GetMedicinePurchase', {StatusId:2}).done((result) => {
+        if (result.success) {
+            
+            let _html = result.data.map((v, i) => {
+
+                return `
+                <tr>
+                <td>${i + 1}</td>
+                <td>
+                <div class="btn-group mb-1">
+                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/Purchase/ViewPurchaseDetails?Id=${v.id}">View</a>
+                            </div>
+                        </div>
+                </td>
+                <td>${v.supplier}</td>
+                <td>${v.invoiceNo}</td>
+                <td>${v.subTotalAmount}</td>
+                <td>${v.discount}</td>
+                <td>${v.totalAmount}</td>
+                <td>${v.paidAmount}</td>
+                <td>${v.balanceAmount}</td>
+                <td>${v.purchaseDate}</td>
+                <td>${v.details}</td>
+                <td>${v.remark}</td>
+                <td>${v.entryAt}</td>
+                </tr>
+                `;
+            });
+            $('#datagrid tbody').empty().append(_html);
         }
     }).fail((xhr) => {
         console.log(xhr);

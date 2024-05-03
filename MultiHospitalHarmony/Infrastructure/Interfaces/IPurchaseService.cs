@@ -10,5 +10,6 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
         Task<AppResponse<List<MedicinePurchase>>> GetMedicinePurchase(int loginId, GetMedicinePurchasReq request);
         Task<AppResponse<PurchaseDetails>> GetMedicinePurchaseDetails(int loginId, GetMedicinePurchasReq request);
         Task<AppResponse<object>> PayPurchaseDueAmount(int loginId, PayPurchaseDueAmountReq request);
+        Task<AppResponse<object>> CancelReturnPurchase(int loginId, CancelReturnPurchaseReq request);
     }
 }

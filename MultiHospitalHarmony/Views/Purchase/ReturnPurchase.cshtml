@@ -1,0 +1,194 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<PurchaseDetails>
+<style>
+    .fieldset {
+        border: 1px solid #ccc;
+        margin-top: 15px;
+        padding: 10px;
+        min-height: 100px;
+    }
+</style>
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Purchase Details</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <fieldset class="fieldset">
+                        <h5><b>Basic Details</b></h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Invoice No. </label>:
+                                <span class="text-blue-600 text-bold" id="txt_VoucherNo">@Model.Data.InvoiceNo</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Purchase Date </label>:
+                                <span class="text-blue-600 text-bold" id="txt_BillNo">@Model.Data.PurchaseDate</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Sub Total Amount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_PurchaseDate">@Model.Data.SubTotalAmount</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Discount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_InterStateFunction">@Model.Data.Discount /-</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Total Amount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_TotalAmount">@Model.Data.TotalAmount /-</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Paid Amount </label>:
+                                <span class="text-blue-600 text-bold" id="txt_GstAmt">@Model.Data.PaidAmount /-</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span>Balance Amount</label>:
+                                <span class="text-blue-600 text-bold" id="txt_GstCess">@Model.Data.BalanceAmount /-</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span>Status</label>:
+                                @if (Model.Data.Status == 1)
+                                {
+                                    <span class="badge badge-success badge-sm">Order Completed</span>
+                                }
+                                else if (Model.Data.Status == 2)
+                                {
+                                    <span class="badge badge-danger badge-sm">Order Canceled</span>
+                                }
+                                else if (Model.Data.Status == 3)
+                                {
+                                    <span class="badge badge-danger badge-sm">Order Returned</span>
+                                }
+                                else if (Model.Data.Status == 4)
+                                {
+                                    <span class="badge badge-info badge-sm">Partially Paid</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning badge-sm">Status Not Found</span>
+                                }
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <h5><b>Supplier Details</b></h5>
+                        <div class="row" id="divSupplierDetails">
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> Name </label>:
+                                <span class="text-blue-600 text-bold">@Model.Data.Supplier</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> MobileNo </label>:
+                                <span class="text-blue-600 text-bold">@Model.Data.MobileNo</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> EmailId </label>:
+                                <span class="text-blue-600 text-bold">@Model.Data.EmailId</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="textLable"><span class="fa fa-arrow-circle-o-right"></span> City </label>:
+                                <span class="text-blue-600 text-bold">@Model.Data.CityName</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <h5><b>Medicine Details</b></h5>
+                        <div class="row col-md-12 table-responsive" id="divVoucherItemDetails">
+                            <table class="table table-bordered table-sm" width="100%">
+                                <thead>
+                                    <tr class="seen">
+                                        <th>#</th>
+                                        <th>Medicine</th>
+                                        <th>Batch Code</th>
+                                        <th>Expiry Date</th>
+                                        <th>Box Size</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Return Qty</th>
+                                        <th>Total Quantity</th>
+                                        <th>Supplier Price</th>
+                                        <th>MRP</th>
+                                        <th>Total Purchase Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblItemDetails">
+                                    @{
+                                        int i = 0;
+                                        foreach (var item in Model.Data.PurchaseMedicineDetails)
+                                        {
+                                            i++;
+                                            <tr data-itemid="@i">
+                                                <td>@i</td>
+                                                <td>@item.Medicine</td>
+                                                <td>@item.BatchCode</td>
+                                                <td>@item.ExpiryDate</td>
+                                                <td>@item.BoxSize</td>
+                                                <td>@item.AvilQty</td>
+                                                <td>
+                                                    <input type="number" id="txt_returnQty_@i" />
+                                                </td>
+                                                <td>@item.TotalQuantity</td>
+                                                <td>@item.SupplierPrice</td>
+                                                <td>@item.MRP</td>
+                                                <td>@item.TotalPurchasePrice</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <h5><b>Payment Details</b></h5>
+                        <div class="col-md-12 row">
+                            <table class="table table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mode</th>
+                                        <th>Amount</th>
+                                        <th>Paid Amount</th>
+                                        <th>Balance Amount</th>
+                                        <th>Status</th>
+                                        <th>UTR</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblPaymentDetails">
+                                    @{
+                                        int j = 0;
+                                        foreach (var item in Model.Data.PaymentDetails)
+                                        {
+                                            j++;
+                                            <tr>
+                                                <td>@j</td>
+                                                <td>@item.Mode</td>
+                                                <td>@item.Amount</td>
+                                                <td>@item.PaidAmount</td>
+                                                <td>@item.BalanceAmount</td>
+                                                <td>
+                                                    <span class="badge badge-success badge-sm">Completed</span>
+                                                </td>
+                                                <td>@item.Remark</td>
+                                                <td>@item.EntryAt</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+﻿@using MultiHospitalHarmony.Enum
+@using MultiHospitalHarmony.Extentions
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Purchase Return List</h4>
+                </div>
+                <div class="col-sm-6 d-flex">
+                    <select class="form-control form-control-sm" id="SearchCriteria">
+                        <option value="">:: Search Criteria ::</option>
+                        @{
+                            List<SearchCriteria> criteriaList = Enum.GetValues(typeof(SearchCriteria)).Cast<SearchCriteria>().ToList();
+                            foreach (var item in criteriaList)
+                            {
+                                <option value="@Convert.ToInt32(item)">@item.ToString()</option>
+                            }
+                        }
+                    </select>
+                    <input class="form-control form-control-sm" placeholder="Search Text" id="SearchText" />
+                    <button class="btn btn-primary btn-sm btn-last" onclick="loaddata()"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Supplier</td>
+                                    <td>InvoiceNo</td>
+                                    <td>Sub Total Amount</td>
+                                    <td>Discount</td>
+                                    <td>Total Amount</td>
+                                    <td>Paid Amount</td>
+                                    <td>Balance Amount</td>
+                                    <td>Purchase Date</td>
+                                    <td>Details</td>
+                                    <td>Remark</td>
+                                    <td>EntryAt</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Due Amount</label>
+                <input type="number" class="form-control" id="dueamount" value="0" disabled />
+                <label>Payment Mode</label>
+                <select class="form-control" id="ddlPaymnetMethod">
+                    <option value="0">:: select ::</option>
+                </select>
+                <label>Paid Amount</label>
+                <input type="number" class="form-control" id="paidamount" value="0" />
+                <input type="hidden" id="hdnId" value="0" />
+                <label>Remark</label>
+                <input type="text" class="form-control" id="remark" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success light" onclick="payDueAmount()">Pay</button>
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/purchase.js"></script>
+    <script>
+        $(document).ready(function () {
+            getReturnList();
+        });
+    </script>
+}

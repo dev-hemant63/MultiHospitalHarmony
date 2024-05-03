@@ -106,5 +106,24 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<object>> CancelReturnSale(int loginId, ReturnSaleReq request)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_ReturnInvoice", new
+                {
+                    loginId,
+                    request.WID,
+                    request.HospitalId,
+                    InvoiceId = request.Id,
+                }, CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "CancelReturnSale", ex.Message);
+            }
+            return response;
+        }
     }
 }
