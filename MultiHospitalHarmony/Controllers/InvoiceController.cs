@@ -75,5 +75,10 @@ namespace MultiHospitalHarmony.Controllers
             });
             return Json(res);
         }
+        [HttpGet]
+        public IActionResult SaleReturn()
+        {
+            return View();
+        }
     }
 }

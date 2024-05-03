@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm" id="datagrid">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
                             <thead>
                                 <tr>
                                     <td>#</td>
@@ -33,6 +33,7 @@
                                     <td>Customer</td>
                                     <td>InvoiceNo</td>
                                     <td>InvoiceDate</td>
+                                    <td>Status</td>
                                     <td>Details</td>
                                     <td>Total Amount</td>
                                     <td>Discount</td>
@@ -59,6 +60,25 @@
             $.post('/Invoice/GetInvoiceList').done((result) => {
                 if (result.success) {
                     let _html = result.data.map((v, i) => {
+
+                        let status = '';
+                        if (v.status == 1) {
+                            status = '<span class="badge badge-sm badge-success">Order Completed</span>';
+                        }
+                        if (v.status == 2) {
+                            status = '<span class="badge badge-sm badge-danger">Order Canceled</span>';
+                        }
+                        if (v.status == 3) {
+                            status = '<span class="badge badge-sm badge-danger">Order Returned</span>';
+                        }
+                        if (v.status == 4) {
+                            status = '<span class="badge badge-sm badge-info">Partially Paid</span>';
+                        }
+
+                        let option = '';
+                        if (v.status != 3) {
+                            option = `<a class="dropdown-item" href="javascript:void(0)" onclick="cancelReturnSale('${v.id}')">Return</a>`;
+                        }
                         return `
                                                             <tr>
                                                             <td>${i + 1}</td>
@@ -69,13 +89,14 @@
                                                                 <div class="dropdown-menu">
                                                                                                     <a class="dropdown-item" href="/Invoice/ViewInvoice?invoiceId=${v.id}&isprint=false" >View</a>
                                                                                             <a class="dropdown-item" href="/Invoice/ViewInvoice?invoiceId=${v.id}&isprint=true" >Print</a>
-                                                                                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="cancelReturnSale('${v.id}')">Return</a>
+                                                                                                    ${option}
                                                                 </div>
                                                             </div>
                                                             </td>
                                                                     <td>${v.customerInfo}</td>
                                                                     <td>${v.invoiceNo}</td>
                                                                             <td>${v.invoiceDate}</td>
+                                                                                    <td>${status}</td>
                                                                             <td>${v.details}</td>
                                                                                     <td>${v.totalPrice}</td>
                                                                             <td>${v.discount}</td>

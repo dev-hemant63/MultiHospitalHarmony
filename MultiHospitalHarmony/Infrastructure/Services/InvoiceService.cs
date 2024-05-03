@@ -74,6 +74,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 {
                     getInvoiceListReq.WID,
                     getInvoiceListReq.HospitalId,
+                    getInvoiceListReq.StatusId,
                     loginId
                 });
                 res.Success = true;

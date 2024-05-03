@@ -4,5 +4,6 @@ namespace MultiHospitalHarmony.Models.DTOs
 {
     public class GetInvoiceListReq:CommonRequest
     {
+        public int StatusId { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace MultiHospitalHarmony.Models
         public string CustomerInfo { get; set; }
         public string InvoiceNo { get; set; }
         public string InvoiceDate { get; set; }
+        public int Status { get; set; }
         public string Details { get; set; }
         public decimal GST { get; set; }
         public decimal TotalPrice { get; set; }
