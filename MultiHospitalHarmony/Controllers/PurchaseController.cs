@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class PurchaseController : Controller
     {
         private readonly ICommonService _commonService;
@@ -42,7 +44,7 @@ namespace MultiHospitalHarmony.Controllers
             if (SupplierId != 0)
             {
                 res.Data = res.Data.Where(x => x.SupplierId == SupplierId).ToList();
-            }            
+            }
             return Json(res);
         }
         [HttpPost]
@@ -69,7 +71,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewPurchaseDetails(int Id)
         {
-            var response = await _purchaseService.GetMedicinePurchaseDetails(User.GetLogingID<int>(),new GetMedicinePurchasReq
+            var response = await _purchaseService.GetMedicinePurchaseDetails(User.GetLogingID<int>(), new GetMedicinePurchasReq
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId(),
@@ -108,7 +110,7 @@ namespace MultiHospitalHarmony.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CancelReturnPurchase(int PurchaseId,int StatusId)
+        public async Task<IActionResult> CancelReturnPurchase(int PurchaseId, int StatusId)
         {
             var res = await _purchaseService.CancelReturnPurchase(User.GetLogingID<int>(), new CancelReturnPurchaseReq
             {

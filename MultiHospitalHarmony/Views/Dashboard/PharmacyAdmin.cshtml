@@ -1,7 +1,9 @@
-﻿@{
+﻿@using MultiHospitalHarmony.Models.Common
+@{
 	ViewData["Title"] = "Dashboard";
 	Layout = "_Layout";
 }
+@model AppResponse<PharmacyDashboardData>
 <div class="row">
 	<div class="col-xl-3  col-lg-6 col-sm-6">
 		<div class="widget-stat card">
@@ -15,8 +17,7 @@
 					</span>
 					<div class="media-body">
 						<p class="mb-1">TOTAL CUSTOMER</p>
-						<h4 class="mb-0">3280</h4>
-						<span class="badge badge-primary">+3.5%</span>
+						<h4 class="mb-0">@Model.Data.TotalCustomer</h4>
 					</div>
 				</div>
 			</div>
@@ -38,8 +39,7 @@
 					</span>
 					<div class="media-body">
 						<p class="mb-1">TOTAL MEDICINE</p>
-						<h4 class="mb-0">3280</h4>
-						<span class="badge badge-primary">+3.5%</span>
+						<h4 class="mb-0">@Model.Data.TotalMedicine</h4>
 					</div>
 				</div>
 			</div>
@@ -58,8 +58,7 @@
 					</span>
 					<div class="media-body">
 						<p class="mb-1">OUT OF STOCK</p>
-						<h4 class="mb-0">364.50K</h4>
-						<span class="badge badge-danger">-3.5%</span>
+						<h4 class="mb-0">@Model.Data.OutOfStock</h4>
 					</div>
 				</div>
 			</div>
@@ -79,8 +78,7 @@
 					</span>
 					<div class="media-body">
 						<p class="mb-1">EXPIRED MEDICINE</p>
-						<h4 class="mb-0">364.50K</h4>
-						<span class="badge badge-success">-3.5%</span>
+						<h4 class="mb-0">@Model.Data.ExpiredMedicine</h4>
 					</div>
 				</div>
 			</div>
@@ -111,6 +109,33 @@
 								<th>EntryAt</th>
 							</tr>
 						</thead>
+						<tbody>
+							@{
+								if (@Model.Data.SaleInfo.Any())
+								{
+									int i = 0;
+									foreach (var item in @Model.Data.SaleInfo)
+									{
+										i++;
+										<tr>
+											<td>@i</td>
+											<td>@item.CustomerInfo</td>
+											<td>@item.InvoiceNo</td>
+											<td>@item.TotalPrice</td>
+											<td>@item.PaidAmount</td>
+											<td>@item.BalanceAmount</td>
+											<td>@item.EntryAt</td>
+										</tr>
+									}
+								}
+								else
+								{
+									<tr>
+										<td colspan="34" class="text-center text-danger">Data Not Found!</td>
+									</tr>
+								}
+							}
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -136,23 +161,19 @@
 						</tr>
 						<tr>
 							<th>Total Sales</th>
-							<td class="text-right">0</td>
+							<td class="text-right">@Model.Data.TotalSales</td>
 						</tr>
 						<tr>
 							<th>Total Purchase</th>
-							<td class="text-right">0</td>
+							<td class="text-right">@Model.Data.TotalPurchase</td>
 						</tr>
 						<tr>
 							<th>Cash Received</th>
-							<td class="text-right">0</td>
+							<td class="text-right">@Model.Data.CashReceived</td>
 						</tr>
 						<tr>
 							<th>Bank Receive </th>
-							<td class="text-right">0</td>
-						</tr>
-						<tr>
-							<th>Total Service </th>
-							<td class="text-right">0</td>
+							<td class="text-right">@Model.Data.BankReceive</td>
 						</tr>
 					</tbody>
 				</table>

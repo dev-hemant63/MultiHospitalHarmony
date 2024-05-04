@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class InvoiceController : Controller
     {
         private readonly IInvoiceService _invoiceService;
@@ -80,6 +82,6 @@ namespace MultiHospitalHarmony.Controllers
         {
             return View();
         }
-        
+
     }
 }

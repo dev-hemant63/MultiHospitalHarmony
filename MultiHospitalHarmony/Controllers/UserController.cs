@@ -60,7 +60,7 @@ namespace MultiHospitalHarmony.Controllers
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(string jsonData,IFormFile Logo, IFormFile Banner)
+        public async Task<IActionResult> Create(string jsonData, IFormFile Logo, IFormFile Banner)
         {
             var request = JsonConvert.DeserializeObject<Users>(jsonData);
             if (Logo != null)
@@ -112,17 +112,17 @@ namespace MultiHospitalHarmony.Controllers
         public async Task<IActionResult> profile()
         {
             var userRes = await _userService.GetUserById(User.GetLogingID<int>(), User.GetLogingID<int>());
-			var cityRes = await _commonService.GetCity();
-			if (cityRes.Success)
-			{
-				userRes.Data.City = cityRes.Data;
-			}
-			var stateRes = await _commonService.GetState();
-			if (stateRes.Success)
-			{
-				userRes.Data.State = stateRes.Data;
-			}
-			return View(userRes.Data);
+            var cityRes = await _commonService.GetCity();
+            if (cityRes.Success)
+            {
+                userRes.Data.City = cityRes.Data;
+            }
+            var stateRes = await _commonService.GetState();
+            if (stateRes.Success)
+            {
+                userRes.Data.State = stateRes.Data;
+            }
+            return View(userRes.Data);
         }
         [HttpGet]
         public async Task<IActionResult> forgetpassword()
@@ -156,7 +156,7 @@ namespace MultiHospitalHarmony.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> SaveMedicalHistory(string jsonData,IFormFile file)
+        public async Task<IActionResult> SaveMedicalHistory(string jsonData, IFormFile file)
         {
             var response = new AppResponse<object>();
             var medicalHistory = JsonConvert.DeserializeObject<MedicalHistory>(jsonData);
@@ -175,14 +175,14 @@ namespace MultiHospitalHarmony.Controllers
                 }
                 medicalHistory.PrescriptionFile = fileRes.Data;
             }
-            response = await _userService.SaveMedicalHistory(User.GetLogingID<int>(),medicalHistory);
+            response = await _userService.SaveMedicalHistory(User.GetLogingID<int>(), medicalHistory);
             return Json(response);
         }
         [HttpPost]
         public async Task<IActionResult> GetPatientList(GetUserFilter filter)
         {
             filter.RoleId = AppRole.Patient;
-            var data = await _userService.GetUserList(User.GetLogingID<int>(),filter);
+            var data = await _userService.GetUserList(User.GetLogingID<int>(), filter);
             if (data.Success)
             {
                 return PartialView(data.Data);
@@ -196,10 +196,42 @@ namespace MultiHospitalHarmony.Controllers
             return Json(data);
         }
         [HttpPost]
-        public async Task<IActionResult> AssignPermission(int UserId,int ModuleId)
+        public async Task<IActionResult> AssignPermission(int UserId, int ModuleId)
         {
             var res = await _userService.AssignPermission(UserId, ModuleId);
             return Json(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> doctorlist()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Getdoctorlist(GetUserFilter userFilter)
+        {
+            userFilter.RoleId = AppRole.Doctor;
+            var data = await _userService.GetUserList(User.GetLogingID<int>(), userFilter);
+            if (data.Success)
+            {
+                return PartialView(data.Data);
+            }
+            return PartialView("~/home/recordnotfound");
+        }
+        [HttpGet]
+        public async Task<IActionResult> PharmacyList()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetPharmacyList(GetUserFilter userFilter)
+        {
+            userFilter.RoleId = AppRole.PharmacyAdmin;
+            var data = await _userService.GetUserList(User.GetLogingID<int>(), userFilter);
+            if (data.Success)
+            {
+                return PartialView(data.Data);
+            }
+            return PartialView("~/home/recordnotfound");
         }
     }
 }

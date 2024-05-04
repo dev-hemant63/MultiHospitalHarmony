@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models;
@@ -6,15 +7,16 @@ using MultiHospitalHarmony.Models.DTOs;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class WardController : Controller
     {
         private readonly IWardService _wardService;
         public WardController(IWardService wardService)
         {
-			_wardService = wardService;
-		}
+            _wardService = wardService;
+        }
 
-		[HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Type()
         {
             return View();
@@ -22,7 +24,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveType(AddWardTypeReq addWardTypeReq)
         {
-            var res = await _wardService.AddWardType(User.GetLogingID<int>(),new AddWardTypeReq
+            var res = await _wardService.AddWardType(User.GetLogingID<int>(), new AddWardTypeReq
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId(),
@@ -35,7 +37,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetWardType(GetWardTypeReq addWardTypeReq)
         {
-            var res = await _wardService.GetWardType(User.GetLogingID<int>(),new GetWardTypeReq
+            var res = await _wardService.GetWardType(User.GetLogingID<int>(), new GetWardTypeReq
             {
                 WID = User.GetWID<int>(),
                 HospitalId = User.GetHospitalId()
@@ -45,7 +47,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetWardTypeById(GetWardTypeReq addWardTypeReq)
         {
-            addWardTypeReq.Id = addWardTypeReq.Id == 0 ? -1: addWardTypeReq.Id;
+            addWardTypeReq.Id = addWardTypeReq.Id == 0 ? -1 : addWardTypeReq.Id;
             var res = await _wardService.GetWardTypeById(User.GetLogingID<int>(), new GetWardTypeReq
             {
                 WID = User.GetWID<int>(),

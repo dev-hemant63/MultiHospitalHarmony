@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
@@ -8,6 +9,7 @@ using MultiHospitalHarmony.Models.DTOs;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         private ICommonService _commonService;
@@ -31,9 +33,9 @@ namespace MultiHospitalHarmony.Controllers
             {
                 model.State = stateRes.Data;
             }
-            if(Id != 0)
+            if (Id != 0)
             {
-                var data = await _supplierService.GetById(User.GetLogingID<int>(),Id);
+                var data = await _supplierService.GetById(User.GetLogingID<int>(), Id);
                 model.Id = data.Data.Id;
                 model.Name = data.Data.Name;
                 model.MobileNo = data.Data.MobileNo;
@@ -65,7 +67,7 @@ namespace MultiHospitalHarmony.Controllers
             });
             return Json(response);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> List()
         {

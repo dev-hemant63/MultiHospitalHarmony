@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly IUserService _userService;
@@ -71,7 +73,7 @@ namespace MultiHospitalHarmony.Controllers
             return Json(res);
         }
         [HttpPost]
-        public async Task<IActionResult> AdmitPatient(string JsonData,IFormFile File)
+        public async Task<IActionResult> AdmitPatient(string JsonData, IFormFile File)
         {
             var req = JsonConvert.DeserializeObject<AdmitPatientReq>(JsonData);
             string fileName = "";
@@ -80,10 +82,10 @@ namespace MultiHospitalHarmony.Controllers
                 var fileRes = _fileUploadService.Upload(new FileUploadModel
                 {
                     file = File,
-                    FileName =$"{req.FullName}_{DateTime.Now.ToString("ddMMyyyyhhmmssfff")}",
+                    FileName = $"{req.FullName}_{DateTime.Now.ToString("ddMMyyyyhhmmssfff")}",
                     FilePath = "wwwroot/upload/patient/PrescriptionFile/"
                 });
-                if(!fileRes.Success)
+                if (!fileRes.Success)
                 {
                     return Json(fileRes);
                 };
@@ -105,7 +107,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAdmitedPatientList(PatientFilter patientFilter)
         {
-            var res = await _iPDService.AdmitedPatientList(User.GetLogingID<int>(),new PatientFilter
+            var res = await _iPDService.AdmitedPatientList(User.GetLogingID<int>(), new PatientFilter
             {
                 HospitalId = User.GetHospitalId(),
                 WID = User.GetWID<int>(),

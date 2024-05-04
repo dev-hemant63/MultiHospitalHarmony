@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
@@ -7,6 +8,7 @@ using MultiHospitalHarmony.Models.DTOs;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;
@@ -40,7 +42,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetCustomerList()
         {
-            var res = await _customerService.List(User.GetLogingID<int>(),new GetCustomersReq
+            var res = await _customerService.List(User.GetLogingID<int>(), new GetCustomersReq
             {
                 HospitalId = User.GetHospitalId(),
                 WID = User.GetWID<int>(),

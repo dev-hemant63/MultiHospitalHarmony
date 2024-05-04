@@ -48,7 +48,7 @@
                                 @{
                                     foreach (var item in Model.ApplicationRole)
                                     {
-                                                <option value="@item.Id">@item.Role.ToString().ToUpper()</option>
+                                        <option value="@item.Id">@item.Role.ToString().ToUpper()</option>
                                     }
                                 }
                             </select>
@@ -80,7 +80,7 @@
                                 @{
                                     foreach (var item in Model.State)
                                     {
-                                                <option value="@item.Id">@item.StateName</option>
+                                        <option value="@item.Id">@item.StateName</option>
                                     }
                                 }
                             </select>
@@ -92,7 +92,7 @@
                                 @{
                                     foreach (var item in Model.City)
                                     {
-                                                <option value="@item.Id">@item.CityName</option>
+                                        <option value="@item.Id">@item.CityName</option>
                                     }
                                 }
                             </select>
@@ -198,15 +198,22 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    Swal.fire({
-                        title: "Success",
-                        text: response.message,
-                        icon: "success"
-                    });
                     if (response.success) {
+                        Swal.fire({
+                            title: "Success",
+                            text: response.message,
+                            icon: "success"
+                        });
                         $('input').val('');
                         $('select').val('');
                         window.location.href = '/user/userlist';
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Failed!",
+                            text: response.message,
+                            icon: "error"
+                        });
                     }
                 },
                 error: function (error) {
@@ -228,7 +235,7 @@
             }
             else if (roleId == 5) {
                 $('.hospital').removeClass('d-none');
-               
+
             }
             else {
                 $('#divQualifications').addClass('d-none');
@@ -238,20 +245,20 @@
         }
         var qualificationsAdd = () => {
             let _new = `
-                                             <tr>
-                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                                <td><input type="text" class="form-control form-control-sm" required /> </td>
-                                                                                        <td><i class="fa fa-trash-o text-danger delete" style="font-size: 24px;
-                            cursor: pointer;"></i></td>
-                                                            </tr>
-                                    `
+                                                     <tr>
+                                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                        <td><input type="text" class="form-control form-control-sm" required /> </td>
+                                                                                                <td><i class="fa fa-trash-o text-danger delete" style="font-size: 24px;
+                                    cursor: pointer;"></i></td>
+                                                                    </tr>
+                                            `
             $('#Qualifications tbody').append(_new);
         }
         $(document).on('click', '.delete', function () {
             $(this).closest('tr').remove();
         });
-        var handleRequired = ()=>{
+        var handleRequired = () => {
             let _is = $('#isdedicated').is(':checked');
             if (_is) {
                 $('input[type="file"]').prop('required', true);

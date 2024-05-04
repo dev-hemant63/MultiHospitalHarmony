@@ -4,9 +4,11 @@ using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models.Common;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
@@ -30,7 +32,7 @@ namespace MultiHospitalHarmony.Controllers
         {
             filter.HospitalId = User.GetHospitalId();
             filter.DoctorId = User.GetDoctorId();
-            var response = await _appointmentService.GetAppointments(User.GetLogingID<int>(),filter);
+            var response = await _appointmentService.GetAppointments(User.GetLogingID<int>(), filter);
             return PartialView(response);
         }
         [HttpGet]
@@ -43,7 +45,7 @@ namespace MultiHospitalHarmony.Controllers
         {
             filter.HospitalId = User.GetHospitalId();
             filter.DoctorId = User.GetDoctorId();
-            var response = await _appointmentService.GetScheduledAppointments(User.GetLogingID<int>(),filter);
+            var response = await _appointmentService.GetScheduledAppointments(User.GetLogingID<int>(), filter);
             return PartialView(response);
         }
         [HttpPost]
@@ -51,7 +53,7 @@ namespace MultiHospitalHarmony.Controllers
         {
             appointmentReq.HospitalId = User.GetHospitalId();
             appointmentReq.DoctorId = User.GetDoctorId();
-            var response = await _appointmentService.UpdateAppointmentStatus(User.GetLogingID<int>(),appointmentReq);
+            var response = await _appointmentService.UpdateAppointmentStatus(User.GetLogingID<int>(), appointmentReq);
             return Json(response);
         }
     }

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models.DTOs;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class CommissionController : Controller
     {
         private readonly ICommissionService _commissionService;

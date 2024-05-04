@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Infrastructure.Services;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace MultiHospitalHarmony.Controllers
 {
+    [Authorize]
     public class MedicineController : Controller
     {
         private readonly IMedicineService _mediicineService;
@@ -28,7 +30,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUnit(MedicineUnitReq medicineUnitReq)
         {
-            var res = await _mediicineService.SaveUnit(User.GetLogingID<int>(),new MedicineUnitReq
+            var res = await _mediicineService.SaveUnit(User.GetLogingID<int>(), new MedicineUnitReq
             {
                 HospitalId = User.GetHospitalId(),
                 WID = User.GetWID<int>(),
@@ -177,7 +179,7 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetMedicineList()
         {
-            var res = await _mediicineService.GetMedicineList(User.GetLogingID<int>(),new GetMedicineFilter
+            var res = await _mediicineService.GetMedicineList(User.GetLogingID<int>(), new GetMedicineFilter
             {
                 HospitalId = User.GetHospitalId(),
                 WID = User.GetWID<int>(),
@@ -186,7 +188,7 @@ namespace MultiHospitalHarmony.Controllers
             return PartialView(res);
         }
         [HttpPost]
-        public async Task<IActionResult> AddMedicine(string jsonData,IFormFile file)
+        public async Task<IActionResult> AddMedicine(string jsonData, IFormFile file)
         {
             var addMedicineReq = JsonConvert.DeserializeObject<AddMedicineReq>(jsonData);
             addMedicineReq.Image = file;
