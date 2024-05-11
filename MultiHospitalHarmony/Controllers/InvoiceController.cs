@@ -82,6 +82,36 @@ namespace MultiHospitalHarmony.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        public IActionResult Laboratoryinvoice()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Laboratoryinvoicelist()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveLaboratoryinvoice(Laboratory_InvoiceReq invoiceReq)
+        {
+            invoiceReq.HospitalId = User.GetHospitalId();
+            invoiceReq.WID = User.GetWID<int>();
+            var res = await _invoiceService.AddLaboratory_Invoice(User.GetLogingID<int>(), invoiceReq);
+            return Json(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetLabInvoiceList(GetLaboratory_InvoiceReq getLaboratory)
+        {
+            getLaboratory.HospitalId = User.GetHospitalId();
+            getLaboratory.WID = User.GetWID<int>();
+            var res = await _invoiceService.GetLaboratory_InvoiceList(User.GetLogingID<int>(), getLaboratory);
+            return Json(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ViewLabInvoice(int invoiceId)
+        {
+            return View();
+        }
     }
 }

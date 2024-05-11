@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
-using MultiHospitalHarmony.Infrastructure.Services;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
 using Newtonsoft.Json;

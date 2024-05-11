@@ -1,0 +1,264 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Laboratory Invoice</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Patient</label>
+                        <select class="form-control" id="ddlPatient">
+                            <option value="">:: SELECT PATIENT ::</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Date </label>
+                        <input type="date" class="form-control" id="txtdate" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Details </label>
+                        <input type="text" class="form-control" id="txtDetails" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Payment Mode </label>
+                        <select class="form-control" id="ddlPaymentMode">
+                            <option value="">:: SELECT PAYMENTMODE ::</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Remark / UTR </label>
+                        <input type="text" class="form-control" id="txtRemark" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Test Category</th>
+                                        <th>Test</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-invoice">
+
+                                    <tr>
+                                        <td colspan="4" class="text-end">Discount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="discount" onchange="handlePrice()" /></td>
+                                        <td>
+                                            <button class="btn btn-success light btn-sm" onclick="addRow()"><i class="fa fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">GST (CGST + SGST + IGST) : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="gst" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Net Total : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="nettotal" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Paid Amount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="paidamount" onchange="handlePrice()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <input type="button" id="full_paid_invoice_tab" class="btn btn-warning" value="Full Paid" tabindex="14" onclick="full_paid_invoice()">
+                                            <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="Save" onclick="saveInvoice()" tabindex="15">
+                                        </td>
+                                        <td colspan="1" class="text-end">Balance Amount : </td>
+                                        <td><input type="number" class="form-control form-control-sm" id="balanceamount" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            bindPatient();
+        });
+        var bindPatient = () => {
+            $.post('/User/BindPatient').done((res) => {
+                if (res.success) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.fullName}</option>`;
+                    });
+                    $('#ddlPatient').empty().append('<option value="0">:: Select ::</option>').append(_option);
+                    bindPaymentModes();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var bindPaymentModes = () => {
+            $.post('/Purchase/GetPaymentModes').done((response) => {
+                if (response.success) {
+                    let _option = response.data.map((v, i) => {
+                        return `<option value='${v.id}'>${v.name}</option>`;
+                    });
+                    $('#ddlPaymentMode').empty().append('<option value="0">:: Select ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var addRow = () => {
+            let _rownumber = $('#table-invoice tr.item').length;
+            _rownumber = _rownumber + 1;
+
+            let _html = `
+                                            <tr data-rowid="${_rownumber}" class="item">
+                                                                    <td>
+                                                                                    <select class="form-control" id="ddltestcat_${_rownumber}" onchange="handleCategory('${_rownumber}')">
+                                                                    <option value="0">:: SELECT ::</option>
+                                                                    </select>
+                                                                    </td>
+                                                                    <td>
+                                                                                    <select class="form-control" id="ddltest_${_rownumber}" onchange="handleTest('${_rownumber}')">
+                                                                    <option value="0">:: SELECT ::</option>
+                                                                    </select>
+                                                                    </td>
+                                                                    <td>
+                                                                                            <input type="number" disabled class="form-control form-control-sm" id="txtprice_${_rownumber}" />
+                                                                    </td>
+                                                                            <td>
+                                                                                                                    <input type="number" oninput="handleTest('${_rownumber}')" class="form-control form-control-sm" id="txtqty_${_rownumber}" />
+                                                                            </td>
+                                                                    <td>
+                                                                                    <input type="number" class="form-control disabled form-control-sm" id="txtTotal_${_rownumber}" />
+                                                                    </td>
+                                                                    <td>
+                                                                    <button class="btn btn-danger light btn-sm delete"><i class="fa fa-trash"></i></button>
+                                                                    </td>
+                                                                    </tr>
+                                    `;
+            $("#table-invoice").prepend(_html);
+            $.post('/BindTestCategory').done((res) => {
+                if (res.success) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}">${v.name}</option>`;
+                    });
+                    $('#ddltestcat_' + _rownumber).empty().append('<option value="0">:: SELECT ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+            });
+
+        }
+        $(document).on('click', '.delete', function () {
+            $(this).closest('tr').remove();
+        });
+        var handleCategory = (id) => {
+            let catId = $('#ddltestcat_' + id).val();
+            $.post('/BindTest', { categoryId: catId }).done((res) => {
+                if (res.success) {
+                    let _option = res.data.map((v, i) => {
+                        return `<option value="${v.id}" data-price="${v.price}">${v.name}</option>`;
+                    });
+                    $('#ddltest_' + id).empty().append('<option value="0">:: SELECT ::</option>').append(_option);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+            });
+        }
+        var handleTest = (id) => {
+            debugger
+            let _price = $('#ddltest_' + id + ' option:selected').data('price');
+            $('#txtprice_' + id).val(_price);
+            let _qty = $('#txtqty_' + id).val();
+            if (_qty == '') {
+                _qty = 0;
+            }
+            let totalAmount = _price * parseFloat(_qty);
+            $('#txtTotal_' + id).val(totalAmount);
+        }
+        var handlePrice = () => {
+            let totalAmount = 0;
+            $('#table-invoice tr.item').each(function () {
+                totalAmount += parseFloat($(this).find('td:eq(4) input').val()) || 0;
+            });
+            let discount = $('#discount').val();
+            discount = discount == '' ? 0 : discount;
+            let gst = $('#gst').val();
+            gst = gst == '' ? 0 : gst;
+            let paidamount = $('#paidamount').val();
+            paidamount = paidamount == '' ? 0 : paidamount;
+            let nettotal = parseInt(totalAmount) - parseInt(discount) + parseInt(gst);
+            $('#nettotal').val(nettotal);
+            let balanceamount = parseInt(nettotal) - parseInt(paidamount);
+            $('#balanceamount').val(balanceamount);
+        }
+        var saveInvoice = () => {
+            var Laboratory_Invoice_Details = [];
+            let sabAmount = 0;
+            $('#table-invoice tr.item').each(function () {
+                sabAmount += parseFloat($(this).find('td:eq(4) input').val()) || 0;
+            });
+            let obj = {
+                PatientId: $('#ddlPatient').val(),
+                InvoiceDate: $('#txtdate').val(),
+                Details: $('#txtDetails').val(),
+                PaymentModeId: $('#ddlPaymentMode').val(),
+                Remark: $('#txtRemark').val(),
+                SubTotal: sabAmount,
+                Discount: $('#discount').val(),
+                GST: $('#gst').val(),
+                TotalAmount: $('#nettotal').val(),
+                PaidAmount: $('#paidamount').val(),
+                BalanceAmount: $('#balanceamount').val(),
+                Laboratory_Invoice_Details:[]
+            }
+            $('#table-invoice tr.item').each(function () {
+                let data = {
+                    Total: parseFloat($(this).find('td:eq(4) input').val()) || 0,
+                    TestCategoryId: parseFloat($(this).find('td:eq(0) select').val()) || 0,
+                    TestId: parseFloat($(this).find('td:eq(1) select').val()) || 0,
+                    Price: parseFloat($(this).find('td:eq(2) input').val()) || 0,
+                    Qty: parseFloat($(this).find('td:eq(3) input').val()) || 0,
+                }
+                Laboratory_Invoice_Details.push(data);
+            });
+            obj.Laboratory_Invoice_Details = Laboratory_Invoice_Details;
+            $.post('/Invoice/SaveLaboratoryinvoice', obj).done((res) => {
+                Swal.fire({
+                    title: res.success == true ? "Success" : "Failed",
+                    text: res.message,
+                    icon: res.success == true ? "success" : "error"
+                });
+                if (res.success == true) {
+                    window.location.reload();
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

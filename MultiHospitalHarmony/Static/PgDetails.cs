@@ -7,6 +7,6 @@
         public static string StatusURL = "https://uniquepayupi.in/api/Transaction/Status";
         public static string MerchantId = "ee41a437-f351-4a44-9c1e-b457a57b96dc";//"MLFA4QXUV"; 
         public static string SecretKey = "9438c4c5-03ce-4d8e-a6c8-5470c181a3f3";//"MLFA4QXUV123"; 
-        public static string ServerHookURL = "https://localhost:44397/callback/uniquepayupi"; 
+        public static string ServerHookURL = "https://localhost:7287/callback/uniquepayupi"; 
     }
 }

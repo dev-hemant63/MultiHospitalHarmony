@@ -60,5 +60,32 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
-    }
+		public async Task<AppResponse<object>> ChangePassword(int loginId,ChangePasswordReq passwordReq)
+		{
+			var response = new AppResponse<object>
+			{
+				Success = false,
+				Message = "An error has been occured try after sometime.",
+				Data = null
+			};
+			try
+			{
+				passwordReq.NewPassword = Security.Encrypt(passwordReq.NewPassword);
+				passwordReq.OldPassword = Security.Encrypt(passwordReq.OldPassword);
+				response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_ChangePassword", new
+                {
+                    loginId,
+					passwordReq.HospitalId,
+					passwordReq.WID,
+					passwordReq.NewPassword,
+					passwordReq.OldPassword
+				}, CommandType.StoredProcedure);
+			}
+			catch (Exception ex)
+			{
+				_dapperContext.SaveLog("AccountService", "ChangePassword", ex.Message);
+			}
+			return response;
+		}
+	}
 }

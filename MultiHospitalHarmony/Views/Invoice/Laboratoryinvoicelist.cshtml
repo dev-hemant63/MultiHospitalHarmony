@@ -1,0 +1,117 @@
+﻿@using MultiHospitalHarmony.Enum
+@using MultiHospitalHarmony.Extentions
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Invoice List</h4>
+                </div>
+                <div class="col-sm-6 d-flex">
+                    <select class="form-control form-control-sm" id="SearchCriteria">
+                        <option value="">:: Search Criteria ::</option>
+                        @{
+                            List<SearchCriteria> criteriaList = Enum.GetValues(typeof(SearchCriteria)).Cast<SearchCriteria>().ToList();
+                            foreach (var item in criteriaList)
+                            {
+                                <option value="@Convert.ToInt32(item)">@item.ToString()</option>
+                            }
+                        }
+                    </select>
+                    <input class="form-control form-control-sm" placeholder="Search Text" id="SearchText" />
+                    <button class="btn btn-primary btn-sm btn-last" onclick="loaddata()"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Patient</td>
+                                    <td>InvoiceNo</td>
+                                    <td>InvoiceDate</td>
+                                    <td>Status</td>
+                                    <td>Details</td>
+                                    <td>Total Amount</td>
+                                    <td>Discount</td>
+                                    <td>GST</td>
+                                    <td>Paid Amount</td>
+                                    <td>Balance Amount</td>
+                                    <td>EntryAt</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+        var loadData = () => {
+            $.post('/Invoice/GetLabInvoiceList').done((result) => {
+                if (result.success) {
+                    let _html = result.data.map((v, i) => {
+
+                        let status = '';
+                        if (v.status == 1) {
+                            status = '<span class="badge badge-sm badge-success">Order Completed</span>';
+                        }
+                        if (v.status == 2) {
+                            status = '<span class="badge badge-sm badge-danger">Order Canceled</span>';
+                        }
+                        if (v.status == 3) {
+                            status = '<span class="badge badge-sm badge-danger">Order Returned</span>';
+                        }
+                        if (v.status == 4) {
+                            status = '<span class="badge badge-sm badge-info">Partially Paid</span>';
+                        }
+
+                        return `
+                                                                    <tr>
+                                                                    <td>${i + 1}</td>
+                                                                    <td>
+                                                                                <div class="btn-group mb-1">
+                                                                        <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                                        </button>
+                                                                        <div class="dropdown-menu">
+                                                                                                                    <a class="dropdown-item" href="/Invoice/ViewLabInvoice?invoiceId=${v.id}&isprint=false" >View</a>
+                                                                                                            <a class="dropdown-item" href="/Invoice/ViewLabInvoice?invoiceId=${v.id}&isprint=true" >Print</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    </td>
+                                                                                    <td>${v.patientInfo}</td>
+                                                                            <td>${v.invoiceNo}</td>
+                                                                                    <td>${v.invoiceDate}</td>
+                                                                                            <td>${status}</td>
+                                                                                    <td>${v.details}</td>
+                                                                                                    <td>${v.totalAmount}</td>
+                                                                                    <td>${v.discount}</td>
+                                                                            <td>${v.gst}</td>
+                                                                                            <td>${v.paidAmount}</td>
+                                                                                                    <td>${v.balanceAmount}</td>
+                                                                            <td>${v.entryAt}</td>
+                                                                    </tr>
+                                                                    `;
+                    });
+                    $('#datagrid tbody').empty().append(_html);
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

@@ -76,5 +76,11 @@ namespace MultiHospitalHarmony.Controllers
 
             return View(res);
         }
+        [Authorize(Roles = "LaboratoryAdmin")]
+        [HttpGet]
+        public async Task<IActionResult> LaboratoryAdmin()
+        {
+            return View();
+        }
     }
 }

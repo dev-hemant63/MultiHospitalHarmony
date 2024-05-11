@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Enum;
@@ -75,6 +76,16 @@ namespace MultiHospitalHarmony.Controllers
 			HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
 			HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
 			return LocalRedirect(returnUrl);
+		}
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordReq passwordReq)
+        {
+			passwordReq.HospitalId = User.GetHospitalId();
+            passwordReq.WID = User.GetWID<int>();
+			var res = await _accountService.ChangePassword(User.GetLogingID<int>(), passwordReq);
+            return Json(res);
+
 		}
 	}
 }

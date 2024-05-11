@@ -1,4 +1,5 @@
-﻿using MultiHospitalHarmony.Context;
+﻿using Azure.Core;
+using MultiHospitalHarmony.Context;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.Common;
@@ -165,6 +166,56 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             catch (Exception ex)
             {
                 _dapperContext.SaveLog("InvoiceService", "GetPurchaseReportMonthWise", ex.Message);
+            }
+            return res;
+        }
+        public async Task<AppResponse<object>> AddLaboratory_Invoice(int loginId,Laboratory_InvoiceReq request)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_Laboratory_Invoice", new
+                {
+                    loginId,
+                    request.WID,
+                    request.HospitalId,
+                    request.PatientId,
+                    request.InvoiceDate,
+                    request.Details,
+                    request.PaymentModeId,
+                    request.Remark,
+                    request.SubTotal,
+                    request.Discount,
+                    request.GST,
+                    request.TotalAmount,
+                    request.PaidAmount,
+                    request.BalanceAmount,
+                    Laboratory_Invoice_Details = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(request.Laboratory_Invoice_Details)),
+                }, CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "AddLaboratory_Invoice", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<List<Laboratory_Invoice>>> GetLaboratory_InvoiceList(int loginId, GetLaboratory_InvoiceReq getLaboratory)
+        {
+            var res = new AppResponse<List<Laboratory_Invoice>>();
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<Laboratory_Invoice>("Proc_GetLaboratory_InvoiceList", new
+                {
+                    getLaboratory.WID,
+                    getLaboratory.HospitalId,
+                    loginId
+                });
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "GetLaboratory_InvoiceList", ex.Message);
             }
             return res;
         }

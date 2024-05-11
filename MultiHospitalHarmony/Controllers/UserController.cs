@@ -101,7 +101,9 @@ namespace MultiHospitalHarmony.Controllers
         [HttpPost]
         public async Task<IActionResult> GetUserList(GetUserFilter userFilter)
         {
-            var data = await _userService.GetUserList(User.GetLogingID<int>(), userFilter);
+            userFilter.HospitalId = User.GetHospitalId();
+            userFilter.WID = User.GetWID<int>();
+			var data = await _userService.GetUserList(User.GetLogingID<int>(), userFilter);
             if (data.Success)
             {
                 return PartialView(data.Data);
@@ -182,7 +184,9 @@ namespace MultiHospitalHarmony.Controllers
         public async Task<IActionResult> GetPatientList(GetUserFilter filter)
         {
             filter.RoleId = AppRole.Patient;
-            var data = await _userService.GetUserList(User.GetLogingID<int>(), filter);
+            filter.WID = User.GetWID<int>();
+            filter.HospitalId = User.GetHospitalId();
+			var data = await _userService.GetUserList(User.GetLogingID<int>(), filter);
             if (data.Success)
             {
                 return PartialView(data.Data);
@@ -232,6 +236,17 @@ namespace MultiHospitalHarmony.Controllers
                 return PartialView(data.Data);
             }
             return PartialView("~/home/recordnotfound");
+        }
+        [HttpPost]
+        public async Task<IActionResult> BindPatient()
+        {
+            var data = await _userService.GetUserList(User.GetLogingID<int>(), new GetUserFilter
+            {
+                RoleId = AppRole.Patient,
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId()
+            });
+            return Json(data);
         }
     }
 }

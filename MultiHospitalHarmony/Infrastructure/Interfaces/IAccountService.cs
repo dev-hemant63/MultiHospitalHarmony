@@ -7,5 +7,7 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
     public interface IAccountService
     {
         Task<AppResponse<Users>> Login(LoginRequest loginRequest);
-    }
+        Task<AppResponse<object>> ChangePassword(int loginId, ChangePasswordReq passwordReq);
+
+	}
 }

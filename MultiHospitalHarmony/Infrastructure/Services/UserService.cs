@@ -48,6 +48,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     users.TimeFrom,
                     users.TimeTo,
                     users.IsDedicated,
+                    users.HospitalId,
                     UserName = Utility.GetUserName((AppRole)users.RoleId),
                     EntryBy = loginId,
                     WId,
@@ -79,7 +80,9 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     loginId,
                     FilterRoleId = userFilter.RoleId,
                     userFilter.SearchCriteria,
-                    userFilter.SearchText
+                    userFilter.SearchText,
+                    userFilter.WID,
+                    userFilter.HospitalId,
                 }, CommandType.StoredProcedure);
                 res.Success = true;
                 res.Message = "Success";
