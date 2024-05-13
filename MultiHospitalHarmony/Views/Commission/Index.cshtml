@@ -104,13 +104,13 @@
 @section Scripts {
     <script>
         var save = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Id: $('#hdnId').val(),
                 RoleId: $('#ddlRole').val(),
                 Amount: $('#txtcommission').val()
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/Commission/Save', obj).done((res) => {
                 Swal.fire({

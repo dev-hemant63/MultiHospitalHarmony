@@ -40,6 +40,7 @@ builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddSingleton<IInvoiceService, InvoiceService>();
 builder.Services.AddSingleton<IDashboardServices, DashboardService>();
 builder.Services.AddSingleton<ITestManagementService, TestManagementService>();
+builder.Services.AddSingleton<IOperationTheatreService, OperationTheatreService>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>

@@ -75,6 +75,7 @@
             let obj ={
                 WardTypeId: $('#ddlwardtpe').val()
             }
+
             $.post('/ward/GetWardList', obj).done((res) => {
                 if (res.data != null && res.success == true) {
                     let _option = res.data.map((v, i) => {
@@ -129,9 +130,6 @@
             });
         }
         var savePatient = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 PatientUserName: $('#txtUserName').val(),
                 MobileNo: $('#txtPatientInfo').val(),
@@ -162,6 +160,9 @@
                 Prescription: $('#txtPrescription').val(),
                 ReferedType: "",
                 PreferredForAdmit: $('#ddlforAdmit').val() == '1'?true:false,
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             let formdata = new FormData();
             formdata.append("JsonData", JSON.stringify(obj));

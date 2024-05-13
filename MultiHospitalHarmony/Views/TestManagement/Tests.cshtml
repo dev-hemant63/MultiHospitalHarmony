@@ -108,15 +108,15 @@
 @section Scripts {
     <script>
         var save = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Id: $('#hdnId').val(),
                 CategoryId: $('#ddlCategory').val(),
                 Name: $('#txtName').val(),
                 Remark: $('#txtRemark').val(),
                 Price: $('#txtPrice').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/TestManagement/SaveTest', obj).done((res) => {
                 Swal.fire({

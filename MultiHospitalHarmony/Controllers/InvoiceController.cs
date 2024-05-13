@@ -111,7 +111,15 @@ namespace MultiHospitalHarmony.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewLabInvoice(int invoiceId)
         {
-            return View();
+            var getLaboratory = new GetLaboratory_InvoiceReq();
+            getLaboratory.HospitalId = User.GetHospitalId();
+            getLaboratory.WID = User.GetWID<int>();
+            getLaboratory.InvoiceId = invoiceId;
+            var res = await _invoiceService.GetLabInvoiceDetails(User.GetLogingID<int>(), getLaboratory);
+            res.Data.Laboratory_Invoice_Details = JsonConvert.DeserializeObject<List<Laboratory_Invoice_Detail>>(res.Data.Laboratory_Invoice_DetailsJson);
+            res.Data.InvoiceFrom = JsonConvert.DeserializeObject<List<InvoiceFrom>>(res.Data.InvoiceFrom_Json).FirstOrDefault();
+            res.Data.InvoiceTo = JsonConvert.DeserializeObject<List<InvoiceFrom>>(res.Data.InvoiceTo_Json).FirstOrDefault();
+            return View(res);
         }
     }
 }

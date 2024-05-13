@@ -81,14 +81,14 @@
             });
         }
         var save = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Id: $('#hdnId').val(),
                 Name: $('#txtName').val(),
                 Remark: $('#txtRemark').val(),
                 Price: $('#txtAmount').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/BedManagement/Save', obj).done((res) => {
                 Swal.fire({

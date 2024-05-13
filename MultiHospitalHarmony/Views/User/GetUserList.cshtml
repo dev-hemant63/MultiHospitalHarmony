@@ -17,7 +17,10 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/user/create?Id=@item.Id">Edit</a>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" href="javascript:void(0)" onclick="getPermisions('@item.Id')">Permission</a>
+                                @if (User.GetRoleId<int>() == 1 || User.GetRoleId<int>() == 5)
+                                {
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" href="javascript:void(0)" onclick="getPermisions('@item.Id')">Permission</a>
+                                }
                                 @if (item.RoleId == 7)
                                 {
                                     <a class="dropdown-item" href="/user/detail?Id=@item.Id">Details</a>

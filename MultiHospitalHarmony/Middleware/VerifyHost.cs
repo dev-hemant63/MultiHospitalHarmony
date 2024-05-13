@@ -14,35 +14,42 @@ namespace MultiHospitalHarmony.Middleware
         }
         public async Task InvokeAsync(HttpContext context)
         {
-            try
+            if (context.Request.Path.Value.Equals("/Account/Login") || context.Request.Path.Value.Equals("/"))
             {
-				if (context.Request.Path == "/Home/NotFound")
-				{
-					await _next(context);
-				}
-				var appsetting = context.RequestServices.GetService<AppSettings>();
-				var domain = context.Request.Host.Value;
-				if (domain.Contains("localhost"))
-				{
-					domain = appsetting.HostName;
-				}
-				var response = await _commonService.VerifyHost(domain);
-				if (response.Success)
-				{
-					context.Request.Headers["WId"] = response.Data.ToString();
-				}
-				else
-				{
-					context.Response.Redirect($"/Home/NotFound");
-					return;
-				}
-				await _next(context);
-			}
-            catch (Exception ex)
+                try
+                {
+                    if (context.Request.Path == "/Home/NotFound")
+                    {
+                        await _next(context);
+                    }
+                    var appsetting = context.RequestServices.GetService<AppSettings>();
+                    var domain = context.Request.Host.Value;
+                    if (domain.Contains("localhost"))
+                    {
+                        domain = appsetting.HostName;
+                    }
+                    var response = await _commonService.VerifyHost(domain);
+                    if (response.Success)
+                    {
+                        context.Request.Headers["WId"] = response.Data.ToString();
+                    }
+                    else
+                    {
+                        context.Response.Redirect($"/Home/NotFound");
+                        return;
+                    }
+                    await _next(context);
+                }
+                catch (Exception ex)
+                {
+                    context.Response.Redirect($"/Home/NotFound");
+                    return;
+                }
+            }
+            else
             {
-				context.Response.Redirect($"/Home/NotFound");
-				return;
-			}
+                await _next(context);
+            }
         }
     }
 }

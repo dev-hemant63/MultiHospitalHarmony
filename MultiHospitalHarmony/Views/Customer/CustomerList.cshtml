@@ -145,9 +145,6 @@
             });
         }
         var saveData = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Id: $('#hdnId').val(),
                 Name: $('#txtName').val(),
@@ -159,7 +156,9 @@
                 Tahsil: $('#txtTahsil').val(),
                 Address: $('#txtAddress').val(),
             }
-            console.log('obj', obj);
+            if (!validateObject(obj)) {
+                return false;
+            }
             $.post('/Customer/SaveCustomer', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

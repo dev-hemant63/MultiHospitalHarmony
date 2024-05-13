@@ -71,9 +71,7 @@
 @section Scripts {
     <script>
         var save = (id) => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
+
             let obj = {
                 Id:id,
                 Name: $('#txtfullname').val(),
@@ -84,6 +82,9 @@
                 Pincode: $('#txtZipCode').val(),
                 Tahsil: $('#txtTehsil').val(),
                 Address: $('#txtAddress').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/Supplier/SaveSupplier', obj).done((response) => {
                 if (response.success) {

@@ -1637,8 +1637,9 @@ progress {
   color: var(--bs-table-active-color); }
 
 .table-hover > tbody > tr:hover > * {
-  --bs-table-accent-bg: var(--bs-table-hover-bg);
-  color: var(--bs-table-hover-color); }
+    --bs-table-accent-bg: #c0bc65c2;
+    color: #000000;
+}
 
 .table-primary {
   --bs-table-color: #000;

@@ -80,13 +80,13 @@
             loadData();
         });
         var saveData = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Name: $('#txtName').val(),
                 IsActive: $('input[name="status"]').val(),
                 Id: $('#hdnId').val()
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/Medicine/SaveUnit', obj).done((res) => {
                 Swal.fire({

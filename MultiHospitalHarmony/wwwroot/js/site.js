@@ -1,4 +1,5 @@
-﻿let valiadteInputs = () => {
+﻿
+let valiadteInputs = () => {
     let isValid = false;
     $('input:required, select:required,textarea:required').removeClass("is-invalid");
     $('input:required, select:required,textarea:required').addClass("is-valid");
@@ -66,4 +67,5 @@ let getAreaByPincode = () => {
             };
         };
     })();
+
 

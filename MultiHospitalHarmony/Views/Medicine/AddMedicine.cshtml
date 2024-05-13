@@ -189,9 +189,6 @@
             });
         }
         var saveData = (id) => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj ={
                 Id:id,
                 BarCode: $('#txtBarCode').val(),
@@ -209,6 +206,9 @@
                 SupplierPrice: $('#txtSupplierPrice').val(),
                 TaxInPercentage: $('#txtPricetax').val(),
                 PricePerUnit: $('#txtPricePerUnit').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));

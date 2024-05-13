@@ -2,8 +2,7 @@
 
 namespace MultiHospitalHarmony.Models.DTOs
 {
-    public class GetLaboratory_InvoiceReq:CommonRequest
+    public class GetSurgeriesReq:CommonRequest
     {
-        public int InvoiceId { get; set; }
     }
 }

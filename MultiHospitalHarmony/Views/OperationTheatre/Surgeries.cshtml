@@ -1,11 +1,12 @@
 ﻿@using MultiHospitalHarmony.Models.Common
-@model AppResponse<List<Module>>
+@using MultiHospitalHarmony.Models.DTOs
+@model AppResponse<List<SaveSurgeriesReq>>
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div class="col-sm-3">
-                    <h4 class="card-title">Module Management</h4>
+                    <h4 class="card-title">Surgeries Management</h4>
                 </div>
                 <div class="col-sm-9" style="display: flex; justify-content: end;">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('0')"><i class="fa fa-plus text-white" style="font-size: 13px; cursor: pointer;"></i> Add New</button>
@@ -20,8 +21,7 @@
                                     <td>#</td>
                                     <td>Action</td>
                                     <td>Name</td>
-                                    <td>Display Name</td>
-                                    <td>IsActive</td>
+                                    <td>Description</td>
                                     <td>EntryAt</td>
                                 </tr>
                             </thead>
@@ -35,28 +35,21 @@
                                             foreach (var item in Model.Data)
                                             {
                                                 counter++;
-                                                                <tr>
-                                                                    <td>@counter</td>
-                                                                    <td>
-                                                                        <div class="btn-group mb-1">
-                                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                                            </button>
-                                                                            <div class="dropdown-menu">
-                                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('@item.Id')" href="javascript:void(0)" onclick="edit('@item.Id')">Edit</a>
-                                                                            <a class="dropdown-item" onclick="assignModule('@item.Id')" href="javascript:void(0)" onclick="edit('@item.Id')">Assign Page</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>@item.Name</td>
-                                                                    <td>@item.DisplayName</td>
-                                                                    <td>
-                                                                        <div class="form-check form-switch">
-                                                                            <input class="form-check-input" type="checkbox" role="switch" id="isactive" checked="@item.IsActive">
-                                                                            <label class="form-check-label" for="isactive"></label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>@item.EntryAt</td>
-                                                                </tr>
+                                                <tr>
+                                                    <td>@counter</td>
+                                                    <td>
+                                                        <div class="btn-group mb-1">
+                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('@item.Id')" href="javascript:void(0)" onclick="getById('@item.Id')">Edit</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>@item.SurgeryName</td>
+                                                    <td>@item.Description</td>
+                                                    <td>@item.EntryAt</td>
+                                                </tr>
                                             }
                                         }
                                     }
@@ -73,7 +66,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Module</h5>
+                <h5 class="modal-title">Add Surgeries</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -85,8 +78,8 @@
                         <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Name" required />
                     </div>
                     <div class="col-sm-12">
-                        <label>Display Name</label>
-                        <input id="txtdisplayname" name="txtdisplayname" class="form-control" placeholder="Display Name" required />
+                        <label>Description</label>
+                        <input id="txtDescription" name="txtDescription" class="form-control" placeholder="Description" required />
                         <input type="hidden" id="hdnId" />
                     </div>
                 </div>
@@ -100,28 +93,16 @@
 </div>
 @section Scripts {
     <script>
-        var assignModule = (id) => {
-            $.post('/Setting/AssignPage', { id: id }).done((result) => {
-                $('body').append(result);
-                $('#myModalNew').modal('show');
-                $('[data-dismiss="modal"]').unbind().click(function () {
-                    $('.modal,.modal-backdrop').remove();
-                });
-            }).fail((xhr) => {
-                console.log(xhr);
-            });
-        }
         var save = () => {
-
             let obj = {
                 Id: $('#hdnId').val(),
-                Name: $('#txtName').val(),
-                DisplayName: $('#txtdisplayname').val(),
+                SurgeryName: $('#txtName').val(),
+                Description: $('#txtDescription').val(),
             }
             if (!validateObject(obj)) {
                 return false;
             }
-            $.post('/Setting/SaveModule', obj).done((res) => {
+            $.post('/OperationTheatre/SaveSurgeries', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",
                     text: res.message,
@@ -140,13 +121,13 @@
                 });
             });
         }
-        var getById = (id) => {
+        var getById = (id) =>{
             if (id != 0) {
-                $.post('/Setting/GetModuleById', { Id: id }).done((res) => {
+                $.post('/OperationTheatre/GetSurgerieById', { Id: id }).done((res) => {
                     if (res.success) {
                         $('#hdnId').val(res.data.id);
-                        $('#txtName').val(res.data.name);
-                        $('#txtdisplayname').val(res.data.displayName);
+                        $('#txtName').val(res.data.surgeryName);
+                        $('#txtDescription').val(res.data.description);
                     }
                 }).fail((xhr) => {
                     console.log(xhr);

@@ -305,6 +305,7 @@
                 SubTotalAmount: 0,
                 InvoicesItems: [],
             }
+
             $('#table-invoice tr.item').each((i, item) => {
 
                 let data = {
@@ -319,6 +320,9 @@
                 InvoicesItems.push(data);
             });
             obj.InvoicesItems = InvoicesItems;
+            if (!validateObject(obj)) {
+                return false;
+            }
             $.post('/Invoice/SaveInvoice', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

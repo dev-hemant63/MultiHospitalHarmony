@@ -219,5 +219,26 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<GetLabInvoiceDetails>> GetLabInvoiceDetails(int loginId, GetLaboratory_InvoiceReq getLaboratory)
+        {
+            var res = new AppResponse<GetLabInvoiceDetails>();
+            try
+            {
+                res.Data = await _dapperContext.ExecuteProcAsync<GetLabInvoiceDetails>("Proc_GetLabInvoiceDetails", new
+                {
+                    getLaboratory.WID,
+                    getLaboratory.HospitalId,
+                    getLaboratory.InvoiceId,
+                    loginId
+                });
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "GetLabInvoiceDetails", ex.Message);
+            }
+            return res;
+        }
     }
 }

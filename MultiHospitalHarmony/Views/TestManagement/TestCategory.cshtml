@@ -91,13 +91,13 @@
 @section Scripts {
     <script>
         var save = () => {
-            // if (!valiadteInputs()) {
-            //     return false;
-            // }
             let obj = {
                 Id: $('#hdnId').val(),
                 Name: $('#txtName').val(),
                 Remark: $('#txtRemark').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
             }
             $.post('/TestManagement/SaveTestCategory', obj).done((res) => {
                 Swal.fire({

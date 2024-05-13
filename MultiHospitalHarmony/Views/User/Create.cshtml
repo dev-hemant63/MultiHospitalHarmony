@@ -185,7 +185,9 @@
                 Photo: '',
                 Qualifications: JSON.stringify(Qualifications)
             };
-
+            if (!validateObject(obj)) {
+                return false;
+            }
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));
             formData.append('Logo', $('#Logo').prop('files')[0]);
