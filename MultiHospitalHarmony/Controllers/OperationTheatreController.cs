@@ -38,5 +38,10 @@ namespace MultiHospitalHarmony.Controllers
             var res = await _operationTheatreService.GetSurgeriesById(User.GetLogingID<int>(), surgeriesReq);
             return Json(res);
         }
+        [HttpGet]
+        public async Task<IActionResult> SurgerieDoctorMaping()
+        {
+            return View();
+        }
     }
 }

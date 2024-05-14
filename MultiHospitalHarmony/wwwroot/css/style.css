@@ -15905,9 +15905,10 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 				} 
 			} */
 }
-  [data-sidebarbg="color_2"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li > ul,
-  [data-sidebarbg="color_2"] .menu-toggle .deznav .metismenu li > ul {
-    background: #222B40 !important; }
+    [data-sidebarbg="color_2"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li > ul,
+    [data-sidebarbg="color_2"] .menu-toggle .deznav .metismenu li > ul {
+        background: #452b90 !important;
+    }
   [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu ul a:before,
   [data-sidebarbg="color_2"] .deznav .metismenu ul a:before {
     background: rgba(255, 255, 255, 0.5); }
@@ -36506,4 +36507,23 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     100% {
         transform: rotate(1turn)
     }
+}
+table thead {
+    background-color: #c1bf99
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+thead {
+    position: sticky;
+    top: 0;
 }
