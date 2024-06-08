@@ -36509,7 +36509,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     }
 }
 table thead {
-    background-color: #c1bf99
+    background-color: #3d5a80;
+    color:white
 }
 
 table {

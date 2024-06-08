@@ -8,8 +8,12 @@
         return false;
     }
     let rowCount = $('#addpurchase tr.item').length;
+    let rowCount2 = $('#addpurchase tr.d-none').length;
+    if (rowCount == 1 && rowCount2 == 1) {
+        rowCount = 0;
+    }
     rowCount = rowCount + 1;
-    let _html = `<tr data-rowid="1" class="item">
+    let _html = `<tr data-rowid="${rowCount}" class="item">
                                         <td>
                                             <select class="form-control form-control-sm" onchange="handelMedicine('${rowCount}')" id="ddlMedicine_${rowCount}">
                                                 <option value="0">:: SELECT Medicine ::</option>
@@ -47,6 +51,9 @@
                                     </tr>`;
     $("#addpurchase tr.item:last").after(_html);
     bindMedicine(rowCount);
+    if (rowCount2 == 1) {
+        $('#item_1').remove();
+    }
 }
 $(document).on('click', '.delete', function () {
     let rowCount = $('#addpurchase tr.item').length;
@@ -96,7 +103,6 @@ var bindPaymentModes = () => {
 var bindMedicine = (id) => {
     let SupplierId = $('#ddlSupplier').val();
     $.post('/Purchase/GetMedicineList', { SupplierId: SupplierId }).done((result) => {
-        console.log('GetMedicineList', result);
         if (result.success) {
             let _option = result.data.map((v, i) => {
                 return `<option value="${v.id}" data-box="${v.boxSize}" data-supplierprice="${v.supplierPrice}">${v.name}</option>`;

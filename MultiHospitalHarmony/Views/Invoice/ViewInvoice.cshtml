@@ -24,29 +24,29 @@
 
         <div class="card mt-3" id="invoice">
             <div class="card-header">
-                Invoice <strong>@Model.Data.InvoiceNo</strong> <strong>@Model.Data.InvoiceDate</strong>
-                <span class="float-end">
-                    <strong>Status:</strong> @status
-                </span>
-                <button class="btn btn-info light btn-sm d-none" id="btn-print"><i class="fa fa-print"></i></button>
+                Invoice
+                <button class="btn btn-info light btn-sm d-none" id="btn-print" onclick="printInvoice()"><i class="fa fa-print"></i></button>
             </div>
             <div class="card-body">
                 <div class="row mb-5">
-                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <h6>From:</h6>
                         <div> <strong>@Model.Data.PharmacyDetails.FullName</strong> </div>
                         <div>@Model.Data.PharmacyDetails.Address</div>
                         <div>@Model.Data.PharmacyDetails.ZipCode</div>
                         <div>Email: @Model.Data.PharmacyDetails.Email</div>
                         <div>Phone: @Model.Data.PharmacyDetails.MobileNo</div>
+                        <div>Date: @Model.Data.InvoiceDate</div>
+                        <div>Status: @status</div>
                     </div>
-                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12 text-end">
+                    <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-6 text-end">
                         <h6>To:</h6>
                         <div> <strong>@Model.Data.CustomerDetail.Name</strong> </div>
                         <div>@Model.Data.CustomerDetail.Address</div>
                         <div>@Model.Data.CustomerDetail.Pincode</div>
                         <div>Email: @Model.Data.CustomerDetail.EmailId</div>
                         <div>Phone: @Model.Data.CustomerDetail.MobileNo</div>
+                        <input type="hidden" value="@Model.Data.InvoiceNo" id="invoiceno" />
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -127,6 +127,8 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var invoiceNo = $('#invoiceno').val();
+            $('title').text(`Invoice - ${invoiceNo}`);
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
             var isprint = urlParams.get('isprint');
@@ -134,12 +136,15 @@
                 $('#btn-print').removeClass('d-none');
             }
         });
-        $('#btn-print').click(function () {
-            var content = $("#invoice").html();
-            var printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><link href="~/css/style.css" rel="stylesheet"><title>Print</title></head><body>' + content + '</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        });
+        var printInvoice = () => {
+            $('#btn-print').addClass('d-none');
+            var printContents = $('#invoice').html();
+            var originalContents = $('body').html();
+
+            $('body').empty().html(printContents);
+            window.print();
+            $('body').empty().html(originalContents);
+            $('#btn-print').removeClass('d-none');
+        }
     </script>
 }
