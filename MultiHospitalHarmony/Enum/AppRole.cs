@@ -11,6 +11,7 @@
         Doctor =6,
         Patient = 7,
         Reception = 8,
-        PharmacyAdmin = 9
+        PharmacyAdmin = 9,
+        LaboratoryAdmin = 10
     }
 }

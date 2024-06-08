@@ -24,27 +24,29 @@
 
         <div class="card mt-3" id="invoice">
             <div class="card-header">
-                Invoice <strong>@Model.Data.InvoiceNo</strong> <strong>@Model.Data.InvoiceDate</strong> <span class="float-end">
-                    <strong>Status:</strong> @status <button class="btn btn-info light" id="btn-invoice"><i class="fa fa-print"></i></button>
-                </span>
+                Invoice
+                <button class="btn btn-info light btn-sm d-none" id="btn-print" onclick="printInvoice()"><i class="fa fa-print"></i></button>
             </div>
             <div class="card-body">
                 <div class="row mb-5">
-                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                         <h6>From:</h6>
                         <div> <strong>@Model.Data.InvoiceFrom.FullName</strong> </div>
                         <div>@Model.Data.InvoiceFrom.Address</div>
                         <div>@Model.Data.InvoiceFrom.ZipCode</div>
                         <div>Email: @Model.Data.InvoiceFrom.Email</div>
                         <div>Phone: @Model.Data.InvoiceFrom.MobileNo</div>
+                        <div>Date: @Model.Data.InvoiceDate</div>
+                        <div>Status: @status</div>
                     </div>
-                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-6 text-end">
                         <h6>To:</h6>
                         <div> <strong>@Model.Data.InvoiceTo.FullName</strong> </div>
                         <div>@Model.Data.InvoiceTo.Address</div>
                         <div>@Model.Data.InvoiceTo.ZipCode</div>
                         <div>Email: @Model.Data.InvoiceTo.Email</div>
                         <div>Phone: @Model.Data.InvoiceTo.MobileNo</div>
+                        <input type="hidden" value="@Model.Data.InvoiceNo" id="invoiceno" />
                     </div>
                     
                 </div>
@@ -124,17 +126,25 @@
 </div>
 @section Scripts {
 <script>
-    $('#btn-invoice').click(function () {
-            var invoiceHTML = $("#invoice").html();
-            var printWindow = window.open('', '_blank');
-            printWindow.document.open();
-            printWindow.document.write('<html><head><title>Invoice</title></head><body>');
-            printWindow.document.write(invoiceHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
+        $(document).ready(function () {
+            var invoiceNo = $('#invoiceno').val();
+            $('title').text(`Invoice - ${invoiceNo}`);
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            var isprint = urlParams.get('isprint');
+            if (isprint == 'true') {
+                $('#btn-print').removeClass('d-none');
+            }
+        });
+        var printInvoice = () => {
+            $('#btn-print').addClass('d-none');
+            var printContents = $('#invoice').html();
+            var originalContents = $('body').html();
 
-            // Print the invoice
-            printWindow.print();
-    })
+            $('body').empty().html(printContents);
+            window.print();
+            $('body').empty().html(originalContents);
+            $('#btn-print').removeClass('d-none');
+        }
 </script>
 }

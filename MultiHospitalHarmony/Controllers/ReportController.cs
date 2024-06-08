@@ -77,6 +77,7 @@ namespace MultiHospitalHarmony.Controllers
             });
             return PartialView(res);
         }
+        
         [HttpGet]
         public IActionResult PurchaseReportMonthWise()
         {
@@ -92,6 +93,27 @@ namespace MultiHospitalHarmony.Controllers
                 Year = Year
             });
             return PartialView(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> LabSaleReport()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetLabSaleReportMonthWise(int Year)
+        {
+            var res = await _invoiceService.GetLabSaleReportMonthWise(User.GetLogingID<int>(), new GetSaleReportMonthWiseReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>(),
+                Year = Year
+            });
+            return PartialView(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> LabSaleReportMonthWise()
+        {
+            return View();
         }
     }
 }
