@@ -133,5 +133,10 @@ namespace MultiHospitalHarmony.Controllers
             var medicalHistory = await _userService.MedicalHistory(patientId);
             return PartialView(medicalHistory);
         }
+        [HttpGet]
+        public async Task<IActionResult> Appointment()
+        {
+            return View();
+        }
     }
 }

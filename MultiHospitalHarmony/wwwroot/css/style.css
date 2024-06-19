@@ -12717,9 +12717,10 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
           border-radius: 0.125rem;
           line-height: 1;
           border-radius: 0.125rem; }
-      .deznav .metismenu > li:hover > a, .deznav .metismenu > li:focus > a {
-        /*  background-color: lighten($color: $primary, $amount: 40%); */
-        color: var(--secondary); }
+.deznav .metismenu > li:hover > a, .deznav .metismenu > li:focus > a {
+    /*  background-color: lighten($color: $primary, $amount: 40%); */
+    color: #000000;
+}
         .deznav .metismenu > li:hover > a g [fill], .deznav .metismenu > li:focus > a g [fill] {
           fill: var(--secondary); }
       .deznav .metismenu > li.mm-active > a {
@@ -12728,7 +12729,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         .deznav .metismenu > li.mm-active > a i {
           font-weight: 100; }
         .deznav .metismenu > li.mm-active > a .menu-icon svg path {
-          fill: var(--secondary) !important; }
+            fill: #000000 !important;
+        }
         .deznav .metismenu > li.mm-active > a g [fill] {
           fill: var(--secondary); }
         .deznav .metismenu > li.mm-active > a:after {
@@ -15332,7 +15334,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_2"][data-theme-version="dark"],
 [data-nav-headerbg="color_2"] {
-    --nav-headbg: #452b90;
+    --nav-headbg: #ffffff;
     /* .nav-control{
 				background-color:transparent;
 			} */
@@ -15837,7 +15839,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sidebarbg="color_2"][data-theme-version="dark"],
 [data-sidebarbg="color_2"] {
-    --sidebar-bg: #452b90;
+    --sidebar-bg: #ffffff;
     /* .hamburger .line{
 				background:$white;
 			} */
@@ -15955,14 +15957,19 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   [data-sidebarbg="color_2"][data-theme-version="dark"][data-sidebar-style="compact"][data-layout="horizontal"] .deznav .metismenu > li > a .menu-icon,
   [data-sidebarbg="color_2"][data-sidebar-style="compact"][data-layout="horizontal"] .deznav .metismenu > li > a .menu-icon {
     background-color: #344161; }
-  [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu a,
-  [data-sidebarbg="color_2"] .deznav .metismenu a {
-    color: #fff; }
-  [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a:hover, [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a:focus, [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a.mm-active,
-  [data-sidebarbg="color_2"] .deznav .metismenu li ul a:hover,
-  [data-sidebarbg="color_2"] .deznav .metismenu li ul a:focus,
-  [data-sidebarbg="color_2"] .deznav .metismenu li ul a.mm-active {
-    color: var(--secondary) !important; }
+    [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu a,
+    [data-sidebarbg="color_2"] .deznav .metismenu a {
+        color: #000;
+    }
+    [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a:hover, [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a:focus, [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu li ul a.mm-active,
+    [data-sidebarbg="color_2"] .deznav .metismenu li ul a:hover,
+    [data-sidebarbg="color_2"] .deznav .metismenu li ul a:focus,
+    [data-sidebarbg="color_2"] .deznav .metismenu li ul a.mm-active {
+        color: #ffffff !important;
+        background-color: #3d5a80;
+        border-radius: 1px;
+        
+    }
   [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu > li:hover > a,
   [data-sidebarbg="color_2"] .deznav .metismenu > li:hover > a {
     /* background: rgba(255, 255, 255, 0.15) !important; */ }
@@ -15970,9 +15977,10 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   [data-sidebarbg="color_2"] .deznav .metismenu > li > a {
     color: i;
       color-color: rgba(255, 255, 255, 0.85) !important; }
-  [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu > li.mm-active > a,
-  [data-sidebarbg="color_2"] .deznav .metismenu > li.mm-active > a {
-    color: var(--secondary) !important; }
+    [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu > li.mm-active > a,
+    [data-sidebarbg="color_2"] .deznav .metismenu > li.mm-active > a {
+        color: #0d0d0d !important;
+    }
     [data-sidebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu > li.mm-active > a i,
     [data-sidebarbg="color_2"] .deznav .metismenu > li.mm-active > a i {
       color: #fff !important; }
@@ -20262,7 +20270,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   font-family: 'Open Sans', sans-serif; }
 
 [data-typography="poppins"] {
-    font-family: system-ui;
+    font-family: 'Poppins';
 }
 
 [data-typography="cairo"] {

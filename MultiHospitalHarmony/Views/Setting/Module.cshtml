@@ -102,11 +102,15 @@
     <script>
         var assignModule = (id) => {
             $.post('/Setting/AssignPage', { id: id }).done((result) => {
-                $('body').append(result);
-                $('#myModalNew').modal('show');
-                $('[data-dismiss="modal"]').unbind().click(function () {
-                    $('.modal,.modal-backdrop').remove();
-                });
+                // $('body').append(result);
+                // $('#myModalNew').modal('show');
+                // $('[data-dismiss="modal"]').unbind().click(function () {
+                //     $('.modal,.modal-backdrop').remove();
+                // });
+                $('#myModal .modal-body').html(result);
+
+              // Open the modal
+              $('#myModal').css('display', 'block');
             }).fail((xhr) => {
                 console.log(xhr);
             });

@@ -48,24 +48,26 @@ let getAreaByPincode = () => {
         alert('Server Error!');
     });
 }
-//var showModel = function (result) {
-//    $('body').append(result);
-//    $('#myModalNew').modal('show');
-//    $('[data-dismiss="modal"]').unbind().click(function () {
-//        $('.modal,.modal-backdrop').remove();
-//    })
+//class Helper {
+//    static notify(status, msg) {
+//        const duration = 5000;
+//        switch (status) {
+//            case 1:
+//                Msg.success(msg, duration);
+//                break;
+//            case 2:
+//                Msg.info(msg, duration);
+//                break;
+//            default:
+//                Msg.danger(msg, duration);
+//                break;
+//        }
+//    }
+//    static loading(btnId) {
+//        $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
+//    }
+
+//    static stoploading(btnId, btnText) {
+//        $('#' + btnId).html(btnText).prop('disabled', false);
+//    }
 //}
-    (function () {
-        var btnLoader = () => {
-            return {
-                load: (btnId) => {
-                    $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
-                },
-                stop: (btnId, btnText) => {
-                    $('#' + btnId).html(btnText).prop('disabled', false);
-                }
-            };
-        };
-    })();
-
-

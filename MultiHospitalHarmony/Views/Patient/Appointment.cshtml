@@ -1,0 +1,105 @@
+﻿<div class="row">
+    <div class="col-xl-12 col-lg-12" id="maindiv">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Appointment</h4>
+            </div>
+            <div class="card-body">
+                <div class="basic-form">
+                    <div class="row" id="div-main">
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Doctor</label>
+                            <select class="form-control" id="ddlDoctor">
+                                <option value="0">:: SELECT DOCTOR ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" id="txtPatientName" />
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Patient MobileNo</label>
+                            <input type="text" class="form-control" id="txtPatientMobileNo" />
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Gender</label>
+                            <select class="form-control" id="ddlGender">
+                                <option value="0">:: SELECT GENDER ::</option>
+                                <option value="M">MALE</option>
+                                <option value="F">FEMALE</option>
+                                <option value="O">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">DOB</label>
+                            <input type="date" class="form-control" id="txtDOB" />
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">State</label>
+                            <select class="form-control" id="ddlState">
+                                <option value="0">:: SELECT STATE ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">City</label>
+                            <select class="form-control" id="ddlCity">
+                                <option value="0">:: SELECT CITY ::</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Time</label>
+                            <input type="time" class="form-control" id="txttime" />
+                        </div>
+                        <div class="col-sm-4 m-b30">
+                            <label class="form-label">Appointment Date</label>
+                            <input type="date" class="form-control" id="txtAppointmentDate" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-4">
+                            <button class="btn btn-sm btn-primary" id="btn-submit" onclick="saveAppointment()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var saveAppointment = () => {
+            let obj = {
+                DoctorId: $('#ddlDoctor').val(),
+                PatientName: $('#txtPatientName').val(),
+                PatientMobileNo: $('#txtPatientMobileNo').val(),
+                Gender: $('#ddlGender').val(),
+                DOB: $('#txtDOB').val(),
+                CityId: $('#ddlCity').val(),
+                StateId: $('#ddlState').val(),
+                Time: $('#txttime').val(),
+                AppointmentDate: $('#txtAppointmentDate').val(),
+            }
+            if (!validateObject(obj)) {
+                return false;
+            }
+            $.post('/Appointment/Save', obj).done((response) => {
+                Swal.fire({
+                    title: response.success == true ? "Success" : "Failed",
+                    text: response.message,
+                    icon: response.success == true ? "success" : "error"
+                });
+                if (response.success) {
+                    $('input').val('');
+                    $('select').val('0');
+                }
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+}

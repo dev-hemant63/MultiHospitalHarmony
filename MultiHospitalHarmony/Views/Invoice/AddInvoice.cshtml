@@ -50,7 +50,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="table-invoice">
-                                    <tr data-rowid="1" class="item">
+                                    <tr data-rowid="1" class="item d-none" id="item_1">
                                         <td>
                                             <select class="form-control" id="ddlMedicine_1" onchange="handleMedicine('1')">
                                                 <option value="0">:: SELECT Medicine ::</option>
@@ -131,6 +131,10 @@
         });
         var addRow = () => {
             let rowCount = $('#table-invoice tr.item').length;
+            let rowCount2 = $('#table-invoice tr.d-none').length;
+            if (rowCount == 1 && rowCount2 == 1) {
+                rowCount = 0;
+            }
             rowCount = rowCount + 1;
             let _html = `
                                             <tr data-rowid="${rowCount}" class="item">
@@ -172,6 +176,9 @@
                         `;
 
             $('#table-invoice tr.item').after(_html);
+            if (rowCount2 == 1) {
+                $('#item_1').remove();
+            }
             setTimeout(() => {
                 bindMedicine(rowCount);
             }, 1000);
