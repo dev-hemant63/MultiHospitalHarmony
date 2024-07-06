@@ -92,7 +92,7 @@
         var saveBed = (wardId) => {
 
             let obj = {
-                Id: $('#hdnId').val(),
+                Id: $('#hdnId').val() || '0',
                 Name: $('#txtName').val(),
                 Code: $('#txtCode').val(),
                 WardId: wardId
@@ -131,9 +131,10 @@
         var getById = (id,wardId) =>{
             $.post('/Ward/GetHospitalBedById', { Id: id, WardId: wardId }).done((res) => {
                 if (res.success) {
-                    $('#hdnId').val(res.data.id);
-                    $('#txtName').val(res.data.name);
-                    $('#txtCode').val(res.data.code);
+                    res = res.data[0];
+                    $('#hdnId').val(res.id);
+                    $('#txtName').val(res.name);
+                    $('#txtCode').val(res.code);
                 }
             }).fail((xhr) => {
                 console.log(xhr);

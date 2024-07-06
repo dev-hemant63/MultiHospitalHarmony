@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
+using MultiHospitalHarmony.Infrastructure.Services;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.DTOs;
 using Newtonsoft.Json;
@@ -15,12 +16,14 @@ namespace MultiHospitalHarmony.Controllers
         private ICommonService _commonService;
         private IIPDService _iPDService;
         private IFileUploadService _fileUploadService;
-        public PatientController(IUserService userService, ICommonService commonService, IIPDService iPDService, IFileUploadService fileUploadService)
+        private readonly IWardService _wardService;
+        public PatientController(IUserService userService, ICommonService commonService, IIPDService iPDService, IFileUploadService fileUploadService, IWardService wardService)
         {
             _userService = userService;
             _commonService = commonService;
             _iPDService = iPDService;
             _fileUploadService = fileUploadService;
+            _wardService = wardService;
         }
         [HttpGet]
         public async Task<IActionResult> Admit()
@@ -58,6 +61,24 @@ namespace MultiHospitalHarmony.Controllers
             if (roleRes.Success)
             {
                 data.ApplicationRole = roleRes.Data;
+            }
+            var WardTypeRes = await _wardService.GetWardType(User.GetLogingID<int>(), new GetWardTypeReq
+            {
+                WID = User.GetWID<int>(),
+                HospitalId = User.GetHospitalId()
+            });
+            if (WardTypeRes.Success)
+            {
+                data.WardType = WardTypeRes.Data;
+            }
+            var dRRes = await _userService.GetDoctorList(User.GetLogingID<int>(), new GetDoctorReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>()
+            });
+            if (dRRes.Success)
+            {
+                data.UserList = dRRes.Data;
             }
             return PartialView(data);
         }

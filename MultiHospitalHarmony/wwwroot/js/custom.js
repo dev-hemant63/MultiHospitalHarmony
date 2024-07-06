@@ -744,3 +744,27 @@ jQuery(window).on('resize',function () {
 	}, 1000);
 });
 /*  Window Resize END */
+
+class Helper {
+	static notify(status, message) {
+		const duration = 5000;
+		switch (status) {
+			case 1:
+				Msg.success(message, duration);
+				break;
+			case -1:
+				Msg.danger(message, duration);
+				break;
+			default:
+				Msg.info(message, duration);
+				break;
+		}
+	}
+	static loading(btnId) {
+		$('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
+	}
+
+	static stoploading(btnId, btnText) {
+		$('#' + btnId).html(btnText).prop('disabled', false);
+	}
+}

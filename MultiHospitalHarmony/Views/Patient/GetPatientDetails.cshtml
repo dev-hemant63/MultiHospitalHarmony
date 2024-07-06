@@ -134,6 +134,12 @@
                 <label>Ward Type</label>
                 <select class="form-control" id="ddlwardtpe" onchange="bindWardRoom()">
                     <option value="">:: Please select ::</option>
+                    @{
+                        foreach (var item in Model.WardType)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="col-sm-4 d-none PreferredForAdmit">
@@ -152,6 +158,12 @@
                 <label>Assign Doctor</label>
                 <select class="form-control" id="ddldoctor">
                     <option value="">:: Please select ::</option>
+                    @{
+                        foreach (var item in Model.UserList)
+                        {
+                            <option value="@item.Id">@item.FullName</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="col-sm-4">

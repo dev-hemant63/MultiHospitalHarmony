@@ -842,11 +842,11 @@
                     case 1:
                         Msg.success(message, duration);
                         break;
-                    case 2:
-                        Msg.info(message, duration);
+                    case -1:
+                        Msg.danger(message, duration);
                         break;
                     default:
-                        Msg.danger(message, duration);
+                        Msg.info(message, duration);
                         break;
                 }
             }

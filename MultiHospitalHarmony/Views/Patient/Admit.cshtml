@@ -25,13 +25,6 @@
         var getDetails = () => {
             $.post('/patient/GetPatientDetails', { patientInfo: $('#txtPatientInfo').val() }).done((result) => {
                 $('#div-main').empty().append(result);
-                setTimeout(() => {
-                    bindWardType();
-                    
-                }, 1000);
-                setTimeout(() => {
-                    bindDoctor();
-                },1000);
             }).fail((xhr) => {
                 console.log(xhr);
                 Swal.fire({
@@ -52,25 +45,25 @@
                 //$('.PreferredForAdmit select,input').attr('required', false);
             }
         }
-        var bindWardType = () =>{
-            $.post('/ward/GetWardType').done((res) => {
-                if (res.data != null && res.success == true) {
-                    let _option = [];
-                    for (let i = 0; i < res.data.length; i++) {
-                        let v = res.data[i];
-                        _option.push(`<option value="${v.id}">${v.name}</option>`);
-                    }
-                    $('#ddlwardtpe').empty().append('<option value="0">:: SELECT WARD ::</option>').append(_option);
-                }
-            }).fail((xhr) => {
-                console.log(xhr);
-                Swal.fire({
-                    title: "Failed!!",
-                    text: "Server Error!",
-                    icon: "error"
-                });
-            });
-        }
+        // var bindWardType = () =>{
+        //     $.post('/ward/GetWardType').done((res) => {
+        //         if (res.data != null && res.success == true) {
+        //             let _option = [];
+        //             for (let i = 0; i < res.data.length; i++) {
+        //                 let v = res.data[i];
+        //                 _option.push(`<option value="${v.id}">${v.name}</option>`);
+        //             }
+        //             $('#ddlwardtpe').empty().append('<option value="0">:: SELECT WARD ::</option>').append(_option);
+        //         }
+        //     }).fail((xhr) => {
+        //         console.log(xhr);
+        //         Swal.fire({
+        //             title: "Failed!!",
+        //             text: "Server Error!",
+        //             icon: "error"
+        //         });
+        //     });
+        // }
         var bindWardRoom = () => {
             let obj ={
                 WardTypeId: $('#ddlwardtpe').val()
@@ -112,23 +105,23 @@
                 });
             });
         }
-        var bindDoctor = () => {
-            $.post('/patient/GetDoctors').done((res) => {
-                if (res.data != null && res.success == true) {
-                    let _option = res.data.map((v, i) => {
-                        return `<option value="${v.id}">${v.fullName}</option>`;
-                    });
-                    $('#ddldoctor').empty().append('<option value="">:: SELECT DOCTOR ::</option>').append(_option);
-                }
-            }).fail((xhr) => {
-                console.log(xhr);
-                Swal.fire({
-                    title: "Failed!!",
-                    text: "Server Error!",
-                    icon: "error"
-                });
-            });
-        }
+        // var bindDoctor = () => {
+        //     $.post('/patient/GetDoctors').done((res) => {
+        //         if (res.data != null && res.success == true) {
+        //             let _option = res.data.map((v, i) => {
+        //                 return `<option value="${v.id}">${v.fullName}</option>`;
+        //             });
+        //             $('#ddldoctor').empty().append('<option value="">:: SELECT DOCTOR ::</option>').append(_option);
+        //         }
+        //     }).fail((xhr) => {
+        //         console.log(xhr);
+        //         Swal.fire({
+        //             title: "Failed!!",
+        //             text: "Server Error!",
+        //             icon: "error"
+        //         });
+        //     });
+        // }
         var savePatient = () => {
             let obj = {
                 PatientUserName: $('#txtUserName').val(),
