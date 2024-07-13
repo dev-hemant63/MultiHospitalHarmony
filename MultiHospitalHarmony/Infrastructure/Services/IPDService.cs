@@ -130,5 +130,27 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
+        public async Task<AppResponse<object>> SaveDoctorVisit(int loginId, SaveDoctorVisitReq saveDoctorVisitReq)
+        {
+            var response = new AppResponse<object>();
+            try
+            {
+                response = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_SaveDoctorVisit",new
+                {
+                    loginId,
+                    saveDoctorVisitReq.WID,
+                    saveDoctorVisitReq.HospitalId,
+                    saveDoctorVisitReq.DoctorId,
+                    saveDoctorVisitReq.VisitDate,
+                    saveDoctorVisitReq.VisitTime,
+                    saveDoctorVisitReq.PatientId,
+                },CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("IPDService", "SaveDoctorVisit", ex.Message);
+            }
+            return response;
+        }
     }
 }

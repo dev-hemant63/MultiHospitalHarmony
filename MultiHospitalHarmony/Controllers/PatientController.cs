@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiHospitalHarmony.Extentions;
 using MultiHospitalHarmony.Infrastructure.Interfaces;
@@ -158,6 +159,38 @@ namespace MultiHospitalHarmony.Controllers
         public async Task<IActionResult> Appointment()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveDoctorVisit(IFormFile file,string jsonData)
+        {
+            var saveDoctorVisitReq = JsonConvert.DeserializeObject<SaveDoctorVisitReq>(jsonData);
+            saveDoctorVisitReq.WID = User.GetWID<int>();
+            saveDoctorVisitReq.HospitalId = User.GetHospitalId();
+            saveDoctorVisitReq.DoctorId = User.GetDoctorId();
+            var res = await _iPDService.SaveDoctorVisit(User.GetLogingID<int>(), saveDoctorVisitReq);
+
+            if (res.Success)
+            {
+                var medicalHistory = JsonConvert.DeserializeObject<MedicalHistory>(jsonData);
+                medicalHistory.IsFromAdmitted = true;
+                if (file != null)
+                {
+                    var fileRes = _fileUploadService.Upload(new FileUploadModel
+                    {
+                        file = file,
+                        FileName = DateTime.Now.ToString("ddMMyyyyhhmmssfff"),
+                        FilePath = "wwwroot/upload/patient/PrescriptionFile/"
+                    });
+                    if (!fileRes.Success)
+                    {
+                        res.Message = fileRes.Message;
+                        return Json(res);
+                    }
+                    medicalHistory.PrescriptionFile = fileRes.Data;
+                }
+                res = await _userService.SaveMedicalHistory(User.GetLogingID<int>(), medicalHistory);
+            }
+            return Ok(res);
         }
     }
 }

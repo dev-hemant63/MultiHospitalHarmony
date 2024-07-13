@@ -97,9 +97,9 @@
                 Code: $('#txtCode').val(),
                 WardId: wardId
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Ward/AddHospitalBeds', obj).done((response) => {
                 if (response.success) {
                     Swal.fire({

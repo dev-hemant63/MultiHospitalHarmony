@@ -156,9 +156,9 @@
                 Tahsil: $('#txtTahsil').val(),
                 Address: $('#txtAddress').val(),
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Customer/SaveCustomer', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

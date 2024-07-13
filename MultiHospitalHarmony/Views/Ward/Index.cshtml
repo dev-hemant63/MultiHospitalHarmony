@@ -116,9 +116,9 @@
                 Charge: $('#txtCharge').val(),
                 Capacity_of_bed: $('#txtcapofbed').val()
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Ward/Save', obj).done((response) => {
                 if (response.success) {
                     Swal.fire({

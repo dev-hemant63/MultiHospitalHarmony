@@ -121,5 +121,10 @@ namespace MultiHospitalHarmony.Controllers
             res.Data.InvoiceTo = JsonConvert.DeserializeObject<List<InvoiceFrom>>(res.Data.InvoiceTo_Json).FirstOrDefault();
             return View(res);
         }
+        [HttpGet]
+        public IActionResult PatientBill()
+        {
+            return View();
+        }
     }
 }

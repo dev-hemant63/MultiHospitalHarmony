@@ -154,9 +154,9 @@
                 ReferedType: "",
                 PreferredForAdmit: $('#ddlforAdmit').val() == '1'?true:false,
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             let formdata = new FormData();
             formdata.append("JsonData", JSON.stringify(obj));
             formdata.append("File", $('#txtPrescriptionFile').prop('files')[0]);

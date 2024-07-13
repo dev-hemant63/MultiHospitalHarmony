@@ -99,9 +99,9 @@
                 SurgeryName: $('#txtName').val(),
                 Description: $('#txtDescription').val(),
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/OperationTheatre/SaveSurgeries', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

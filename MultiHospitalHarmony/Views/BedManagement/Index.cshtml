@@ -87,9 +87,9 @@
                 Remark: $('#txtRemark').val(),
                 Price: $('#txtAmount').val(),
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/BedManagement/Save', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

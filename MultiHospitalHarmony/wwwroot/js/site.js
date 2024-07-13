@@ -71,3 +71,12 @@ let getAreaByPincode = () => {
 //        $('#' + btnId).html(btnText).prop('disabled', false);
 //    }
 //}
+function goBack() {
+    window.history.back();
+}
+function goForward() {
+    window.history.forward();
+}
+function refresh() {
+    window.location.reload();
+}

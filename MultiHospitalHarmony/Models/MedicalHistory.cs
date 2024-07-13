@@ -3,6 +3,7 @@
     public class MedicalHistory
     {
         public int PatientId { get; set; }
+        public bool IsFromAdmitted { get; set; }
         public string Diagnosis { get; set; }
         public string Prescription { get; set; }
         public string DoctorInfo { get; set; }

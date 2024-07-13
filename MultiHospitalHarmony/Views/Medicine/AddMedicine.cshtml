@@ -207,9 +207,9 @@
                 TaxInPercentage: $('#txtPricetax').val(),
                 PricePerUnit: $('#txtPricePerUnit').val(),
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             let formData = new FormData();
             formData.append('jsonData', JSON.stringify(obj));
             formData.append('file', $('#txtImage').prop('files')[0])

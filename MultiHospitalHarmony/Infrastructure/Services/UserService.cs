@@ -182,6 +182,7 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                     medicalHistory.Prescription,
                     medicalHistory.PrescriptionFile,
                     medicalHistory.Wight,
+                    medicalHistory.IsFromAdmitted,
                 });
             }
             catch (Exception ex)

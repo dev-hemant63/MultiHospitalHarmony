@@ -84,9 +84,9 @@
                 IsActive: $('input[name="status"]').val(),
                 Id: $('#hdnId').val()
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Medicine/SaveType', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

@@ -94,9 +94,9 @@
                 Name: $('#txtName').val(),
                 Remark: $('#txtRemark').val()
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Ward/SaveType', obj).done((response) => {
                 if (response.success) {
                     Swal.fire({

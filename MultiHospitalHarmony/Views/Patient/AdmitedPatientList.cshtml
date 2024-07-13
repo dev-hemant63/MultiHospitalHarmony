@@ -65,10 +65,43 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row" id="data">
+                <div class="row d-none" id="divDoctorVisit">
+                    <div class="col-sm-3">
+                        <label>Visit Time <span class="text-danger">*</span></label>
+                        <input type="time" class="form-control form-control-sm" placeholder="Visit Time" id="txtVisitTime" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Visit Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" placeholder="Visit Date" id="txtVisitDate" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Wight <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Wight" id="txtWight" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Prescription File <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control form-control-sm" placeholder="Wight" id="File" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Diagnosis <span class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" id="Diagnosis">
+
+                        </textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Prescription <span class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" id="Prescription">
+
+                        </textarea>
+                    </div>
+                    <input type="hidden" id="hdnId"/>
+                </div>
+                
+                <div class="row mt-2" id="data">
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary light" onclick="saveDoctorVisit()">Save</button>
                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -97,6 +130,8 @@
         }
         var doctorVisit = (patientId) => {
             $('#title').text('Doctor Visit');
+            $('#divDoctorVisit').removeClass('d-none');
+            $('#hdnId').val(patientId);
             $.post('/patient/GetDoctorVisit', { patientId: patientId }).done((res) => {
                 $('#data').empty().append(res);
             }).fail((xhr) => {
@@ -110,6 +145,7 @@
         }
         var wardDetail = (patientId) => {
             $('#title').text('Ward Details');
+            $('#divDoctorVisit').addClass('d-none');
             $.post('/patient/GetPatientWards', { patientId: patientId }).done((res) => {
                 $('#data').empty().append(res);
             }).fail((xhr) => {
@@ -123,6 +159,7 @@
         }
         var GetHistory = (patientId) => {
             $('#title').text('Medical History');
+            $('#divDoctorVisit').addClass('d-none');
             $.post('/patient/GetHistory', { patientId: patientId }).done((res) => {
                 $('#data').empty().append(res);
             }).fail((xhr) => {
@@ -133,6 +170,53 @@
                     icon: "error"
                 });
             });
+        }
+        var saveDoctorVisit = () => {
+            let obj = {
+                PatientId: $('#hdnId').val(),
+                VisitTime: formatTimeToAMPM($('#txtVisitTime').val()),
+                VisitDate: $('#txtVisitDate').val(),
+                Diagnosis: $('#Diagnosis').val(),
+                Prescription: $('#Prescription').val(),
+                Wight: $('#Wight').val(),
+            }
+            let formData = new FormData();
+            formData.append('jsonData', JSON.stringify(obj));
+            formData.append('file', $('#File').prop('files')[0])
+            $.ajax({
+                url: '/Patient/SaveDoctorVisit',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: response.success == true ? "Success" : "Failed",
+                        text: response.message,
+                        icon: response.success == true ? "success" : "error"
+                    });
+                    if (response.success) {
+                        $('.btn-close').click();
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    Swal.fire({
+                        title: "Failed!",
+                        text: "Server Error.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+        function formatTimeToAMPM(time) {
+            var hours = parseInt(time.split(':')[0]);
+            var minutes = time.split(':')[1];
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return strTime;
         }
     </script>
 }

@@ -8868,9 +8868,11 @@ h1, .h1, .h1, h2, .h2, .h2, h3, .h3, .h3, h4, .h4, .h4, h5, .h5, .h5, h6, .h6, .
   margin-top: 2.5rem; }
 
 .content-body .container-fluid, .content-body .container-sm, .content-body .container-md, .content-body .container-lg, .content-body .container-xl, .content-body .container-xxl {
-  padding-top: 1.875rem;
+  /*padding-top: 1.875rem;
   padding-right: 1.875rem;
-  padding-left: 1.875rem; }
+  padding-left: 1.875rem;*/
+
+}
   @media only screen and (max-width: 47.9375rem) {
     .content-body .container-fluid, .content-body .container-sm, .content-body .container-md, .content-body .container-lg, .content-body .container-xl, .content-body .container-xxl {
       padding-top: 1.25rem;
@@ -36535,4 +36537,195 @@ th, td {
 thead {
     position: sticky;
     top: 0;
+}
+
+
+.app .app-content > .app-heading-container.app-heading-bordered, .app .app-content > .app-heading.app-heading-bordered {
+    border-left: 0;
+    border-right: 0
+}
+
+.app .app-sidepanel .app-heading {
+    background: 0 0
+}
+
+.app .breadcrumb {
+    float: left;
+    background: 0 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding: 12px 0 13px;
+    width: auto
+}
+
+    .app .breadcrumb > li {
+        line-height: 15px;
+        float: left;
+        font-size: 12px;
+        width: auto
+    }
+
+        .app .breadcrumb > li > a {
+            float: left;
+            line-height: 15px;
+            color: #7F8FA4;
+            text-decoration: none;
+            -webkit-transition: color .1s linear;
+            -moz-transition: color .1s linear;
+            -ms-transition: color .1s linear;
+            -o-transition: color .1s linear;
+            transition: color .1s linear
+        }
+
+            .app .breadcrumb > li > a:hover {
+                color: #64758c
+            }
+
+        .app .breadcrumb > li.active {
+            color: #454545
+        }
+
+        .app .breadcrumb > li + li:before {
+            line-height: 14px;
+            padding: 0 0 0 2px;
+            content: "\f105";
+            font-family: FontAwesome;
+            font-size: 12px;
+            float: left;
+            width: 20px;
+            text-align: center;
+            color: #7F8FA4;
+            margin-top: 1px
+        }
+
+    .app .breadcrumb.breadcrumb-condensed {
+        padding: 0
+    }
+
+.app .app-header .breadcrumb {
+    margin-right: 10px
+}
+
+.app .pagination {
+    width: auto;
+    margin: 0
+}
+
+    .app .pagination li {
+        width: auto
+    }
+
+        .app .pagination li > a, .app .pagination li > span {
+            padding: 10px;
+            line-height: 20px;
+            border-color: #DBE0E4;
+            background: #FFF;
+            min-width: 40px;
+            text-align: center;
+            color: #454545;
+            transition: all .1s linear;
+            margin-bottom: 3px
+        }
+
+            .app .pagination li > a:hover {
+                background: #F5F5F5
+            }
+
+        .app .pagination li.active span, .app .pagination li.active > a {
+            background: #2D3349;
+            color: #FFF
+        }
+
+        .app .pagination li.disabled span, .app .pagination li.disabled > a {
+            -webkit-opacity: .7;
+            -moz-opacity: .7;
+            opacity: .7
+        }
+
+            .app .pagination li.disabled > a:hover {
+                background: #FFF
+            }
+
+    .app .pagination.pagination-separated li {
+        margin-right: 5px
+    }
+
+        .app .pagination.pagination-separated li:last-child {
+            margin-right: 0
+        }
+
+    .app .pagination.pagination-noborder li, .app .pagination.pagination-rounded li {
+        margin-right: 5px
+    }
+
+        .app .pagination.pagination-rounded li > a, .app .pagination.pagination-rounded li > span {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px
+        }
+
+        .app .pagination.pagination-noborder li > a, .app .pagination.pagination-noborder li > span {
+            border: 0;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px
+        }
+
+.app .call-box, .app .pager li > a {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px
+}
+
+.app .pagination.pagination-sm li > a, .app .pagination.pagination-sm li > span {
+    padding: 0 10px;
+    min-width: 20px;
+    font-size: 12px
+}
+
+.app .pagination.pagination-lg li > a, .app .pagination.pagination-lg li > span {
+    padding: 20px 10px;
+    min-width: 60px
+}
+
+.app .pager li {
+    width: auto;
+    float: none
+}
+
+    .app .pager li > a {
+        color: #454545;
+        background: #FFF;
+        -webkit-transition: all .1s linear;
+        -moz-transition: all .1s linear;
+        -ms-transition: all .1s linear;
+        -o-transition: all .1s linear;
+        transition: all .1s linear;
+        border-radius: 5px;
+        line-height: 20px;
+        padding: 10px 15px
+    }
+
+        .app .pager li > a:hover {
+            background: #F5F5F5
+        }
+
+    .app .pager li.disabled > a {
+        -webkit-opacity: .7;
+        -moz-opacity: .7;
+        opacity: .7
+    }
+
+        .app .pager li.disabled > a:hover {
+            color: #454545;
+            background: #FFF
+        }
+
+.app .call-box, .app .modal-content-calling {
+    background: #292f43;
+    color: #FFF
+}
+
+.refresh-back {
+    background: #d7d7d7;
+    margin-bottom: 15px;
 }

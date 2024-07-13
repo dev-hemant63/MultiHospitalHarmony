@@ -72,9 +72,9 @@
                 TotalNumber: $('#txtnumber').val(),
                 Id: $('#hdnId').val()
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Medicine/SaveLeafSetting', obj).done((res) => {
                 Swal.fire({
                     title: res.success == true ? "Success" : "Failed",

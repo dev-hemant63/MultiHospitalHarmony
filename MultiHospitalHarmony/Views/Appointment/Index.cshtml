@@ -96,9 +96,9 @@
                 Status: $('#ddlStatus').val(),
                 Remark: $('#remark').val(),
             }
-            if (!validateObject(obj)) {
-                return false;
-            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
             $.post('/Appointment/UpdateAppointment', obj).done((response) => {
                 Swal.fire({
                     title: response.success == true ? "Success" : "Failed",

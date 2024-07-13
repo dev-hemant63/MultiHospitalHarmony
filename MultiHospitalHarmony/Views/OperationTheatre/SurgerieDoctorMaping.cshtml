@@ -1,4 +1,5 @@
-﻿<div class="row">
+﻿@model SurgerieDoctorMapingVM
+<div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -23,6 +24,31 @@
                                     <td>EntryAt</td>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @{
+                                    int i = 0;
+                                    foreach (var item in Model.DoctorAndSurgery)
+                                    {
+                                        i++;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>
+                                                    <div class="btn-group mb-1">
+                                                        <button class="btn btn-outline-dark btn-sm dropdown-toggle"  type="button" data-bs-toggle="dropdown">
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="getById('@item.Id')" href="#">Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>@item.SurgeryName</td>
+                                                <td>@item.DoctorName</td>
+                                                <td>@item.Price</td>
+                                                <td>@item.EntryAt</td>
+                                            </tr>
+                                    }
+                                }
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -45,18 +71,29 @@
                         <label>Surgery</label>
                         <select class="form-control" id="ddlSurgery">
                             <option value="0">:: SELECT ::</option>
+                            @{
+                                foreach (var item in Model.Surgeries)
+                                {
+                                            <option value="@item.Id">@item.SurgeryName</option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="col-sm-12">
                         <label>Doctor</label>
                         <select class="form-control" id="ddlDoctor">
                             <option value="0">:: SELECT ::</option>
+                            @{
+                                foreach (var item in Model.Doctors)
+                                {
+                                            <option value="@item.Id">@item.FullName</option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="col-sm-12">
                         <label>Price</label>
                         <input id="txtPrice" type="number" name="txtPrice" class="form-control" placeholder="Price" required />
-                        <input type="hidden" id="hdnId" />
                     </div>
                 </div>
             </div>
@@ -67,3 +104,71 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        var save = () => {
+            let obj = {
+                Id: $('#hdnId').val(),
+                SurgerieId: $('#ddlSurgery').val(),
+                DoctorId: $('#ddlDoctor').val(),
+                Price: $('#txtPrice').val()
+            }
+            // if (!validateObject(obj)) {
+            //     return false;
+            // }
+            $.post('/OperationTheatre/DoctorSurgerieMapping', obj).done((response) => {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: "success"
+                    });
+                    $('input').val('');
+                    $('.btn-close').click();
+                }
+                else {
+                    Swal.fire({
+                        title: "Failed",
+                        text: response.message,
+                        icon: "error"
+                    });
+                }
+
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: "Server Error!",
+                    icon: "error"
+                });
+            });
+        }
+        var getById = (id) => {
+            if(id != 0){
+                $.post('/OperationTheatre/GetDoctorSurgeryById', { Id: id }).done((response) => {
+                    if (response.success) {
+                        $('#hdnId').val(response.data[0].id);
+                        $('#ddlSurgery').val(response.data[0].surgerieId);
+                        $('#ddlDoctor').val(response.data[0].doctorId);
+                        $('#txtPrice').val(response.data[0].price);
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Failed",
+                            text: response.message,
+                            icon: "error"
+                        });
+                    }
+
+                }).fail((xhr) => {
+                    console.log(xhr);
+                    Swal.fire({
+                        title: "Failed!!",
+                        text: "Server Error!",
+                        icon: "error"
+                    });
+                });
+            }
+        }
+    </script>
+}
