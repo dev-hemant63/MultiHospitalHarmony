@@ -195,5 +195,12 @@
                 }
             });
         }
+        var PreferredForSurgeries = ()=>{
+            if ($('#ddlforSurgeries').val() == 1) {
+                $('#Surgeries').removeClass('d-none');
+            } else {
+                $('#Surgeries').addClass('d-none');
+            }
+        }
     </script>
 }

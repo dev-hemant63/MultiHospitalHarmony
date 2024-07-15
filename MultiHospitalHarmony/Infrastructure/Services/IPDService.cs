@@ -4,6 +4,8 @@ using MultiHospitalHarmony.Infrastructure.Interfaces;
 using MultiHospitalHarmony.Models;
 using MultiHospitalHarmony.Models.Common;
 using MultiHospitalHarmony.Models.DTOs;
+using Newtonsoft.Json;
+using ServiceStack.Script;
 using System.Data;
 
 namespace MultiHospitalHarmony.Infrastructure.Services
@@ -149,6 +151,43 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             catch (Exception ex)
             {
                 _dapperContext.SaveLog("IPDService", "SaveDoctorVisit", ex.Message);
+            }
+            return response;
+        }
+        public async Task<AppResponse<PatientDetails>> GetPatientDetails(int loginId, GetPatientDetailsReq getPatientDetailsReq)
+        {
+            var response = new AppResponse<PatientDetails>();
+            try
+            {
+                var dbresponse = await _dapperContext.ExecuteProcAsync<AppResponse<string>>("Proc_GetPatientDetailsForRelease", new
+                {
+                    loginId,
+                    getPatientDetailsReq.WID,
+                    getPatientDetailsReq.HospitalId,
+                    getPatientDetailsReq.PatientUserName
+                },CommandType.StoredProcedure);
+                response.Success = dbresponse.Success;
+                response.Message = dbresponse.Message;
+                response.Data = JsonConvert.DeserializeObject<List<PatientDetails>>(dbresponse.Data).FirstOrDefault();
+                if (!string.IsNullOrEmpty(response.Data.WardDetailsJson)) {
+					response.Data.WardDetails = JsonConvert.DeserializeObject<List<WardDetails>>(response.Data.WardDetailsJson);
+				}
+                if (!string.IsNullOrEmpty(response.Data.DoctorVisitJson))
+                {
+					response.Data.DoctorVisit = JsonConvert.DeserializeObject<List<DoctorVisitDetails>>(response.Data.DoctorVisitJson);
+				}
+				if (!string.IsNullOrEmpty(response.Data.MedicalHistoryJson))
+                {
+					response.Data.MedicalHistory = JsonConvert.DeserializeObject<List<MedicalHistoryDetails>>(response.Data.MedicalHistoryJson);
+				}
+				if (!string.IsNullOrEmpty(response.Data.SurgeriesDetailsJson))
+                {
+					response.Data.SurgeriesDetails = JsonConvert.DeserializeObject<List<SurgeriesDetails>>(response.Data.SurgeriesDetailsJson);
+				}
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("IPDService", "GetPatientDetails", ex.Message);
             }
             return response;
         }

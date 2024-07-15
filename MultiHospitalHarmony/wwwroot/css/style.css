@@ -26859,6 +26859,14 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center; }
+.card-header-cus {
+    border-color: #E6E6E6;
+    position: relative;
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
     @media only screen and (max-width: 35.9375rem) {
       .card-header {
         padding: 1.25rem 1rem 1.25rem; } }

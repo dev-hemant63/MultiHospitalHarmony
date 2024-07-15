@@ -167,6 +167,26 @@
                 </select>
             </div>
             <div class="col-sm-4">
+                <label>Preferred For Surgery</label>
+                <select class="form-control" id="ddlforSurgeries" onchange="PreferredForSurgeries()" required>
+                    <option value="">:: Please select ::</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="col-sm-4 d-none" id="Surgeries">
+                <label>Surgeries</label>
+                <select class="form-control" id="ddlSurgeries" required>
+                    <option value="">:: Please select ::</option>
+                    @{
+                        foreach (var item in Model.SurgeryList)
+                        {
+                            <option value="@item.Id">@item.SurgeryName [@item.Price]</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-4">
                 <label>Prescription File</label>
                 <input type="file" id="txtPrescriptionFile" class="form-control" placeholder="Prescription" required />
             </div>

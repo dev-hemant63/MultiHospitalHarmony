@@ -178,9 +178,9 @@ var saveData = () => {
         BalanceAmount: $('#txtBalanceAmount').val(),
         MedicinePurchaseDetails:[]
     }
-    if (!validateObject(obj)) {
-        return false;
-    }
+    //if (!validateObject(obj)) {
+    //    return false;
+    //}
     $('#addpurchase tr.item').each(function (i, v) {
         let obj = {
             MedicineId: $(v).find('td:eq(0) select').val(),

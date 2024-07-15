@@ -1,0 +1,281 @@
+﻿@using MultiHospitalHarmony.Models.Common
+@model AppResponse<PatientDetails>
+@{
+	var doctorFees = @Model.Data.DoctorVisit.Sum(x => Convert.ToDecimal(x.WardVisitFee));
+	var total = (Model.Data.SurgeriesDetails.Sum(x => x.Price) + doctorFees + Model.Data.WardFees);
+	<div class="custom-tab-1">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" data-bs-toggle="tab" href="#PatientDetails"><i class="la la-home me-2"></i> Patient Details</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#ward"><i class="la la-user me-2"></i> Ward Details</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#doctor"><i class="la la-phone me-2"></i>  Doctor Visits</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#history"><i class="la la-envelope me-2"></i> Medical History</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#Surgeries"><i class="la la-envelope me-2"></i>Surgeries Details</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-bs-toggle="tab" href="#bill"><i class="la la-envelope me-2"></i>Bill Details</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="PatientDetails" role="tabpanel">
+				<div class="card">
+					<div class="card-header">
+						<h4>Patient Details</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p><strong>Name:</strong> @Model.Data.FullName</p>
+								<p><strong>Age:</strong> @Model.Data.Age</p>
+								<p><strong>Gender:</strong> Male</p>
+							</div>
+							<div class="col-md-6">
+								<p><strong>Address:</strong> @Model.Data.Address</p>
+								<p><strong>Contact:</strong> @Model.Data.MobileNo</p>
+								<p><strong>Email:</strong> @Model.Data.Email</p>
+							</div>
+							<hr />
+							<div class="col-sm-12">
+								<h4 class="card-title">Guardian Details</h4>
+								<div class="col-md-4">
+									<p><strong>Name:</strong> @Model.Data.GuardianName</p>
+								</div>
+								<div class="col-md-4">
+									<p><strong>Age:</strong> @Model.Data.GuardianMobile</p>
+								</div>
+								<div class="col-md-4">
+									<p><strong>Relation With Patient:</strong> @Model.Data.Relation_with_Patient</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="ward">
+				<div class="card">
+					<div class="card-header">
+						<h4>Ward Details</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<td>#</td>
+										<td>WardType</td>
+										<td>WardName</td>
+										<td>BedName</td>
+										<td>Charge</td>
+										<td>StartOn</td>
+										<td>EndOn</td>
+									</tr>
+								</thead>
+								<tbody>
+									@{
+										int i = 0;
+										foreach (var item in Model.Data.WardDetails)
+										{
+											i++;
+											<tr>
+												<td>@i</td>
+												<td>@item.WardType</td>
+												<td>@item.WardName</td>
+												<td>@item.BedName</td>
+												<td>@item.Charge</td>
+												<td>@item.StartOn</td>
+												<td>@item.EndOn</td>
+											</tr>
+										}
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="doctor">
+				<div class="card">
+					<div class="card-header">
+						<h4>Doctor Visits</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<td>#</td>
+										<td>DoctorInfo</td>
+										<td>VisitTime</td>
+										<td>VisitDate</td>
+										<td>WardVisitFee</td>
+									</tr>
+								</thead>
+								<tbody>
+									@{
+										int j = 0;
+										
+										foreach (var item in Model.Data.DoctorVisit)
+										{
+											j++;
+											<tr>
+												<td>@j</td>
+												<td>@item.DoctorInfo</td>
+												<td>@item.VisitTime</td>
+												<td>@item.VisitDate</td>
+												<td>@item.WardVisitFee</td>
+											</tr>
+										}
+										<tr>
+											<td colspan="4" class="text-end">@doctorFees</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="history">
+				<div class="card">
+					<div class="card-header">
+						<h4>Medical History</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<td>#</td>
+										<td>DoctorInfo</td>
+										<td>Diagnosis</td>
+										<td>Prescription</td>
+										<td>PrescriptionFile</td>
+										<td>Wight</td>
+										<td>DateOfVisit</td>
+									</tr>
+								</thead>
+								<tbody>
+									@{
+										j = 0;
+										foreach (var item in Model.Data.MedicalHistory)
+										{
+											j++;	
+											<tr>
+												<td>@j</td>
+												<td>@item.DoctorInfo</td>
+												<td>@item.Diagnosis</td>
+												<td>@item.Prescription</td>
+												<td>
+													<a href="@item.PrescriptionFile" target="_blank"><i class="fa fa-download"></i></a>
+												</td>
+												<td>@item.Wight</td>
+												<td>@item.DateOfVisit</td>
+											</tr>
+										}
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="Surgeries">
+				<div class="card">
+					<div class="card-header">
+						<h4>Surgeries Details</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<td>#</td>
+										<td>DoctorInfo</td>
+										<td>SurgeryName</td>
+										<td>Price</td>
+										<td>ScheduledDate</td>
+										<td>Remark</td>
+										<td>Complete</td>
+									</tr>
+								</thead>
+								<tbody>
+									@{
+										if (Model.Data.SurgeriesDetails != null)
+										{
+											j = 0;
+											foreach (var item in Model.Data.SurgeriesDetails)
+											{
+												j++;
+												<tr>
+													<td>@j</td>
+													<td>@item.DoctorInfo</td>
+													<td>@item.SurgeryName</td>
+													<td>@item.Price</td>
+													<td>@item.ScheduledDate</td>
+													<td>@item.Remark</td>
+													<td>
+														@if (item.IsComplete)
+														{
+															<span class="text-success">Yes</span>
+														}
+														else
+														{
+															<span class="text-danger">No</span>
+														}
+													</td>
+												</tr>
+											}
+										}
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="bill">
+				<div class="card">
+					<div class="card-header">
+						<h4>Bill Details</h4>
+					</div>
+					<div class="card-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Service</th>
+									<th>Cost</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Doctor Visit Fees</td>
+									<td>@doctorFees</td>
+								</tr>
+								<tr>
+									<td>Surgerie Fees</td>
+									<td>@Model.Data.SurgeriesDetails.Sum(x=>x.Price)</td>
+								</tr>
+								<tr>
+									<td>Ward & Bed Fees</td>
+									<td>@Model.Data.WardFees</td>
+								</tr>
+								<tr>
+									<td><strong>Total</strong></td>
+									<td><strong>@total</strong></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

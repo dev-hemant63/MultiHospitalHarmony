@@ -11,5 +11,6 @@ namespace MultiHospitalHarmony.Infrastructure.Interfaces
         Task<AppResponse<List<DoctorVisit>>> GetDoctorVisit(int loginId, int patientId);
         Task<AppResponse<List<PatientWardDetails>>> PatientWardDetails(int loginId, int patientId);
         Task<AppResponse<object>> SaveDoctorVisit(int loginId, SaveDoctorVisitReq saveDoctorVisitReq);
+        Task<AppResponse<PatientDetails>> GetPatientDetails(int loginId, GetPatientDetailsReq getPatientDetailsReq);
     }
 }

@@ -18,13 +18,15 @@ namespace MultiHospitalHarmony.Controllers
         private IIPDService _iPDService;
         private IFileUploadService _fileUploadService;
         private readonly IWardService _wardService;
-        public PatientController(IUserService userService, ICommonService commonService, IIPDService iPDService, IFileUploadService fileUploadService, IWardService wardService)
+        private readonly IOperationTheatreService _operationTheatreService;
+        public PatientController(IUserService userService, ICommonService commonService, IIPDService iPDService, IFileUploadService fileUploadService, IWardService wardService, IOperationTheatreService operationTheatreService)
         {
             _userService = userService;
             _commonService = commonService;
             _iPDService = iPDService;
             _fileUploadService = fileUploadService;
             _wardService = wardService;
+            _operationTheatreService = operationTheatreService;
         }
         [HttpGet]
         public async Task<IActionResult> Admit()
@@ -80,6 +82,15 @@ namespace MultiHospitalHarmony.Controllers
             if (dRRes.Success)
             {
                 data.UserList = dRRes.Data;
+            }
+            var surRes = await _operationTheatreService.GetDoctorAndSurgery(User.GetLogingID<int>(),new GetSurgeriesReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>()
+            });
+            if (surRes.Success)
+            {
+                data.SurgeryList = surRes.Data;
             }
             return PartialView(data);
         }
@@ -191,6 +202,17 @@ namespace MultiHospitalHarmony.Controllers
                 res = await _userService.SaveMedicalHistory(User.GetLogingID<int>(), medicalHistory);
             }
             return Ok(res);
+        }
+        [HttpPost(nameof(GetPatientDetailsForBilling))]
+        public async Task<IActionResult> GetPatientDetailsForBilling(string PatientUserName)
+        {
+            var res = await _iPDService.GetPatientDetails(User.GetLogingID<int>(),new GetPatientDetailsReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>(),
+                PatientUserName = PatientUserName
+            });
+            return PartialView(res);
         }
     }
 }

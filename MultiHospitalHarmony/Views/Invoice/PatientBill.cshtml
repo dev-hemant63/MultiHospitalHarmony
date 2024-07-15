@@ -6,9 +6,9 @@
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <div class="row" id="div-main">
+                    <div class="row" id="data">
                         <div class="col-sm-4 m-b30">
-                            <label class="form-label">PatientId/MobileNo</label>
+                            <label class="form-label">PatientId</label>
                             <input type="text" class="form-control" id="txtPatientInfo" onblur="getDetails()">
                         </div>
                     </div>
@@ -20,7 +20,16 @@
 @section Scripts {
     <script>
         var getDetails = () => {
-
+            $.post('/GetPatientDetailsForBilling', { PatientUserName: $('#txtPatientInfo').val() }).done((res) => {
+                $('#data').empty().html(res);
+            }).fail((xhr) => {
+                console.log(xhr);
+                Swal.fire({
+                    title: "Failed!!",
+                    text: xhr.responseText,
+                    icon: "error"
+                });
+            });
         }
     </script>
 }
