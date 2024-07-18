@@ -214,5 +214,13 @@ namespace MultiHospitalHarmony.Controllers
             });
             return PartialView(res);
         }
+        [HttpPost]
+        public async Task<IActionResult> ReleasePatient(PatientReleaseReq patientReleaseReq)
+        {
+            patientReleaseReq.WID = User.GetWID<int>();
+            patientReleaseReq.HospitalId = User.GetHospitalId();
+            var res = await _iPDService.ReleasePatient(User.GetLogingID<int>(), patientReleaseReq);
+            return Json(res);
+        }
     }
 }

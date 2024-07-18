@@ -1,0 +1,65 @@
+﻿@model List<AdmitedPatientBillList>
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-sm-3">
+                    <h4 class="card-title">Invoice List</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="datagrid">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Action</td>
+                                    <td>Patient Code</td>
+                                    <td>InvoiceNo</td>
+                                    <td>FullName</td>
+                                    <td>AdmissionDate</td>
+                                    <td>DispatchDate</td>
+                                    <td>Total Amount</td>
+                                    <td>Discount</td>
+                                    <td>Payable Amount</td>
+                                    <td>Payment Mode</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 0;
+                                    foreach (var item in Model)
+                                    {
+                                        i++;
+                                        <tr>
+                                        <td>@i</td>
+                                            <td>
+                                                <div class="btn-group mb-1">
+                                                    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="/Invoice/PatientBillView?BillId=@item.Id">View</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@item.UserName</td>
+                                            <td>@item.InvoiceNo</td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.AdmissionDate</td>
+                                            <td>@item.DispatchDate</td>
+                                            <td>@item.TotalAmount</td>
+                                            <td>@item.Discount</td>
+                                            <td>@item.PayableAmount</td>
+                                            <td>@item.PaymentMode</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

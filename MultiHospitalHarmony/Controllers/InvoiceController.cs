@@ -126,5 +126,20 @@ namespace MultiHospitalHarmony.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> PatientBillList()
+        {
+            var res = await _invoiceService.GetAdmitedPatientBillList(User.GetLogingID<int>(),new GetAdmitedPatientBillListReq
+            {
+                HospitalId = User.GetHospitalId(),
+                WID = User.GetWID<int>(),
+            });
+            return View(res.Data);
+        }
+        [HttpGet]
+        public async Task<IActionResult> PatientBillView(int BillId)
+        {
+            return View();
+        }
     }
 }

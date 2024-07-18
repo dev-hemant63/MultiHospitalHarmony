@@ -2,12 +2,14 @@
 {
     public class PatientDetails
     {
+		public int Id { get; set; }
 		public string FullName { get; set; }
 		public string MobileNo { get; set; }
 		public string Address { get; set; }
 		public string Email { get; set; }
 		public string StateName { get; set; }
 		public string CityName { get; set; }
+		public bool IsRelease { get; set; }
 		public int ZipCode { get; set; }
 		public decimal WardFees { get; set; }
 		public DateTime RegistrationDate { get; set; }

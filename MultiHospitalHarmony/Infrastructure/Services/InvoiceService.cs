@@ -263,5 +263,25 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return res;
         }
+        public async Task<AppResponse<List<AdmitedPatientBillList>>> GetAdmitedPatientBillList(int loginId, GetAdmitedPatientBillListReq patientBillListReq)
+        {
+            var res = new AppResponse<List<AdmitedPatientBillList>>();
+            try
+            {
+                res.Data = await _dapperContext.GetAllAsync<AdmitedPatientBillList>("Proc_GetAdmitedPatientBillList", new
+                {
+                    patientBillListReq.WID,
+                    patientBillListReq.HospitalId,
+                    loginId
+                });
+                res.Success = true;
+                res.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("InvoiceService", "GetAdmitedPatientBillList", ex.Message);
+            }
+            return res;
+        }
     }
 }

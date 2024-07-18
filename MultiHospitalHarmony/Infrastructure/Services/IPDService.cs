@@ -191,5 +191,31 @@ namespace MultiHospitalHarmony.Infrastructure.Services
             }
             return response;
         }
+        public async Task<AppResponse<object>> ReleasePatient(int loginId, PatientReleaseReq patientReleaseReq)
+        {
+            var res = new AppResponse<object>();
+            try
+            {
+                res = await _dapperContext.ExecuteProcAsync<AppResponse<object>>("Proc_ReleasePatient", new
+                {
+                    loginId,
+                    patientReleaseReq.WID,
+                    patientReleaseReq.HospitalId,
+                    patientReleaseReq.PatientId,
+                    patientReleaseReq.TotalAmount,
+                    patientReleaseReq.Discount,
+                    patientReleaseReq.InvoiceNo,
+                    patientReleaseReq.PaymentModeId,
+                    patientReleaseReq.BankId,
+                    Services = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(patientReleaseReq.Services))
+                },CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            {
+                _dapperContext.SaveLog("IPDService", "ReleasePatient", ex.Message);
+                res.Message = "An error has occurred try after sometime!";
+            }
+            return res;
+        }
     }
 }
