@@ -82,5 +82,11 @@ namespace MultiHospitalHarmony.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Accountant")]
+        [HttpGet]
+        public async Task<IActionResult> Accountant()
+        {
+            return View();
+        }
     }
 }

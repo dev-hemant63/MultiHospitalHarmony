@@ -40,6 +40,9 @@ namespace MultiHospitalHarmony.Static
                 case AppRole.LaboratoryAdmin:
                     prefix = "LAB";
                     break;
+                case AppRole.Accountant:
+                    prefix = "AC";
+                    break;
             }
             string charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string digitSet = "0123456789";

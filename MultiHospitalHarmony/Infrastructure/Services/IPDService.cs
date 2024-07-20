@@ -184,6 +184,10 @@ namespace MultiHospitalHarmony.Infrastructure.Services
                 {
 					response.Data.SurgeriesDetails = JsonConvert.DeserializeObject<List<SurgeriesDetails>>(response.Data.SurgeriesDetailsJson);
 				}
+                if (!string.IsNullOrEmpty(response.Data.HospitalServicesJson))
+                {
+                    response.Data.HospitalServices = JsonConvert.DeserializeObject<List<HospitalServices>>(response.Data.HospitalServicesJson);
+                }
             }
             catch (Exception ex)
             {

@@ -29,6 +29,8 @@
 		public List<MedicalHistoryDetails> MedicalHistory { get; set; } = new List<MedicalHistoryDetails>();
 		public string SurgeriesDetailsJson { get; set; }
         public List<SurgeriesDetails> SurgeriesDetails { get; set; } = new List<SurgeriesDetails>();
+        public string HospitalServicesJson { get; set; }
+        public List<HospitalServices> HospitalServices { get; set; } = new List<HospitalServices>();
 	}
     public class WardDetails
     {
@@ -64,5 +66,10 @@
         public string SurgeryName { get; set; }
         public decimal Price { get; set; }
         public string DoctorInfo { get; set; }
+    }
+    public class HospitalServices
+    {
+        public string ServiceName { get; set; }
+        public decimal Amount { get; set; }
     }
 }

@@ -6,10 +6,10 @@
     <div class="custom-tab-1">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#PatientDetails"><i class="la la-home me-2"></i> Patient Details</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#PatientDetails"><i class="la la-user me-2"></i> Patient Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#ward"><i class="la la-user me-2"></i> Ward Details</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#ward"><i class="la la-bed me-2"></i> Ward Details</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#doctor"><i class="la la-phone me-2"></i>  Doctor Visits</a>
@@ -248,9 +248,12 @@
                         <div class="col-sm-4">
                             <h4>Bill Details</h4>
                         </div>
-                        <div class="col-sm-8 text-end">
-                            <button class="btn btn-primary light btn-sm" data-bs-toggle="modal" data-bs-target="#billDetails"><i class="fa fa-plus-circle"></i> Add More</button>
-                        </div>
+                        @if (!Model.Data.IsRelease)
+                        {
+                            <div class="col-sm-8 text-end">
+                                <button class="btn btn-primary light btn-sm" data-bs-toggle="modal" data-bs-target="#billDetails"><i class="fa fa-plus-circle"></i> Add More</button>
+                            </div>
+                        }                        
                     </div>
 
                     <div class="card-body">
@@ -281,28 +284,43 @@
                                     <th>Cost</th>
                                 </tr>
                             </thead>
-                            <tbody id="billingDetails">
-                                <tr class="service">
-                                    <td>Doctor Visit Fees</td>
-                                    <td>@doctorFees</td>
-                                </tr>
-                                <tr class="service">
-                                    <td>Surgerie Fees</td>
-                                    <td>@Model.Data.SurgeriesDetails.Sum(x => x.Price)</td>
-                                </tr>
-                                <tr class="service">
-                                    <td>Ward & Bed Fees</td>
-                                    <td>@Model.Data.WardFees</td>
-                                </tr>
-                                <tr>
-                                    <td>Discount</td>
-                                    <td><input type="number" id="txtDisCount" class="form-control form-control-sm" onblur="handleDiscount()" /></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Total</strong></td>
-                                    <td><strong id="totalAmount" data-totalAmount="@total">@total</strong></td>
-                                </tr>
-                            </tbody>
+                            @if (Model.Data.IsRelease)
+                            {
+                                <tbody id="billingDetails">
+                                    @foreach (var item in Model.Data.HospitalServices)
+                                    {
+                                        <tr class="service">
+                                            <td>@item.ServiceName</td>
+                                            <td>@item.Amount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tbody id="billingDetails">
+                                    <tr class="service">
+                                        <td>Doctor Visit Fees</td>
+                                        <td>@doctorFees</td>
+                                    </tr>
+                                    <tr class="service">
+                                        <td>Surgerie Fees</td>
+                                        <td>@Model.Data.SurgeriesDetails.Sum(x => x.Price)</td>
+                                    </tr>
+                                    <tr class="service">
+                                        <td>Ward & Bed Fees</td>
+                                        <td>@Model.Data.WardFees</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Discount</td>
+                                        <td><input type="number" id="txtDisCount" class="form-control form-control-sm" onblur="handleDiscount()" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td><strong id="totalAmount" data-totalAmount="@total">@total</strong></td>
+                                    </tr>
+                                </tbody>
+                            }
                         </table>
                         <input type="hidden" id="acctotalAmount" value="@total" />
 
