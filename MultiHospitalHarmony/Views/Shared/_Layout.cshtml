@@ -28,7 +28,7 @@
     <link href="~/notify/dist/css/bootstrap-msg.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="loader" class="loader">
+    <div id="loader" class="loader d-none">
         <div class="spinner"></div>
     </div>
     <div id="main-wrapper">
@@ -848,6 +848,12 @@
                 });
             });
         }
+        var startGlobalLoading = () => {
+            $('#loader').removeClass('d-none');
+        }
+        var stopGlobalLoading = () => {
+            $('#loader').addClass('d-none');
+        }
         class Helper {
             static notify(status, message) {
                 const duration = 5000;
@@ -863,11 +869,12 @@
                         break;
                 }
             }
+
             static loading(btnId) {
                 $('#' + btnId).html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop('disabled', true);
             }
 
-            static stoploading(btnId, btnText) {
+            static stopLoading(btnId, btnText) {
                 $('#' + btnId).html(btnText).prop('disabled', false);
             }
         }
@@ -885,7 +892,7 @@
             }
             return _validate;
         };
-        
+
     </script>
     @RenderSection("Scripts", required: false)
 </body>
